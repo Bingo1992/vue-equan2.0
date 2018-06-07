@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>充值中心</title>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet">
+    
+</head>
+
+<body class="bg-white">
+  
+
+        <div class="swiper-container swiper-container-c2 pdt">
+            <div class="swiper-wrapper" id="banner_recharge">
+                <!-- <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div> -->
+            </div>
+        </div>
+
+        <ul class="recharge-list flex-layout">
+            <li>
+                <a href="mobile_recharge.html">
+                    <img src="images/mobile.png">
+                    <p>手机充值</p>
+                </a>
+            </li>
+            <li>
+                <a href="oilCard_recharge.html">
+                    <img src="images/oil.png">
+                    <p>油卡充值</p>
+                </a>
+            </li>
+            <li>
+                <a href="media_recharge.html">
+                    <img src="images/media.png">
+                    <p>娱乐充值</p>
+                </a>
+            </li>
+           
+        </ul>
+
+
+        <div>
+            <a class="title-list" href="product_list.html">
+            	<h4>人气推荐</h4>
+            	<i class="icon-right"></i>
+            </a>
+            <ul class="pro-list pro-list-2" id="recharge_area_hot">
+                
+            </ul>
+        </div>
+  
+
+	<script src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script src="js/swiper-4.2.0.min.js"></script>
+    <script src="js/equan.js"></script>
+    <script type="text/javascript">
+
+    $(function() {
+     
+    	equan.findBanner('index_top', 'banner_recharge');
+    	
+    	//人气推荐专区
+        equan.findAreaProduct('2', 'recharge_area_hot', 30);
+
+    });
+
+    </script>
+</body>
+
+</html>

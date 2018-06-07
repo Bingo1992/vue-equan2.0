@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>充值页面</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+
+</head>
+
+<body>
+   
+    <form action="#">
+        <div class="hint">
+            <h4 class="title">请输入交易密码</h4>
+        </div>
+        <div class="bg-show-2 border-top">
+            
+           <ul class="form-list border-list">
+                <li>
+                    <input class="password" type="password" placeholder="请输入6位交易密码">
+                </li>
+            </ul>
+        </div>   
+        <div class="clearfix">
+            <p class="forgetPass">忘记交易密码？</p>
+        </div>
+        <p class="confirm-btn btn">确认<p>
+    </form>
+
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+    <script type="text/javascript">
+    $(function(e) {
+        //点击提交按钮
+        $('.confirm-btn').click(function() {
+            var passValue = $('.password').val();
+           
+            if (passValue == '') {
+                empty_p('密码不能为空');
+            } else {
+                window.location = "recharge.html";
+            }
+        });
+
+    });
+
+    </script>
+
+</body>
+
+</html>

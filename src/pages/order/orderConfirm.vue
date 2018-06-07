@@ -1,0 +1,358 @@
+<template>
+  <div class="orderConfirm banner-b">
+    <loading v-if="showLoading"></loading>
+
+    <section v-if="!showLoading">
+        <div class="logistics bg-show">   
+            <router-link to="/chooseAddress" class="list-box">
+                <i class="icon-map font-gray pdr"></i>
+                <h5 class="list-info-v pdt pdb" v-if="chooseAddress.length === 0">请添加一个收货地址</h5>
+                <div v-else class="list-info-v">
+                    <div>
+                        <h4>
+                            <span class="pdr">{{chooseAddress.username}}</span>
+                            <span>{{chooseAddress.mobile}}</span>
+                        </h4>
+                        <p class="font-gray nowrap-2">{{chooseAddress.province}}{{chooseAddress.city}}{{chooseAddress.district}}{{chooseAddress.detailaddress}}</p>
+                    </div>
+                   
+                </div>  
+                <i class="icon-right"></i>
+            </router-link>
+        </div>
+
+        <!-- 订单列表 -->
+        <ul class="confirm-order">
+            <li class="list-box border-bottom" v-for="(item,i) in proList" :key="i">
+                <img class="list-img" :src="getImgPath(item.productImg)">
+                <div class="list-info-v">
+                    <div>
+                        <div class="list-box">
+                            <div class="list-info-h">
+                                <h5 class="nowrap-2 top-text">{{item.productName}}</h5>
+                            </div>
+                            <h5 class="pdl">X{{item.total}}</h5>
+                        </div>
+                        
+                        <div class="price-big">
+                            <span class="font-orange"><i class="icon-coin"></i>{{item.currCost}}</span>
+                            <s class="font-gray">市场价：￥{{item.currPrice}}</s>
+                        </div>
+                    </div>
+                    
+                </div>
+            </li>
+        </ul>
+
+
+        <div class="bg-mgShow">
+            <div class="title-bar border-bottom">
+              <h5>给卖家留言</h5>
+            </div>
+            <textarea class="txtArea" cols="30" rows="3" placeholder="请输入留言" v-model="remark"></textarea>
+        </div> 
+
+        <div v-if="pay.egou != 0" class="bg-mgShow">
+          <div class="title-bar border-bottom">
+            <h5>使用e购账户</h5>
+          </div>
+          <ul>
+              <li class="list-box">
+                <p class="list-info-h">可用e购账户抵扣<span class="font-red">{{pay.egou}}</span>元</p>
+                 <label class="checkbox">
+                    <input type="radio" checked disabled>
+                    <i class="icon-hook"></i>
+                </label>
+              </li>
+          </ul>
+      </div> 
+
+        <div class="bg-mgShow" v-if="pay.money != 0 || pay.ebi != 0">
+            <div class="title-bar border-bottom">
+              <h5>支付方式</h5>
+            </div>
+            <ul>
+                <li class="list-box" v-if="pay.ebi != 0">
+                  <p class="list-info-h">e币支付<span class="pdr font-orange"><i class="icon-coin"></i>{{pay.ebi}}</span></p>
+                   <label class="checkbox">
+                      <input type="radio" checked disabled>
+                      <i class="icon-hook"></i>
+                  </label>
+                </li>
+                <li v-if="pay.money != 0" class="list-box">
+                  <p class="list-info-h">微信支付<span class=" font-orange">￥{{pay.money}}</span></p>
+                   <label class="checkbox">
+                      <input type="radio" checked disabled>
+                      <i class="icon-hook"></i>
+                  </label>
+                </li>
+            </ul>
+        </div>   
+
+
+        <div class="fixed-bottom  bg-gray">
+          <div class="cal-banner list-box border-top">
+              <div class="list-info-v">
+                <div>
+                    <p v-if="pay.money != 0">
+                        应付现金：
+                        <span class="font-orange">￥{{pay.money}}</span>
+                    </p>
+                    <p v-if="userIntegeral && userIntegeral != 0">
+                        应付e币：
+                        <i class="icon-coin"></i>
+                        <span class="font-orange">{{pay.ebi}}</span>
+                    </p>
+                </div>
+                  
+              </div>
+              <button :class="[{disbtn: chooseAddress.length==0},'btn-theme']" @click="gotoPay1"> 立即付款</button>
+          </div>
+        </div>
+    </section>
+
+    <!-- 提交遮罩 -->
+    <alert-tip v-show="showAlertTip" :formLoading="formLoading" :alertText="alertText"></alert-tip>
+    
+  </div> 
+</template>
+
+<script>
+    import {mapState, mapMutations} from 'vuex'
+    import loading from '/components/loading'
+    import alertTip from '/components/alertTip'
+    import { orderConfirm, addressList, gotoPay } from '/api/api'
+    import { getStore, setStore } from '/utils/storage'
+    import { getImgPath, getUrlPath } from '/components/mixin'
+    export default {
+      name: 'orderConfirm',
+      data () {
+        return {
+            showLoading: false, //显示加载中  
+            proList:[],
+            unCheckCartList: [],
+            address: [],
+            // idList: [],//商品id,商品数量
+            paramsList: [],
+            remark: '',//商家留言
+            curAdsId: 0, //当前地址id
+            total_price2: 0,//应付总额
+            total_ebuy: 0,//可使用e购的商品总额
+            userEbuy: 0, //'e购数量'
+            userIntegeral: 0,//e币数量
+            failPay: false,//支付失败
+            alertText: "",
+            showAlertTip: false,
+            flag: false,//true则全部是虚拟物品
+            formLoading: false,//提交中提示
+            pay: {
+              egou: 0,
+              ebi: 0,
+              money: 0
+            }
+
+        }
+      },
+      components: {
+        loading, alertTip
+      }, 
+      mixins: [getImgPath, getUrlPath],
+      created() {
+        document.title = "订单确认";
+         this._initData();
+      },
+      computed: {
+          ...mapState(['chooseAddress','addressId','cartList'])
+      },
+      methods: {
+       ...mapMutations(['CHOOSE_ADDRESS','INIT_BUYCART']),
+        //获取商品数据
+        _initData() { 
+            this.proList = JSON.parse(getStore('buyPro'));
+           // if (this.$route.query.skuId) {//商品详情过来
+           //      this.cartList = JSON.parse(getStore('buyPro'));
+           //  } else {//购物车过来
+           //      this.cartList = JSON.parse(getStore('buyCart'));
+           //  }
+      
+            if(!getStore('unCheckCartList')) {
+                this.cartList.forEach((item, index) => {
+                  if(!item.check) {
+                    this.unCheckCartList.push(item);
+                  }
+                })
+                setStore('unCheckCartList', this.unCheckCartList);
+            }
+           let virtual = 0;//虚拟商品个数
+           this.proList.forEach((item, index) => {
+               if(item.type == 2) {//虚拟商品
+                   virtual++;
+               }
+              let str = item.productId  +':' +item.total;
+              // if(item.check) {
+              this.paramsList.push(str);
+              // } else {
+              //   this.unCheckCartList.push(item);
+              // }
+             
+            });
+            if(virtual == this.proList.length) {
+                this.flag = true;
+            }
+            this._initAddress();  
+            this.calcTotalMoney(); 
+            this._getUserTotal(); 
+        },
+        //统计总额
+        calcTotalMoney() {
+          this.total_price2 = 0;
+          this.proList && this.proList.forEach((item,i) => {
+            // if(item.check) {
+             this.total_price2 += item.total * item.currCost;
+            // }
+          });
+          return Number(this.total_price2);
+        },
+         //统计可用e购的总额
+        calcTotalEbuy() {
+          this.total_ebuy = 0;
+          this.proList && this.proList.forEach((item,i) => {
+            if(item.ebuy == 1) {
+             this.total_ebuy += item.total * item.currCost;
+            }
+          });
+          return Number(this.total_ebuy);
+        },
+        // 获取e购e币
+        _getUserTotal() {
+           orderConfirm().then(res => {
+              this.userEbuy = res.userEbuy;
+              this.userIntegeral = res.userIntegeral;
+              if(this.userEbuy) {//有e购
+                  if(this.userEbuy >= this.calcTotalEbuy()) {//e购足够
+                      this.pay.egou = this.calcTotalEbuy();
+                      let leaveCost1 = this.calcTotalMoney() - this.calcTotalEbuy();//不能使用e购支付的金额
+                      this.integeralPay(this.userIntegeral, leaveCost1);
+                  } else {//e购不足够
+                      this.pay.egou = this.userEbuy;
+                      let leaveCost2 = this.calcTotalMoney() - this.userEbuy;//不能使用e购支付的金额
+                      this.integeralPay(this.userIntegeral, leaveCost2);
+                  }
+              } else {//e购不存在
+                  this.integeralPay(this.userIntegeral, this.calcTotalMoney());
+              } 
+
+           })
+        },
+        //e币支付
+        integeralPay(userIntegeral, total) {
+            if(userIntegeral) {//e币存在
+                if(userIntegeral >= total) {//e币足够
+                    this.pay.ebi = total;
+                } else {//e币不足
+                    this.pay.ebi = userIntegeral;
+                    this.pay.money = total - userIntegeral;
+                }
+            } else {//e币不存在
+                this.pay.money = total;   
+            }
+        },
+        //支付
+        gotoPay1() {
+          this.showAlertTip = true;//提交中提示
+          this.formLoading = true;
+          this.alertText = '提交中，请稍候'; 
+          let str = "{" + this.paramsList.join(",") + "}";
+    
+          gotoPay({params:{
+              addressid: this.curAdsId, 
+              params:str, 
+              remark: this.remark
+          }}).then(res => {
+            
+              if(res.success == false) {
+                  this.formLoading = false;
+                  this.showHideAlert(res.msg);
+              } else if(Number(res.attributes.wxPayTotal) > 0) {
+                // console.log(res.attributes.payOrderId)
+                window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.payOrderId);
+                // window.location.href = "https://equan.yesm.cn/equan-wxweb/wxhtml/pay.html?orderNo="+res.attributes.payOrderId;
+                  setStore('buyCart', getStore('unCheckCartList'));
+                  this.INIT_BUYCART();
+              } else {
+                  this.$router.push('/result');
+                  setStore('buyCart', getStore('unCheckCartList'));
+                  this.INIT_BUYCART();
+                 // this.$router.push({path:'/pay', query: {orderNo: res.attributes.payOrderId}});
+              }
+         
+          })
+        },
+        // 获取地址
+        _initAddress() {
+          if(this.chooseAddress.length === 0) {//第一次进入
+              addressList().then(res => {
+                  this.address = res.resultList;
+                  if(this.address.length > 0){
+                      this.address.forEach((item, i) => {
+                          if(item.isdefault == 1){
+                              this.CHOOSE_ADDRESS({address:item, id:item.id, index:i});
+                               this.curAdsId = item.id; 
+                          }
+                      });
+                  }
+              })
+            } 
+            else {
+               this.curAdsId = this.addressId; 
+            }
+        },
+         //显示隐藏提示框
+        showHideAlert(text) { 
+            this.showAlertTip = true;
+            this.alertText = text;
+            setTimeout(() => {
+                this.showAlertTip = false;
+            }, 1000);
+        }
+
+      },
+      watch: {
+        '$route':'_initData'
+      }
+     
+    }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+@import "../../assets/scss/var.scss";
+.logistics {
+  // position: relative;
+  &:after {
+      display: block;
+      content: "";
+      height: 3px;
+      background: url(../../assets/images/addLine.png) repeat-x;
+      background-size: 85px;
+  }
+}
+.confirm-order {
+    .list-box {
+      .list-box {
+        align-items: flex-start;
+      }
+    }
+}
+.txtArea {
+  background-color: #f4f4f4;
+  padding: $gauge;
+  margin: $gauge auto;
+  width: pxTorem(702);
+  display: block;
+  border-radius: 6px;
+  line-height: 20px;
+}
+.top-text {margin-bottom: 15px;}
+.icon-coin {font-size: 15px;}
+</style>

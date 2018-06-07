@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>收货地址</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    
+</head>
+
+<body>
+
+    <header class="header bg-show border-bottom">
+        <a href="javascript:history.go(-1)"><i class="icon-left"></i></a>
+        <h4>收货地址</h4>
+    </header>
+        <div class="ui-border">
+            <ul class="address-list border-list">
+                
+            </ul>
+        </div>
+     
+     
+        <a class="btn" href="javascript:">+新增地址</a>
+
+
+        <div class="ui-dialog">
+            <div class="dialog-cnt">
+                <p>确定删除此地址吗？</p>
+                <div class="two-btn">
+                    <div id="cancel" class="btn-a btn-2">取消</div>
+                    <div id="delete" class="btn-a">确定</div>
+                </div>
+            </div>
+        </div>
+
+
+	<script type="text/javascript" src="js/zepto.min.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	<script type="text/javascript" src="js/equan.js"></script>       
+	<script type="text/javascript" src="js/address.js"></script>
+	
+<script type="text/javascript">
+    
+$(function(){
+	// 屏蔽右上角的分享按钮
+	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+		WeixinJSBridge.call('hideOptionMenu');
+	});
+	
+	
+	
+});
+	
+</script>
+</body>
+
+</html>

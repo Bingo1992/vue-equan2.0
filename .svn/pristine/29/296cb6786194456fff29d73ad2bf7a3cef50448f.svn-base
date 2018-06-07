@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <title>我的卡券</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+ 
+	<ul class="border-list bg-show-2">
+        <li>
+            <a href="recharge.html" class="list-box">
+                <div class="list-info">
+                    <h4>使用e券积分卡充值 <span class="btn-tip">?</span></h4>
+                </div>
+                <i class="icon-right"></i>
+            </a>
+        </li>   
+    </ul>
+    
+   
+    <div class="nothing" > <!-- 暂无券样式 需要显示时去掉hide-->
+        <i class="icon-ticket"></i>
+        <h3>您的账户暂无卡券</h3>
+        <a href="index.html">去e券商城逛逛</a>
+    </div>
+    
+    <ul class="ticket-list">
+        
+    </ul>
+
+    <!-- 提示遮罩   -->
+    <div class="ui-dialog">
+        <div class="dialog-cnt">
+            <div class="dialog-content">
+                <h4>帮助</h4>
+                <p>1、刮开e券积分卡背面的“密码”涂层；<br>
+                2、将密码输入到“码券”，安全码输入到“安全码”；<br>
+                <!-- 3、拖动滑条获取图片验证码，按提示点击图片中的图案；<br> -->
+                3、点击“充值”进入充值页面。</p>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript">
+ $(function(){
+	 
+    $('.btn-tip').click(function(e){
+        e.preventDefault();
+        $('.ui-dialog').addClass('show');
+        $('.ui-dialog').click(function(){
+            $(this).removeClass('show');
+        });
+    });
+        
+        
+	var hasTick = 0,html = '';
+    
+	//e2
+    ajaxGet(baseUrl + '/user/eticket/list2', {type:1}, function (data) {
+        if (data.resultCode === 200) {
+            
+        	$(".nothing").css("display" , "none");
+            if(data.hasTicket == true){
+            	hasTick = hasTick + 1;
+            	html = '';
+                for (var i = 0; i < data.resultList.length; i++) {
+                	
+                	
+                	var eticket = data.resultList[i];
+                	var rgUrl = "recharge_type2.html?rType=1&tkid=" + eticket.id+ "&tkVal=" + eticket.code;
+                	
+                	html += '<li>';
+                	html += '<a class="list-box" href="'+rgUrl+'">';
+                	html += '<div class="ticket-img">';
+                	html += '<img src="images/ticket1.jpg" />';
+                	html += '<p>￥<span>'+ eticket.price +'</span></p>';
+                	html += ' </div>';
+                	
+                	html += '<div class="list-info">';
+                	html += '<h4>'+ eticket.productName +'</h4>';
+                	html += '<p>有效期：<span>'+ eticket.expiredTime +'</span></p>';
+                	html += '<p>券码：<span>'+ eticket.code +'</span></p>';
+                	html += '</div>';
+                	html += '<a href="'+rgUrl+'" class="btn">点击充值</a>';
+                	html += '</a>';
+                	html += '</li>';
+                }
+                
+                $(".ticket-list").append(html);
+            	
+            }
+            
+        } else {
+        	hasTick = hasTick + 1;
+            //alert(data.resultMsg);
+        }
+
+    });
+    
+	if(hasTick==0){
+		$(".nothing").css("display" , "block");
+	}
+ });
+</script>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,203 @@
+<template>
+  <div>
+      <ul class="form-list border-list">
+          <li>
+              <label>收货人</label>
+              <input type="text" placeholder="请输入收货人姓名" v-model="ads.name">
+          </li>
+          <li>
+              <label>联系电话</label>
+              <input type="tel" placeholder="请输入联系电话" v-model="ads.mobile">
+          </li>
+          <li class="btn-city" @click="showCityDialog">
+              <label>所在城市</label>
+              <input class="nowrap" type="text" placeholder="选择城市" readonly v-model="ads.provCityVal" ref="inputCity">
+              <i class="icon-right"></i>  
+          </li>
+          <li class="btn-zone" @click="showDisDialog">
+              <label>所在地区</label> 
+              <input class="zoneValue" type="text" placeholder="选择区县" readonly v-model="ads.disVal" ref="inputDis">
+              <i class="icon-right"></i>  
+          </li>
+          <li>
+              <textarea class="list-info-h" cols="30" rows="3" placeholder="详细地址" v-model="ads.detailVal"></textarea>
+          </li>
+          
+      </ul>
+<!--       <label class="list-box" style="margin:0">
+          <div class="checkbox">
+              <input  type="checkbox" value="isDefault" v-model="whetherDefault" @change="check">
+              <i class="icon-hook"></i>
+          </div>
+          <span class="list-info">设为默认地址</span>
+      </label> -->
+      <div class="btn">
+        <p class="btn-theme" @click="saveAddress({
+          params:{
+            id:addressId,
+            username:ads.name,
+            mobile:ads.mobile,
+            prov:ads.provVal,
+            city:ads.cityVal,
+            area:ads.disVal,
+            detailaddress:ads.detailVal}})">
+        保存</p>
+    </div>
+
+    <area-dialog :open-city="openCity" :open-dis="openDis" :provVal="ads.provVal" :cityVal="ads.cityVal" :zone="district" @closeDialog="closeDialog" @provName="provName"  @cityName="cityName"  @disName="disName"></area-dialog>
+
+    <!-- 提交遮罩 -->
+    <alert-tip v-show="showAlertTip" :formLoading="formLoading" :alertText="alertText"></alert-tip>
+  </div> 
+</template>
+
+<script>
+import {mapState, mapMutations} from 'vuex'
+import {addressList, addAddress} from '/api/api'
+import areaDialog from '/components/areaDialog'
+import alertTip from '/components/alertTip'
+
+export default {
+  name: 'addAddress',
+  data () {
+    return {
+        showLoading: true, //显示加载中  
+        openCity:false,
+        openDis: false,
+        district:[],
+        flag: false,
+        alertText: "",
+        showAlertTip: false,
+        formLoading: false,//提交中提示
+        addressId:'',
+        provCityVal: '',//省份加城市
+        ads:{
+          name:'',
+          mobile:'',
+          provVal:'',
+          cityVal:'',
+          disVal:'',
+          detailVal:''
+        }
+          
+    }
+  },
+  mounted() {
+      this._initData();    
+  },
+  components: {
+     areaDialog,  alertTip
+  }, 
+  computed: {
+    //判断手机号码
+    rightMobile() {
+        return  /^1\d{10}$/.test(this.ads.mobile)
+     }
+  },
+  methods: {
+    _initData() {
+      this.addressId = this.$route.query.addressId;
+      if(this.addressId){//修改地址
+        document.title = "修改地址";
+        addressList().then(res => {
+           this.address = res.resultList;
+           this.address && this.address.forEach((elm, index) => {
+               if(elm.id == this.addressId) {
+                 this.ads.name = elm.username;
+                 this.ads.mobile = elm.mobile;
+                 // let arr = elm.address_detail.split(" ");
+                 this.ads.provVal = elm.province;
+                 
+                 this.ads.cityVal = elm.city;
+                 this.ads.provCityVal = elm.province + elm.city;
+                 this.ads.disVal = elm.district;
+
+                 this.ads.detailVal = elm.detailaddress;
+
+               }
+            });
+        })
+           
+      } else {
+         document.title = "添加地址";
+      }
+    },
+    // 保存
+    async saveAddress(params) {
+      if(!this.ads.name){
+        this.showHideAlert('收货人不能为空');
+      } else if(this.ads.name.indexOf('先生') != -1 || this.ads.name.indexOf('小姐') != -1 || this.ads.name.indexOf('女士') != -1) {
+        this.showHideAlert('由于收寄件人必须实名制，请填写全名');
+      } else if(!this.rightMobile){
+        this.showHideAlert('手机号不正确');
+      } else if(!this.ads.provCityVal){
+        this.showHideAlert('城市不能为空');
+      } else if(!this.ads.disVal){
+        this.showHideAlert('县区不能为空');
+      } else if(!this.ads.detailVal){
+        this.showHideAlert('详细地址不能为空');
+      } else {
+        this.showAlertTip = true;//提交中提示
+        this.formLoading = true;
+        this.alertText = '提交中，请稍候'; 
+        if(this.addressId) {//修改地址
+          let update = await addAddress(params);
+        } else {//添加地址
+          delete params.id;
+          let add = await addAddress(params);
+        }
+        
+        this.$router.go(-1);
+      }
+    },
+    // check(){
+    //   if(this.whetherDefault){
+    //     this.flag = true;
+    //   }else {
+    //     this.flag = false;
+    //   }
+    // },
+    showCityDialog() {
+      this.openCity = true;
+      this.$refs.inputCity.blur();
+    },
+    showDisDialog() {
+      this.openDis = true;
+      this.$refs.inputDis.blur();
+    },
+    closeDialog() {
+      this.openCity = false;
+      this.openDis = false;
+    },
+    provName(name){
+      this.ads.provVal = name;
+    },
+    cityName(name){
+      this.ads.cityVal = name;
+      this.ads.provCityVal = this.ads.provVal + name;
+    },
+    disName(name){
+      this.ads.disVal = name;
+    },
+    //显示隐藏提示框
+    showHideAlert(text) { 
+        this.showAlertTip = true;
+        this.alertText = text;
+        setTimeout(() => {
+            this.showAlertTip = false;
+        }, 1000);
+    }
+  }
+
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+@import '../../../assets/scss/var.scss';
+// .addAddress {
+//   @extend %fixed-body;
+//   z-index: 5;
+//   background-color: #f6f6f6;
+// }
+</style>

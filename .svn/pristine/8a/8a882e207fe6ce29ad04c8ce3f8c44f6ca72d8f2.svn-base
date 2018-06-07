@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <title>我的订单</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+
+<div class="nothing " style="display: none">
+    <i class="icon-order"></i>
+    <h3>您还没有相关的订单</h3>
+    <a href="index.html">点击进入e券商城&nbsp;→</a>
+</div>
+<div id="order" style="display: none">
+    <ul class="convert_list border-list">
+    </ul>
+</div>
+
+<div class="ui-dialog">
+    <div class="dialog-cnt">
+        <p>确定删除此地址吗？</p>
+        <div class="two-btn">
+            <div id="cancel" class="btn-a">取消</div>
+            <div id="delete" class="btn-a">确定</div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.btn-delete').click(function () {
+            $('.ui-dialog').addClass('show');
+            var $address = $(this).closest('li');
+
+            $('#delete').unbind('click').click(function () {
+                $('.ui-dialog').removeClass('show');
+                $address.remove();
+            });
+            $('#cancel').click(function () {
+                $('.ui-dialog').removeClass('show');
+
+            });
+
+        });
+        var array = [1, 2, 3, 4, 5,6];
+        ajaxGet(baseUrl + '/shopCart/orders', "", function (data) {
+            if (data.resultCode === 200) {
+                $('#order').css('display', 'block');
+                var html = '';
+                for (var i = 0; i < data.resultList.length; i++) {
+
+                    html += '<li class="bg-show-2 border-top">'
+                    html += '   <div class="list-box border-bottom">'
+                    if (data.resultList[i].state == 0 && (data.resultList[i].orderType == 0||data.resultList[i].orderType == 7)) {
+                        html += '     <p class="list-info">支付单号：'
+                        html += '<span>' + data.resultList[i].note + '</span>'
+                    }else {
+                        html += '     <p class="list-info">订单号：'
+                        html += '<span>' + data.resultList[i].id + '</span>'
+                    }
+
+                    html += '</p>'
+                    if ( data.resultList[i].orderType == 3 || data.resultList[i].orderType == 5) {
+                        if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">排队中</span>'
+                        }else  if(data.resultList[i].state == 2){
+                            html += '<span class="font-orange">充值成功</span>'
+                        }else  if(data.resultList[i].state == 3){
+                            html += '<span class="font-orange">充值失败,已退款</span>'
+                        }else  if(data.resultList[i].state == 4){
+                            html += '<span class="font-orange">部分成功，失败部分退款</span>'
+                        }
+                    }else if (data.resultList[i].orderType == 0 ) {
+                        if(data.resultList[i].state == 0){
+                            html += '<span class="font-orange">未支付</span>'
+                        }else  if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">已支付待发货</span>'
+                        }else  if(data.resultList[i].state == 2){
+                            html += '<span class="font-orange">已发货</span>'
+                        }else  if(data.resultList[i].state == 3){
+                            html += '<span class="font-orange">已签收</span>'
+                        }else  if(data.resultList[i].state == 4){
+                            html += '<span class="font-orange">已退款</span>'
+                        }
+                    }else if (data.resultList[i].orderType == 7) {
+                        if(data.resultList[i].state == 0){
+                            html += '<span class="font-orange">未支付</span>'
+                        }else  if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">已支付，待发券</span>'
+                        }else  if(data.resultList[i].state == 2){
+                            html += '<span class="font-orange">已发券</span>'
+                        }
+                    }else if (data.resultList[i].orderType == 1) {
+                        if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">兑换成功</span>'
+                        }
+                    }else if (data.resultList[i].orderType == 2) {
+                        if(data.resultList[i].state == 0){
+                            html += '<span class="font-orange">未发送</span>'
+                        }else  if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">已发送</span>'
+                        }
+                    }else if (data.resultList[i].orderType == 7) {
+                        if(data.resultList[i].state == 0){
+                            html += '<span class="font-orange">未支付</span>'
+                        }else  if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">已支付</span>'
+                        }else  if(data.resultList[i].state == 2){
+                            html += '<span class="font-orange">已发券</span>'
+                        }
+                    }else if ( data.resultList[i].orderType == 4 || data.resultList[i].orderType == 6) {
+                        if(data.resultList[i].state == 1){
+                            html += '<span class="font-orange">排队中</span>'
+                        }else  if(data.resultList[i].state == 2){
+                            html += '<span class="font-orange">充值成功</span>'
+                        }else  if(data.resultList[i].state == 3){
+                            html += '<span class="font-orange">充值失败,已退款</span>'
+                        }
+                    }
+                    html += '                            </div>'
+                    
+
+                    if (data.resultList[i].state == 0 && (data.resultList[i].orderType == 0||data.resultList[i].orderType == 7)) {
+                        if (data.resultList[i].unpaid != null) {
+                            for (var k = 0; k < data.resultList[i].unpaid.length; k++) {
+                                html += '                            <a class="list-box border-bottom" href="product_detail.html?productid='+ data.resultList[i].unpaid[k].product.id +'">'
+                                html += '                            <img class="list-img" src="'+ baseImgUrl + data.resultList[i].unpaid[k].product.showpic +'">\n'
+                                html += '                            <div class="list-info"> '
+                                html += '                            <h4 class="nowrap">' + data.resultList[i].unpaid[k].productName + '</h4> '
+                                html += '                        <p><i class="icon-points"></i>价格&nbsp;<span class="red-font">' + data.resultList[i].unpaid[k].price + '</span>&nbsp;*&nbsp;<span class="red-font">' + data.resultList[i].unpaid[k].amount + '</span></p> '
+                                html += '                        <p>下单时间：<span>' + data.resultList[i].otime + '</span></p> '
+                                html += '                        </div> '
+                                html += '                        <span class="state font-green"></span> '
+                                html += '                            </a> '
+                            }
+                        }
+
+                        if(data.resultList[i].state == 0){
+                            html += '<div class="border-top clearfix">'
+                            html += '    <a class="btn-border btn-border-theme"  href="pay.html?orderNo='+ data.resultList[i].note +'">立刻支付</a>'
+                            html += '    <a class="btn-delete btn-border"  href="javascript:void(0)"  onclick="cancel('+ data.resultList[i].note +')">取消订单</a>'
+                            html += '   </div>'
+                        }
+                    }
+                    if ($.inArray(data.resultList[i].orderType, array) >= 0) {
+
+                        // html += '                            <a class="list-box border-bottom" href="product_detail.html?productid='+ data.resultList[i].detail[k].product.id +'">'
+                        html += '<a class="list-box border-bottom">'
+                        if (data.resultList[i].orderType == 1) {
+                            html += '<img class="list-img" src="images/picEb.png">\n';
+                        } else if (data.resultList[i].orderType == 2) {
+                            html += '<img class="list-img" src="images/picRb.png">\n';
+                        } else if (data.resultList[i].orderType == 3) {
+                            html += '<img class="list-img" src="images/picYk.png">\n';
+                        } else if (data.resultList[i].orderType == 4) {
+                            html += '<img class="list-img" src="images/mbr.png">\n';
+                        } else if (data.resultList[i].orderType == 5) {
+                            html += '<img class="list-img" src="images/picYk.png">\n';
+                        } else if (data.resultList[i].orderType == 6) {
+                            html += '<img class="list-img" src="images/mbr.png">\n';
+                        }
+
+                        html += '<div class="list-info"> '
+                        if (data.resultList[i].orderType == 1) {
+                            html += '<h4 class="nowrap">兑换e币</h4> ';
+                        }else if (data.resultList[i].orderType == 2) {
+                            html += '<h4 class="nowrap">兑换红包</h4> ';
+                        } else if (data.resultList[i].orderType == 3) {
+                            html += '<h4 class="nowrap">兑换油卡</h4> ';
+                        } else if (data.resultList[i].orderType == 4) {
+                            html += '<h4 class="nowrap">话费充值</h4> ';
+                        } else if (data.resultList[i].orderType == 5) {
+                            html += '<h4 class="nowrap">加油充值</h4> ';
+                        } else if (data.resultList[i].orderType == 6) {
+                            html += '<h4 class="nowrap">流量充值</h4> '
+                        }
+
+                        html += '                        <p><i class="icon-points"></i>面额&nbsp;<span class="red-font">' + data.resultList[i].amount + '</span></p> '
+                        html += '                        <p>下单时间：<span>' + data.resultList[i].otime + '</span></p> '
+                        html += '                        </div> '
+                        if (data.resultList[i].state == 0) {
+                            html += '                        <span class="state font-green">未提交充值</span> '
+                        } else if (data.resultList[i].state == 1) {
+                            html += '                        <span class="state font-green">已提交充值</span> '
+                        }
+                        html += '                            </a> '
+
+                    }else  if (data.resultList[i].orderType == 0 ) {
+                        if (data.resultList[i].detail != null) {
+                            for (var k = 0; k < data.resultList[i].detail.length; k++) {
+                                html += '                            <a class="list-box border-bottom" href="product_detail.html?productid='+ data.resultList[i].detail[k].product.id +'">'
+                                html += '                            <img class="list-img" src="'+ baseImgUrl + data.resultList[i].detail[k].product.showpic +'">\n'
+                                html += '                            <div class="list-info"> '
+                                html += '                            <h4 class="nowrap">' + data.resultList[i].detail[k].productName + '</h4> '
+                                html += '                        <p><i class="icon-points"></i>价格&nbsp;<span class="red-font">' + data.resultList[i].detail[k].price + '</span> &nbsp;*&nbsp;<span class="red-font">' + data.resultList[i].detail[k].amount + '</span></p> '
+                                html += '                        <p>下单时间：<span>' + data.resultList[i].otime + '</span></p> '
+                                html += '                        </div> '
+                                html += '                        <span class="state font-green"></span> '
+                                html += '                            </a> '
+                            }
+                        }
+                        if(data.resultList[i].state == 1){
+                            html += '<div class="border-top clearfix">'
+                            html +='  <a class="btn-border" href="order_detail.html?orderid='+ data.resultList[i].id +'">查看订单</a>'
+                            html +='  </div>'
+                        }else  if(data.resultList[i].state == 2 ){
+                            html += '<div class="border-top clearfix">'
+                            html +='  <a class="btn-border" href="logistics.html?orderid='+ data.resultList[i].id +'">查看物流</a>'
+                            html +='  </div>'
+                        }else  if(data.resultList[i].state == 5 ){
+                            html += '<div class="border-top clearfix">'
+                            html +='  <a class="btn-border" href="logistics.html?orderid='+ data.resultList[i].id +'">查看物流</a>'
+                            html +='  </div>'
+                        }else  if(data.resultList[i].state == 7){
+                            html += '<div class="border-top clearfix">'
+                            html +='  <a class="btn-border" href="odInfo4Eticket.html?eticketId='+ data.resultList[i].supplierid +'">查看电子券</a>'
+                            html +='  </div>'
+                        }
+
+                    }else  if (data.resultList[i].orderType == 7) {
+                        if (data.resultList[i].detail != null) {
+                            for (var k = 0; k < data.resultList[i].detail.length; k++) {
+                                html += '                            <a class="list-box border-bottom" href="product_detail.html?productid='+ data.resultList[i].detail[k].product.id +'">'
+                                html += '                            <img class="list-img" src="'+ baseImgUrl + data.resultList[i].detail[k].product.showpic +'">\n'
+                                html += '                            <div class="list-info"> '
+                                html += '                            <h4 class="nowrap">' + data.resultList[i].detail[k].productName + '</h4> '
+                                html += '                        <p><i class="icon-points"></i>价格&nbsp;<span class="red-font">' + data.resultList[i].detail[k].price + '</span> &nbsp;*&nbsp;<span class="red-font">' + data.resultList[i].detail[k].amount + '</span></p> '
+                                html += '                        <p>下单时间：<span>' + data.resultList[i].otime + '</span></p> '
+                                html += '                        </div> '
+                                html += '                        <span class="state font-green"></span> '
+                                html += '                            </a> '
+                            }
+                        }
+                         if(data.resultList[i].state == 1 ||data.resultList[i].state == 2){
+                            html += '<div class="border-top clearfix">'
+                            html +='  <a class="btn-border" href="odInfo4Eticket.html?eticketId='+ data.resultList[i].supplierid +'">查看电子券</a>'
+                            html +='  </div>'
+                        }
+
+                    }
+                    html += '                            </li>'
+
+                }
+                if(html == ''){
+                    $('.nothing').css('display', 'block');
+                }
+                $('.convert_list').html(html);
+            }
+        }, function (data) {
+
+
+        });
+
+
+    });
+
+    function cancel(payOrderId){
+        ajaxPost(baseUrl+'/shopCart/cancelOrder/'+payOrderId, '', function (data) {
+            if(data.resultCode == 200){
+                window.location.reload();
+            }
+        });
+    }
+</script>
+
+</body>
+
+</html>
+
+

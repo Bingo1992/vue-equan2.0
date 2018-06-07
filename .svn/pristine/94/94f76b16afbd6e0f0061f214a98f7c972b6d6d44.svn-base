@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>新增加油卡</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+
+</head>
+
+<body>
+   
+    <form action="#">
+        <div class="bg-show-2 border-top">
+            
+           <ul class="form-list border-list">
+                 <li>
+                    <div class="select-box">
+                        <select>
+                             <option>请选择油卡类型</option>
+                             <option>中石化加油卡</option>
+                         </select>
+                         <i class="icon-down"></i>
+                    </div>
+                         
+                 </li>
+                <li>
+                    <label>加油卡号</label>
+                    <input class="oil-card-1" type="tel" placeholder="请输入100011开头非副卡号">
+                </li>
+                <li>
+                    <label>确认卡号</label>
+                    <input class="oil-card-2" type="tel" placeholder="请再次确认">
+                </li>
+                <li>
+                    <label>持卡人</label>
+                    <input class="name" type="text" placeholder="持卡人姓名">
+                </li>
+            </ul>
+        </div>   
+       
+        <p class="confirm-btn btn">完成<p>
+    </form>
+
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+    <script type="text/javascript">
+    $(function(e) {
+        //点击提交按钮
+        $('.confirm-btn').click(function() {
+            var oilCard_1 = $('.oil-card-1').val();
+           
+            if (oilCard_1 == '') {
+                empty_p('加油卡号不能为空');
+            } else {
+                yes_p("油卡添加成功");
+            }
+        });
+
+    });
+
+    </script>
+
+</body>
+
+</html>

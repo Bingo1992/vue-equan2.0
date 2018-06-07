@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>用户注册</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+<div class="bg-show-2 border-top">
+   <ul class="form-list border-list">
+        <li>
+            <i class="icon-mobile"></i>
+            <input type="tel" id="regist_mobile" name="mobile" class="mobile" placeholder="请输入您的手机号码">
+        </li>
+         <li class="code">
+            <i class="icon-code"></i>
+            <input type="tel" id="regist_code" name="verify-code" class="verify-code" placeholder="请输入验证码">
+            <button class="get-code">获取验证码</button>
+        </li>
+    </ul>
+</div>   
+       
+ <p id="change-btn" class="btn">注册<p>
+
+<div class="tip-dialog">
+    <i class="icon-gantan"></i>
+    <p>手机号不能为空</p>
+</div>
+
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js?v=1.2"></script>
+<script type="text/javascript">
+    
+$(function(){
+	
+	var token = '',
+		interValObj,//timer变量，控制时间
+		curCount = 120;	//当前剩余秒数
+	
+	//初始化token
+	ajaxGet(baseUrl + "/user/register", {type:1}, function (data) {
+		if(data.resultCode == 200){
+			token = data.token;
+   		}else{
+   			$(".get-code").addClass('dis-btn');
+			wrong_p(data.resultMsg);
+   		}
+    });
+	
+	 //发送验证码
+	 $('.get-code').click(function() {
+	 		
+	 		if(token==''){
+	 			empty_p('系统异常，稍后再试.');
+	 			return false;
+	 		}
+	 		
+	 		var mobile = $("#regist_mobile").val();
+	 		if(mobile == ''){
+	 			empty_p('手机号不能为空.');
+	 			return false;
+	 		}
+	 		
+	 		if(!isMobile(mobile)) {
+	 			wrong_p('手机号不对.');
+	 			return false;
+	 		}
+	 		
+	 		$(".get-code").addClass('dis-btn');
+	 		$(".get-code").html(curCount + "s后获取");
+
+	 		interValObj = window.setInterval(setRemainTime, 1000);//启动计时器，1秒执行一次
+	 		
+	 		ajaxGet(baseUrl + "/user/register/send_code", {mobile : mobile, token : token, type : 'ESHOPREGISTER',checkMobile:'yes'}, function (data) {
+	 			
+	 			if(data.resultCode == 200){
+	 				yes_p(data.resultMsg);
+	        	}else{
+	 				wrong_p(data.resultMsg);
+	        	}
+	 			
+	        });
+     });
+     
+	 
+	 //提交注册
+     $('#change-btn').click(function() {
+    	 
+    	var mobile = $("#regist_mobile").val();
+      	var code = $("#regist_code").val();
+      	
+  		if(mobile == ''){
+  			empty_p('手机号不能为空.');
+  			return false;
+  		}
+  		
+  		if(!isMobile(mobile)) {
+  			wrong_p('手机号不对.');
+  			return false;
+  		}
+  		
+  		if(code == ''){
+  			empty_p('验证码不能为空.');
+  			return false;
+  		}
+  		
+  		ajaxGet(baseUrl + "/user/register/save", {mobile : mobile, code : code, type : 'ESHOPREGISTER'}, function (data) {
+  			
+  			if(data.resultCode == 200){
+  				yes_p(data.resultMsg);
+  				setTimeout("window.location.href = baseHtmlUrl + 'wxhtml/ticket.html';",500); 
+         	}else{
+  				wrong_p(data.resultMsg);
+         	}
+  			
+         });
+     });
+	
+ 	
+ 	function setRemainTime() {
+ 	
+ 		if (curCount == 0) {
+             window.clearInterval(interValObj);			//停止计时器
+             curCount = 120;
+             $(".get-code").removeAttr("disabled");
+             $(".get-code").removeClass('dis-btn');
+ 			$(".get-code").html("获取验证码");
+        }else {
+         	curCount--;
+            $(".get-code").html(curCount + "s后获取");
+        }
+ 	}
+});    
+</script>
+
+</body>
+</html>
+
+

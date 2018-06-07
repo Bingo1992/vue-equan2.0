@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <title>企业赠券</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+ 
+    <!-- 暂无券样式 需要显示时去掉hide-->
+    <div id="noTicket" class="nothing hide">
+        <i class="icon-ticket"></i>
+        <h3>您的账户暂无卡券</h3>
+        <a href="index.html">进入e券商城逛逛</a>
+    </div>
+    <div class="banner-2">
+        <ul class="ticket-list">
+            
+        </ul>
+    </div>
+       
+    <!-- 底部导航 -->
+    <div class="fixed-bottom">
+        <ul class="nav-bar flex-layout">
+            <li>
+                <a href="index.html">
+                    <i class="icon-home"></i>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li>
+                <a href="product_list.html">
+                    <i class="icon-sort"></i>
+                    <p>全部商品</p>
+                </a>
+            </li>
+            <li>
+                <a href="cart.html">
+                    <i class="icon-cart"></i>
+        			<span class="circlePoint">0</span>
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li class="active">
+                <a href="enterprise_ticket.html">
+                    <i class="icon-ticket-2"></i>
+                    <p>企业赠券</p>
+                </a>
+            </li>
+            <li>
+                <a href="personnel.html">
+                    <i class="icon-user"></i>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js"></script> 
+<script type="text/javascript">
+$(function(){
+	
+	equan.findCartTotal('circlePoint');
+	
+	//showLoading(loading_title);
+	var hasTick = false;
+	ajaxGet(baseUrl + '/user/myEtickets', {type:2}, function (data) {
+		if (data.resultCode === 200) {
+	   		if(data.hasTicket == true){
+	   			hasTick = true;
+	        	html = '';
+	            for (var i = 0; i < data.resultList.length; i++) {
+	            	html += '<li>';
+	            	//html += '<a class="list-box" href="ticket_detail.html?tkid='+data.resultList[i].resourceid+'">';
+	            	html += '<a class="list-box" href="http://yesm.cn/etp/pages/m/details_e.jsp?pid='+data.resultList[i].productId+'">';
+	            	html += '<div class="ticket-img">';
+	            	html += '<img src="images/ticket1.jpg" />';
+	            	html += '<p>￥<span>'+ data.resultList[i].price +'</span></p>';
+	            	html += ' </div>';
+	            	
+	            	html += '<div class="list-info">';
+	            	html += '<h4>'+ data.resultList[i].name +'</h4>';
+	            	html += '<p>有效期：<span>'+ data.resultList[i].expiredTime +'</span></p>';
+	            	html += '<p>券码：<span>'+ data.resultList[i].lcode +'</span></p>';
+	            	html += '</div>';
+	            	html += '<i class="icon-right"></i>';
+	            	html += '</a>';
+	            	html += '</li>';　
+	            }
+	            
+	            $(".ticket-list").append(html);
+	        
+	        }else{
+	        	hasTick = false;
+	        	$("#noTicket").removeClass('hide');
+	        }
+	    
+	    } else {
+	        //alert(data.resultMsg);
+	    }
+	    
+		hideLoading();
+	});
+	
+	
+	//e2
+    ajaxGet(baseUrl + '/user/eticket/list2', {type:2}, function (data) {
+    	
+    	//console.log(data);
+    	
+        if (data.resultCode === 200) {
+            
+            if(data.hasTicket == true){
+            	
+            	$(".nothing").css("display" , "none");
+            	
+            	html = '';
+                for (var i = 0; i < data.resultList.length; i++) {
+                	
+                	var eticket = data.resultList[i];
+                	
+                	html += '<li>';
+	            	html += '<a class="list-box" href="https://fs2.yesm.cn/equan/m/product?id='+eticket.eticketProductId+'">';
+	            	html += '<div class="ticket-img">';
+	            	html += '<img src="images/ticket1.jpg" />';
+	            	html += '<p>￥<span>'+ eticket.price +'</span></p>';
+	            	html += ' </div>';
+	            	
+	            	html += '<div class="list-info">';
+	            	html += '<h4>'+ eticket.productName +'</h4>';
+	            	html += '<p>有效期：<span>'+ eticket.expiredTime +'</span></p>';
+	            	html += '<p>券码：<span>'+eticket.code +'</span></p>';
+	            	html += '</div>';
+	            	html += '<i class="icon-right"></i>';
+	            	html += '</a>';
+	            	html += '</li>';
+                }
+                
+                $(".ticket-list").append(html);
+            	
+            }else{
+            	if(!hasTick){
+            		$(".nothing").css("display" , "block");
+            	}
+            }
+            
+        } else {
+            //alert(data.resultMsg);
+        }
+        
+        hideLoading();
+
+    });
+
+});
+</script>
+       
+</body>
+
+</html>
+
+

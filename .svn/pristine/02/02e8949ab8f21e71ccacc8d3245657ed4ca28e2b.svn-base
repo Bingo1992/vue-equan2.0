@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <title>充值结果</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script type="text/javascript" src="js/equan.js"></script> 
+    
+</head>
+<body>
+
+   
+	<div class="result">
+		<i class="icon-hook"></i>
+		<h4 style="font-size:.7rem;line-height:1rem;padding:.5rem;" id="msgH4">充值成功</h4>
+	</div>
+	<div class="two-btn">
+        <a class="btn" href="index.html">e券商城</a>   
+        <a class="btn" href="ticket.html">继续充值</a>
+    </div>
+    
+    
+<!-- 公告提示遮罩   -->
+<div id="notice" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>温馨提示：</h4>
+            <p class="red-font">
+    			红包兑换后24小时内通过e券公众号发送，收到微信“服务通知”推送的“零钱入账”消息，即可点击查看零钱入账明细。
+			</p>
+        </div>
+    </div>
+</div>     
+
+<script type="text/javascript">
+	var type = equan.queryString("type");
+	var redpacket = equan.queryString("redpacket");
+	
+	var msg = decodeURIComponent(equan.queryString("msg"));
+	$("#msgH4").html(msg);
+	
+	if(type==2 && redpacket<=200){
+		$('#notice').addClass('show');
+        $('#notice').click(function(){
+            $(this).removeClass('show');
+        });
+	}
+
+</script>
+	
+</body>
+
+</html>

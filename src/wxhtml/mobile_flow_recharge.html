@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>手机充值</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" >
+   
+</head>
+
+<body>
+
+<form id="mobileOdForm">
+	<input type="hidden" name="productid" value="-6"/>
+	<input type="hidden" name="orderType" value="6"/>
+	<input type="hidden" name="returntype" value="0"/>
+	<input type="hidden" name="sendTotal" value="0"/>
+	<input type="hidden" id="name" name="name" value="流量充值0M"/>
+	<input type="hidden" id="amount" name="amount" value="0" />
+	<input type="hidden" id="receivername" name="receivername" value="0" />
+	
+
+    <div class="fixed-top">
+        <ul class="nav-tabs flex-layout border-bottom">
+            <li>
+                <a href="mobile_recharge.html">话费充值</a>
+            </li>
+            <li class="active">
+                <a href="#">流量充值</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="banner-3">
+         <article class="bg-show">
+            <ul class="form-list border-list">
+                <li>
+                    <input class="mobile" type="text" id="receivermobile" name="receivermobile" placeholder="请输入11位手机号码" />
+                    <p class="motion-shop"><i class="icon-hook"></i><span id="mbDsp">中国移动</span></p>
+                </li>
+            </ul>
+
+            <ul id="Face_1" class="face-value clearfix">
+                <li ><!-- class="active" -->
+                	<a>
+                        <span>30M</span>
+                        <span class="md-font"><br>售价：<span class="fv">6</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>150M</span>
+                        <span class="md-font"><br>售价：<span class="fv">21</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>500M</span>
+                        <span class="md-font"><br>售价：<span class="fv">32</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                 </li>
+            </ul>
+            <ul id="Face_2" class="face-value clearfix">
+                <li ><!-- class="active" -->
+                	<a>
+                        <span>50M</span>
+                        <span class="md-font"><br>售价：<span class="fv">7</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>100M</span>
+                        <span class="md-font"><br>售价：<span class="fv">11</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>500M</span>
+                        <span class="md-font"><br>售价：<span class="fv">32</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                 </li>
+            </ul>
+            
+            <ul id="Face_3" class="face-value clearfix">
+            	<li><!--  class="active" -->
+                	<a>
+                        <span>30M</span>
+                        <span class="md-font"><br>售价：<span class="fv">6</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>50M</span>
+                        <span class="md-font"><br>售价：<span class="fv">8</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>100M</span>
+                        <span class="md-font"><br>售价：<span class="fv">11</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                </li>
+                <li>
+                	<a>
+                        <span>500M</span>
+                        <span class="md-font"><br>售价：<span class="fv">32</span>元</span>
+                        <p class="gray-font">月底失效</p>
+                    </a>
+                 </li>
+            </ul>
+        </article>
+        
+        <article class="bg-show-2">
+	         <div class="title-bar border-bottom">
+	            <h4>支付选择</h4>
+	         </div>
+        
+	        <ul class="border-list recharge-type"><!-- cpType;// 支付方式(1 积分+微信	2 纯积分 	3 微信支付 	4电子券) -->
+	            <li id="eType" >
+	                <span class="lb-type">e币支付</span>
+	                <p class="red-font" id="eCost">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="2">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li>
+	            <!-- <li id="wxType" >
+	                <span class="lb-type">微信支付</span>
+	                <p class="red-font" id="wxMoney">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="3">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li>
+	            <li id="mxType">
+	                <span class="lb-type">e币+微信支付</span>
+	                <p class="red-font" id="mxMoney">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="1">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li> -->
+	        </ul>
+	    </article>
+</form>
+        <a class="btn" href="#">确定支付</a>
+    </div>
+    
+    <div class="service-state">
+        <h4>服务说明</h4>
+        <p><font style="color:red">所充流量包月底失效。</font></p>
+        
+    </div>
+   
+    <!-- 提交提示 -->
+    <div class="on-loading">
+        <div class="loading-cnt">
+          <i class="load-spin"></i>
+          <span>正在提交...</span>
+        </div>
+          
+    </div>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+    
+    <!-- 公告提示遮罩   -->
+<div id="notice" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>公告</h4>
+            <p class="red-font">
+    			尊敬的用户，您好！春节放假期间，客服值班时间为每日9:00-18:00，如有异常兑换或延迟到账等情况，您可以通过客服热线反馈，我们将在2月26日统一处理。恭祝您新春快乐！
+			</p>
+        </div>
+    </div>
+</div>    
+
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript">
+    $(function(){
+    	
+    	/* $('#notice').addClass('show');
+        $('#notice').click(function(){
+            $(this).removeClass('show');
+        }); */
+    	
+    	var userIntegeral = 0,amount = 0,pname = '',sp = '';
+    	
+    	ajaxGet(baseUrl + "/user/integral", {}, function (data) {
+			//console.log(data);
+			if(data.success == true){
+				userIntegeral = data.obj;
+				
+				initFVandPayWay();
+				
+			}else{
+				wrong_p(data.resultMsg);
+				$('.btn').remove();
+			}
+	    });
+    	
+    	
+        //提交
+        $('.btn').click(function(){
+            var mobileNumberValue = $('.mobile').val();
+            if (mobileNumberValue == '') {
+                empty_p('您的手机号不能为空');
+            } else if (!(isMobile(mobileNumberValue))) { 
+                wrong_p('手机号码格式错误');
+            }else if(amount==0){
+            	
+				wrong_p('请选择流量包');
+			} else {
+            	
+            	var cpType = $('input[name="cpType"]:checked').val();
+          		 
+   	            if(cpType){
+   	                
+   	            }else{
+   		 			empty_p('请选择支付方式');
+   		            return false;
+   				 }
+    	   		
+   	            $('.on-loading').addClass('show');
+   	   			exchange(cpType);            	
+                
+            }
+            
+        });
+
+        
+        $('.face-value li').click(function() {
+            $(this).switchTabs('.face-value li');
+            pname = $(this).find('span').html();
+            amount = $(this).find('span .fv').html();
+            
+            //alert(pname + '-'+ amount);
+            
+            initFVandPayWay();
+        });
+
+		function initFVandPayWay(){
+        	
+        	//面值切换
+        	var name = "流量充值" + pname;
+        	
+        	$('#amount').val(amount);
+        	$('#name').val(name);
+        	$('#receivername').val(sp+pname);
+        	
+        	
+        	 //计算并重画支付方式 
+    		$("#eCost").html(amount+"e币");
+       		$('#wxMoney').html(amount+"元");
+       		//alert(amount+"-"+userIntegeral)
+       		
+			if(amount>userIntegeral){
+       			$('#eType').css('display','none');
+       			
+       			if(userIntegeral>0){
+       				$('#mxMoney').html(userIntegeral+"e币+"+(amount-userIntegeral)+"元");
+       				$('#mxType').css('display','-webkit-box');
+       			}else{
+       				$('#mxType').css('display','none');
+       			}
+       		}else{
+       			$('#eType').css('display','-webkit-box');
+       			$('#mxType').css('display','none');
+       		}
+    	}
+        
+		//兑换
+        function exchange(cpType){
+			
+        	//测试
+        	/* var mobileNumberValue = $("#receivermobile").val();
+            if(mobileNumberValue == '13450442428' || mobileNumberValue=='18926252617'){
+           	 	$("#amount").val("1"); 
+           	 	$("#receivername").val("YD30M"); 
+            }
+            else{
+            	//暂停业务
+            	$('#notice').addClass('show');
+            	return false;	
+            } */
+			
+        	
+        	$('.on-loading').addClass('show');
+        	
+        	var params = $('#mobileOdForm').serializeArray();
+        	
+        	//console.log(params);
+        	
+        	if(cpType==2){//全e币
+        		ajaxGet(baseUrl + "/product/exchange", params, function (data) {
+        			//console.log(data);
+        			if(data.resultCode == 200){
+        				yes_p('兑换成功');
+        				window.location.href = "convert_data.html";
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	
+        	}else{//混合
+        		ajaxGet(baseUrl + "/product/pay", params, function (data) {
+        			//console.log(data);
+        			if(data.resultCode == 200){
+        				window.location.href = "pay.html?orderNo="+data.odNo;
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	}
+        	
+        	$('.on-loading').removeClass('show');
+        	
+        }
+		
+       
+      	//验证手机号运营商
+        $('body').delegate('.mobile','input propertychange', function(){
+            var value = $(this).val();
+            if(isMobile(value)) {
+            	var flag = isPhoneNum(value);
+      			 if(flag>0 && flag<4){
+      				 sp = 'YD';
+      				 var spName = '中国移动';
+      				 if(flag==2){
+      					spName = '中国联通';
+      					sp = 'LT';
+      				 }else if(flag==3){
+      					spName = '中国电信';
+      					sp = 'DX';
+      				 }
+      				 
+      				$(this).isShop($(this),spName);
+      				 
+      				 $('.face-value').removeClass('show');
+      				 $('#Face_'+flag).addClass('show');
+      				 
+      				$('#Face_'+flag).find('li').removeClass('active');
+      				amount = 0;
+      				initFVandPayWay();
+      			 }
+                
+            }else {
+                $('.motion-shop').removeClass('show');
+            }
+        });
+        
+        
+   	
+   	
+      /*
+       * 判断是否是正确的手机号，以及手机的运营商
+       * @param {String} num
+       * 
+       * 返回值:
+       *      0 不是手机号码
+       *      1 移动
+       *      2 联通
+       *      3 电信
+       *      4 不确定
+       */
+      function isPhoneNum (num) {
+          var flag = 0;
+          var phoneRe = /^1\d{10}$/;  
+          var dx = [133,153,180,181,189]; /*电信*/
+          var lt = [130,131,132,145,155,156,185,186];/*联通*/
+          var yd = [134,135,136,137,138,139,147,150,151,152,157,158,159,182,183,184,187,188];/*移动*/
+           
+          function inArray(val,arr){
+              for(i in arr){
+                  if(val == arr[i]) return true;
+              }
+              return false;
+          }   
+       
+          if(phoneRe.test(num)){
+              var temp = num.slice(0,3);
+              if(inArray(temp,yd)) return 1;
+              if(inArray(temp,lt)) return 2;
+              if(inArray(temp,dx)) return 3;
+              return 4;
+          }
+          return flag;    
+      }
+		
+    });
+    
+    
+    
+</script>
+   
+</body>
+
+</html>

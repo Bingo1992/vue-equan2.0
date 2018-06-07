@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>编辑地址</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+	<form class="form_data_box">
+        <ul>
+        	<li class="form_row_input">
+                <input class="name" id="username" name="textfield" type="text"  placeholder="请输入收货人姓名" value="" />
+            </li>
+            <li class="form_row_input">
+                <input class="mobile" id="mobile" name="textfield" type="tel"  placeholder="请输入收货人手机号码" />
+            </li>
+            <li class="form_row_select" id="city">
+           		<div class="select_box">
+                	<select class="prov" name="prov"></select> 
+                    <span class="icon-right"></span>  
+                </div>
+                <div class="select_box">
+                	<select class="city" name="city" disabled="disabled"></select>
+                    <span class="icon-right"></span>  
+                </div>
+                <div class="select_box">
+                	<select class="dist" name="area" disabled="disabled"></select>
+                    <span class="icon-right"></span>  
+                </div>
+            </li>
+            
+            <li class="form_row_input">
+                <textarea cols="50" rows="5" id="detailaddress" placeholder="请输入详细地址"></textarea>
+            </li>
+        
+        </ul>
+        <a id="confirm-btn" class="btn">完成</a>
+    </form>
+
+    <div class="tip-dialog">
+        <i class="icon-tip icon-gantan"></i>
+        <p>密码不能为空</p>
+    </div>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/cityselect/city.min.js"></script>
+<script type="text/javascript" src="js/cityselect/jquery.cityselect.js?v=1.0.0.0"></script>
+
+<script type="text/javascript" src="js/equan.js"></script>   
+<script type="text/javascript" src="js/contactForm.js?v=1.0.0.8"></script>
+
+<script type="text/javascript">
+    
+	$(function(){
+		// 屏蔽右上角的分享按钮
+		document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+			WeixinJSBridge.call('hideOptionMenu');
+		});
+	});
+	
+</script>
+
+</body>
+
+</html>

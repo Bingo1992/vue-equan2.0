@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>娱乐充值</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js?v=1.0.0.1"></script>
+</head>
+
+<body>
+    <div class="bg-show">
+        <div class="title-bar border-bottom">
+            <h4>产品选择</h4>
+        </div>
+        <ul class="brand-list clearfix">
+            <li class="active" product_type='[{"爱奇艺直充":[{"name":"月卡","value":"18","way":"充值账号为手机号或邮箱","code":"1240514"},{"name":"季卡","value":"52","way":"充值账号为手机号或邮箱","code":"1240510"},{"name":"年卡","value":"178","way":"充值账号为手机号或邮箱","code":"1240508"}]}]' >
+                <a>
+                  <img src="images/media/qiyi.jpg">  
+                </a>
+            </li>
+            <li product_type='[{"腾讯视频直充":[{"name":"月卡","value":"18","way":"填写QQ号","code":"1241901"},{"name":"季卡","value":"52","way":"填写QQ号","code":"1241903"},{"name":"年卡","value":"188","way":"填写QQ号","code":"1241902"}]}]'>
+                <a>
+                  <img src="images/media/qq_video.jpg">  
+                </a>
+            </li>
+            <li product_type='[{"优酷VIP直充":[{"name":"周卡","value":"7","way":"填写手机号码","code":"1240710"},{"name":"月卡","value":"15","way":"填写手机号码","code":"1240706"},{"name":"季卡","value":"42","way":"填写手机号码","code":"1240707"},{"name":"年卡","value":"158","way":"填写手机号码","code":"1240708"}]}]'>
+                <a>
+                  <img src="images/media/youku.jpg">  
+                </a>
+            </li>
+			<li product_type='[{"移动PC端直充":[{"name":"月卡","value":"13","way":"填写手机号或邮箱","code":"1243701"},{"name":"半年卡","value":"68","way":"填写手机号或邮箱","code":"1243705"},{"name":"年卡","value":"130","way":"填写手机号或邮箱","code":"1243704"}]},{"全屏直充":[{"name":"月卡","value":"25","way":"填写手机号","code":"1243601"},{"name":"季卡","value":"72","way":"填写手机号","code":"1243603"},{"name":"年卡","value":"260","way":"填写手机号","code":"1243604"}]}]'>
+                <a>
+                  <img src="images/media/mgtv.jpg">  
+                </a>
+            </li>
+            <li product_type='[{"搜狐直充":[{"name":"月卡","value":"18","way":"填写手机号码","code":"1242103"},{"name":"季卡","value":"45","way":"填写手机号码","code":"1242102"},{"name":"年卡","value":"159","way":"填写手机号码","code":"1242101"}]}]'>
+                <a>
+                  <img src="images/media/sohu.jpg">  
+                </a>
+            </li>
+			<li product_type='[{"绿钻豪华版直充":[{"name":"月卡","value":"15","way":"填写QQ号","code":"2290107"},{"name":"季卡","value":"45","way":"填写QQ号","code":"2290501"},{"name":"半年卡","value":"90","way":"填写QQ号","code":"2290502"},{"name":"年卡","value":"180","way":"填写QQ号","code":"2290503"}]}]'>
+                <a>
+                  <img src="images/media/qq_music.jpg">  
+                </a>
+            </li>
+            <li product_type='[{"酷狗豪华版直充":[{"name":"月卡","value":"18","way":"填写酷狗号和绑定的手机号码","code":"2290201"}]}]'>
+                <a>
+                  <img src="images/media/kugo.jpg">  
+                </a>
+            </li>
+            <li product_type='[{"乐视超级直充":[{"name":"月卡","value":"45","way":"充值账号为手机号或邮箱","code":"1241307"},{"name":"季卡","value":"128","way":"充值账号为手机号或邮箱","code":"1241311"},{"name":"年卡","value":"388","way":"充值账号为手机号或邮箱","code":"1241308"}]},{"乐次元直充":[{"name":"月卡","value":"16","way":"充值账号为手机号或邮箱","code":"1241310"},{"name":"季卡","value":"45","way":"充值账号为手机号或邮箱","code":"1241309"},{"name":"年卡","value":"158","way":"充值账号为手机号或邮箱","code":"1241306"}]}]'>
+                <a>
+                  <img src="images/media/letv.jpg">  
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="bg-show-2">
+        <div class="title-bar border-bottom">
+            <h4>会员账号</h4>
+        </div>
+        <ul class="form-list border-list">
+            <li>
+                <!-- <label>会员账号</label> -->
+                <input class="mobile" type="text" value="" placeholder="请输入手机号/邮箱">
+            </li>
+        </ul>
+    </div>
+
+    <div class="bg-show-2">
+        <div class="title-bar border-bottom">
+            <h4>面额</h4>
+        </div>
+        
+        <ul class="face-value clearfix show" id="face_ul">
+            
+        </ul>
+    </div>
+
+    <div class="bg-show-2">
+        <div class="title-bar border-bottom">
+            <h4>产品类型</h4>
+        </div>
+        <ul class="face-value clearfix show" id="type_ul">
+        </ul>
+    </div>
+
+    <div class="bg-show-2">
+        <div class="title-bar border-bottom">
+            <h4>支付选择</h4>
+        </div>
+        <ul class="border-list">
+            <li class="list-box">
+                <span class="list-info-h">e币支付</span>
+                <p class="red-font pdr">0e币</p>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" checked="">
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+ <!--            <li class="list-box">
+                <span class="list-info-h">微信支付</span>
+                 <p class="red-font pdr">899元</p>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type">
+                    <i class="icon-hook"></i>
+                </label>
+            </li> -->
+        </ul>
+    </div>
+
+    <a class="btn" href="javascript:" onclick="recharge()">立即充值</a>
+ 
+    <dl class="rich-box font-gray">
+        <dt>温馨提示：</dt>
+        <dd>1、这是温馨提示内容...</dd>
+        <dd>2、这是温馨提示内容...</dd>
+        <dd>3、这是温馨提示内容...</dd>
+    </dl>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+     <!-- 提交提示 -->
+    <div class="on-loading">
+        <div class="loading-cnt">
+          <i class="load-spin"></i>
+          <span>正在提交...</span>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    $(function() {
+    	
+    	var userIntegeral = 0;
+    	
+    	ajaxSynGet(baseUrl + "/user/integral", {}, function (data) {
+			console.log(data);
+			if(data.success == true){
+				userIntegeral = data.obj;
+			}else{
+				wrong_p(data.resultMsg);
+				$('.btn').remove();
+			}
+	    });
+    	
+    	 $('#type_ul').delegate('li','click',function() {
+             $(this).switchTabs('.face-value li');
+             
+             var faceTypeStr = $(this).attr('faceTypeStr');
+             changeFace(faceTypeStr);
+         });
+    	 
+    	 $('#face_ul').delegate('li','click',function() {
+             $(this).switchTabs('.face-value li');
+             
+             checkBtn($(this).attr('faceVal'));
+         });
+
+         $('.brand-list').delegate('li','click',function() {
+             $(this).switchTabs('.brand-list li');
+             
+             changeBrand($(this).attr('product_type'));
+         });
+         
+         
+         $('.brand-list > li').each(function(){
+     		if($(this).hasClass('active')){
+     			
+     			productTypeJson = $(this).attr('product_type');
+     			
+     			changeBrand(productTypeJson);
+     			
+     			return true;
+     		}
+     	});
+        
+        
+        function changeBrand(productTypeJson){
+        	
+        	
+        	productTypeJson = eval('(' + productTypeJson + ')');
+        	
+        	var faceHtml = '';
+        	var typeHtml = '';
+    		var faceTypeStr = '';
+        	
+        	for(var i=0; i<productTypeJson.length; i++){
+        		
+        		
+        		for(key in productTypeJson[i]){
+        			
+        			faceTypeStr = JSON.stringify(productTypeJson[i][key]);
+        			
+        			faceTypeStr = encodeURIComponent(faceTypeStr);
+        			
+        			if(i == 0){
+        				typeHtml += '<li class="active" faceTypeStr="'+ faceTypeStr +'">';	
+        				changeFace(faceTypeStr);
+        				
+    				}
+    				else{
+    					typeHtml += '<li faceTypeStr="'+ faceTypeStr +'">';	
+    				}
+    				
+        			typeHtml += '    <a class="center-text">';
+        			typeHtml += key;
+        			typeHtml += '    </a>';
+        			typeHtml += '</li>';
+        			
+        		}
+        		
+        	}
+        	
+        	$('#type_ul').html(typeHtml);
+        	
+        	
+        	
+        }
+        
+        function changeFace(faceTypeStr){
+        	
+        	faceTypeStr = decodeURIComponent(faceTypeStr);
+        	
+        	var faceTypeJson = eval('(' + faceTypeStr + ')');
+        	
+        	
+        	var faceHtml = '';
+        	for(var i=0; i<faceTypeJson.length;i++){
+        		console.log(faceTypeJson[i]);	
+        		
+        		if(i == 0){
+        			faceHtml += '<li class="active" price="'+ faceTypeJson[i].value +'" code="'+ faceTypeJson[i].code +'" faceVal="'+ faceTypeJson[i].value +'">';
+        			checkBtn(faceTypeJson[i].value);
+        		}
+        		else{
+        			faceHtml += '<li price="'+ faceTypeJson[i].value +'" code="'+ faceTypeJson[i].code +'" faceVal="'+ faceTypeJson[i].value +'">';
+        		}
+        		
+        		faceHtml += '<a>';
+        		faceHtml += '<p>'+ faceTypeJson[i].name +'</p>';
+        		faceHtml += '<p>'+ faceTypeJson[i].value +'元</p>';
+        		faceHtml += '</a>';
+        		faceHtml += '</li>';
+        		
+        		$('.mobile').attr('placeholder', faceTypeJson[i].way);
+        		$('.tip-dialog > p').html(faceTypeJson[i].way + '不能为空');
+        	}
+        	
+        	$('#face_ul').html(faceHtml);
+        	
+        }
+        
+        function checkBtn(value){
+        	
+        	value = parseInt(value);
+        	$('.pdr').html(value + 'e币');
+        	
+        	//userIntegeral = 0;
+        	
+        	if(userIntegeral < value) {
+        		$('.btn').html('余额不足');
+        		$('.btn').removeAttr('onclick');
+        	}
+        	else{
+        		$('.btn').html('立即购买');
+        		$('.btn').attr('onclick', 'recharge();');
+        	}
+        	
+        }
+        
+    });
+    
+    function recharge(){
+    	
+    	var account = $('.mobile').val();
+    	
+    	console.log(account);
+    	if(account == ''){
+    		
+    		$('.tip-dialog').addClass('show');
+    		empty_p('会员账号不能为空');
+    		
+    		return false;
+    	}
+    	
+    	$('.on-loading').addClass('show');
+    	
+    	var price = '';
+    	var code = '';
+    	$('#face_ul > li').each(function(){
+    		if($(this).hasClass('active')){
+    			code = $(this).attr("code");
+    			price = $(this).attr("price");
+    			return true;
+    		}
+    	});
+    	
+    	console.log(code);
+    	
+		ajaxPost(baseUrl + '/recharge/ofpay/media', {code : code, account : account, price : price}, function (data) {
+	    	
+			console.log(data);
+			
+	        if (data.success === true) {
+	        	
+	        	$('.on-loading').removeClass('show');
+	        	
+	        	yes_p('下单成功，提交充值中');
+	        	
+	        	setTimeout("location.href = 'convert_data.html'", 2000 );
+	        	
+	        } else {
+	            //alert(data.resultMsg);
+	        	wrong_p(data.msg);
+	        	
+	        	$('.on-loading').removeClass('show');
+	        }
+	    });
+    	
+    	
+    }
+    
+    </script>
+</body>
+
+</html>

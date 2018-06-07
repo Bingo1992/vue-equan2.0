@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的账户</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+    <div class="credit-top">
+        <div class="search">
+            <i class="icon-search"></i>
+            <span>按日期查询</span>
+        </div>
+        <div class="credit-num">
+            <p>e币总额</p>
+            <p id="credit">--</p>
+        </div>
+
+        <a class="btn-recharge btn" href="ticket.html">e币充值</a>
+    </div>
+    <!-- 输入查询日期 -->
+    <form action="#" class="query-time">
+        <div class="shade-dialog hide"></div>
+        <!-- 黑色遮罩 -->
+        <div class="time-list">
+            <a class="return border-bottom" href="#">
+                <i class="icon-left"></i> 返回
+            </a>
+            <ul class="border-list">
+                <li>
+                    <label for="beginTime">选择开始时间</label>
+                    <input type="date" name="beginTime" id="beginTime" placeholder="请输入查询时间段">
+                    <i class="icon-right"></i>
+                </li>
+                <li>
+                    <label for="end-time">选择结束时间</label>
+                    <input type="date" name="endTime" id="endTime" placeholder="请输入查询时间段">
+                    <i class="icon-right"></i>
+                </li>
+            </ul>
+            <p id="btn-check" class="btn-check btn">查询<p>
+        </div>
+    </form>
+    <!-- 输入查询日期结束 -->
+    <article class="credit-list bg-show-2">
+        <div class="credit-title border-bottom">
+            <p><span>7天内</span>交易情况</p>
+        </div>
+        <table class="credit-detail">
+            <thead>
+                <tr>
+                    <th>交易日期</th>
+                    <th>交易描述</th>
+                    <th>额度变动</th>
+                </tr>
+            </thead>
+            <tbody id="integral-history-list">
+                
+            </tbody>
+        </table>
+    </article>
+    <p class="more">点击加载更多</p>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+    
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js?v=1.0.0.0.1"></script>
+<script type="text/javascript" src="js/my_account.js?v=1.0.0.0.2"></script>
+<script type="text/javascript">
+    $(function() {
+        //点击查询日期按钮
+        $('.search span').click(function() {
+            $('.query-time').find('.shade-dialog').removeClass('hide').siblings('.time-list').addClass('more-wp-open');
+        });
+
+        //验证输入日期
+        $('#btn-check').click(function() {
+            var begin = document.getElementById("beginTime"),
+                beginTime = begin.value;
+
+            var end = document.getElementById("endTime"),
+                endTime = end.value;
+
+            if (beginTime == '' || endTime == '') {
+                empty_p('请输入查询日期');
+            } else if (endTime <= beginTime) {
+                wrong_p('日期有误');
+            } else {
+                var text = beginTime + '到' + endTime;
+                $('.credit-title span').html(text);
+                $('.query-time').find('.shade-dialog').addClass('hide').siblings('.time-list').removeClass('more-wp-open');
+            }
+        });
+
+        //返回按钮
+        $('.return').click(function() {
+            $('.query-time').find('.shade-dialog').addClass('hide').siblings('.time-list').removeClass('more-wp-open');
+        })
+    });
+
+
+    //三位数以上使用分隔符
+    function formatNum(num){
+
+        num = num.toString();   //将输入的数字转换为字符串
+
+        if(/^-?\d+\.?\d+$/.test(num)){  //判断输入内容是否为整数或小数
+            if(/^-?\d+$/.test(num)){    //判断输入内容是否为整数
+                num =num + ",";   //将小数点换成逗号
+            }else{
+                num = num.replace(/\./,',');      //将小数的小数点换成逗号
+            }
+
+            while(/\d{4}/.test(num)){ //
+                num = num.replace(/(\d+)(\d{3}\,)/,'$1,$2');
+            }
+
+            num = num.replace(/\,(\d*)$/,'$1');   //将最后一个逗号去掉
+        }
+        return num;
+    }
+
+    </script>
+ 
+</body>
+
+</html>

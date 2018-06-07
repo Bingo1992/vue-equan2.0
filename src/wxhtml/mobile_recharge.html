@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>手机充值</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" >
+   	<script src="json/GXMobileNums.js"></script>
+</head>
+
+<body>
+
+<form id="mobileOdForm">
+	<input type="hidden" name="productid" value="-4"/>
+	<input type="hidden" name="orderType" value="4"/>
+	<input type="hidden" name="returntype" value="0"/>
+	<input type="hidden" name="sendTotal" value="0"/>
+	<input type="hidden" id="name" name="name" value="话费充值30元"/>
+	<input type="hidden" id="amount" name="amount" value="30" />
+
+    <div class="fixed-top">
+        <ul class="nav-tabs flex-layout border-bottom">
+            <li class="active">
+                <a href="#">话费充值</a>
+            </li>
+            <li>
+                <a href="mobile_flow_recharge.html">流量充值</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="banner-3">
+         <article class="bg-show">
+            <ul class="form-list border-list">
+                <li>
+                    <input class="mobile" type="text" id="receivermobile" name="receivermobile" placeholder="请输入11位手机号码">
+                    <p class="motion-shop"><i class="icon-hook"></i><span>广州移动</span></p>
+                    <ul class="hist-box border-bottom hide">
+                    </ul>
+                </li>
+            </ul>
+            <ul class="form-list border-list">
+                <li style="color:red;">*请确认手机号信息，一经提交，无法撤回！</li>
+            </ul>
+            <ul class="face-value clearfix show">
+                <!-- <li class="active"><a><span>10</span>元</a></li> -->
+                <li class="active"><a><span>30</span>元</a></li>
+                <li><a><span>50</span>元</a></li>
+                <li><a><span>100</span>元</a></li>
+            </ul>
+        </article>
+        
+        <article class="bg-show-2">
+	         <div class="title-bar border-bottom">
+	            <h4>支付选择</h4>
+	         </div>
+        
+	        <ul class="border-list recharge-type"><!-- cpType;// 支付方式(1 积分+微信	2 纯积分 	3 微信支付 	4电子券) -->
+	            <li id="eType" >
+	                <span class="lb-type">e币支付</span>
+	                <p class="red-font" id="eCost">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="2">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li>
+	            <!-- <li id="wxType" >
+	                <span class="lb-type">微信支付</span>
+	                <p class="red-font" id="wxMoney">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="3">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li>
+	            <li id="mxType">
+	                <span class="lb-type">e币+微信支付</span>
+	                <p class="red-font" id="mxMoney">--</p>
+	                <label class="checkbox" for="type">
+	                    <input type="radio" name="cpType" value="1">
+	                    <i class="icon-hook"></i>
+	                </label>
+	            </li> -->
+	        </ul>
+	    </article>
+</form>
+        <a class="btn" href="#">确定支付</a>
+    </div>
+    
+    <div class="service-state">
+        <h4>服务说明</h4>
+        <p><font style="color:red">每天23:00至01:00暂停充值。</font></p>
+        
+    </div>
+   
+    <!-- 提交提示 -->
+    <div class="on-loading">
+        <div class="loading-cnt">
+          <i class="load-spin"></i>
+          <span>正在提交...</span>
+        </div>
+          
+    </div>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+    
+<!-- 公告提示遮罩   -->
+<div id="notice" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>公告</h4>
+            <p class="red-font">
+    			尊敬的用户，您好！春节放假期间，客服值班时间为每日9:00-18:00，如有异常兑换或延迟到账等情况，您可以通过客服热线反馈，我们将在2月26日统一处理。恭祝您新春快乐！
+			</p>
+        </div>
+    </div>
+</div>    
+
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+    	
+    	/* $('#notice').addClass('show');
+        $('#notice').click(function(){
+            $(this).removeClass('show');
+        }); */
+    	
+    	var userIntegeral = 0,amount = 30;
+    	
+    	ajaxGet(baseUrl + "/user/integral", {}, function (data) {
+			console.log(data);
+			if(data.success == true){
+				userIntegeral = data.obj;
+				
+				initFVandPayWay();
+				
+			}else{
+				wrong_p(data.resultMsg);
+				$('.btn').remove();
+			}
+	    });
+    	
+    	ajaxGet(baseUrl + "/mobile/recharge/record", {orderType : 4}, function (data) {
+			console.log(data);
+			if(data.success == true){
+				
+				var html = '';
+				for(var i = 0; i < data.obj.length; i++){
+					
+					if(i == 0){
+						$("#receivermobile").val(data.obj[i]);
+					}
+					
+					html += '<li  class="histNum">';
+					html += '<span class="historynum">'+ data.obj[i] +'</span>';
+					html += '</li>';	
+				}
+				
+				$('.hist-box').html(html);
+			}
+	    });
+    	
+    	
+        //提交
+        $('.btn').click(function(){
+            var mobileNumberValue = $('.mobile').val();
+            if (mobileNumberValue == '') {
+                empty_p('您的手机号不能为空');
+            } else if (!(isMobile(mobileNumberValue))) { 
+                wrong_p('手机号码格式错误');
+            } else {
+            	
+            	/* var flag = isPhoneNum(mobileNumberValue);
+            	
+            	if(flag && flag==-4){
+            		wrong_p('对不起，广西移动号码暂停服务!');
+            	}else{ */
+            		
+            		var cpType = $('input[name="cpType"]:checked').val();
+             		 
+     	   	            if(cpType){
+     	   	                
+     	   	            }else{
+     	   		 			empty_p('请选择支付方式');
+     	   		            return false;
+     	   				 }
+     	    	   		
+     	   	            $('.on-loading').addClass('show');
+     	   	            
+     	   	   			exchange(cpType);  
+            	//}
+            }
+            
+        });
+
+         //选项卡切换
+         /**
+	        $('.nav-tabs li').click(function() {
+	            $(this).switchTabs('.nav-tabs li', '.face-value');
+	        });
+         **/
+
+        $('.face-value li').click(function() {
+            $(this).switchTabs('.face-value li');
+            amount = $(this).find('span').html();
+            
+            initFVandPayWay();
+        });
+         
+         //聚焦输入框
+         $('.mobile').bind('click',function(event){
+
+             event.stopPropagation();
+             var $_this = $(this);
+             
+             $(this).siblings('.hist-box').removeClass('hide');
+
+             $_this.on('input propertychange',function(event){
+                 event.stopPropagation();
+                 var flag = false;
+                 var inputLen = $_this.val().length; //输入框输入的文字长度
+
+                 $('.hist-box li').each(function(){//判断字符串是否匹配
+                     var shortStr = $(this).find('.historynum').html().substring(0,inputLen);
+                     if($_this.val().match(shortStr)){
+                         flag = true;
+                     }
+                 });
+               
+                 if(flag == true && inputLen < 11){
+                     $_this.siblings('.hist-box').removeClass('hide');
+                 }else {
+                     $_this.siblings('.hist-box').addClass('hide');
+                 }
+                 
+             });
+           
+            
+             //点击历史号码
+             $('.hist-box li').on('click',function(event) {
+                 var histNum = $(this).find('.historynum').html();
+                 $_this.val(histNum);
+                 // $(this).parent('.hist-box').addClass('hide');
+             });
+
+             //删除号码
+             $('.hist-box .icon-cha').on('click',function(event){
+                 event.stopPropagation();
+                 var $parent = $(this).closest('li');
+                 $parent.remove();
+             });
+             //点击其他地方隐藏遮罩
+             $(document).click(function(event) {
+                $('.hist-box').addClass('hide');
+             }); 
+         });
+
+
+		function initFVandPayWay(){
+        	
+        	//面值切换
+        	var name = "话费充值"+amount+"元";
+        	
+        	$('#amount').val(amount);
+        	$('#name').val(name);
+        	
+        	
+        	 //计算并重画支付方式 
+    		$("#eCost").html(amount+"e币");
+       		$('#wxMoney').html(amount+"元");
+       		//alert(amount+"-"+userIntegeral)
+       		
+			if(amount>userIntegeral){
+       			$('#eType').css('display','none');
+       			
+       			if(userIntegeral>0){
+       				$('#mxMoney').html(userIntegeral+"e币+"+(amount-userIntegeral)+"元");
+       				$('#mxType').css('display','-webkit-box');
+       			}else{
+       				$('#mxType').css('display','none');
+       			}
+       		}else{
+       			$('#eType').css('display','-webkit-box');
+       			$('#mxType').css('display','none');
+       		}
+    	}
+        
+		//兑换
+        function exchange(cpType){
+        	
+        	//测试
+        	/* var mobileNumberValue = $("#receivermobile").val();
+            if(mobileNumberValue == '13450442428' || mobileNumberValue=='18926252617'){
+           	 	$("#amount").val("1"); 
+            }
+            else{
+            	//暂停业务
+            	$('#notice').addClass('show');
+            	return false;	
+            } */
+			
+			
+        	$('.on-loading').addClass('show');
+        	
+        	var params = $('#mobileOdForm').serializeArray();
+        	
+        	//console.log(params);
+        	
+        	if(cpType==2){//全e币
+        		ajaxGet(baseUrl + "/product/exchange", params, function (data) {
+        			console.log(data);
+        			if(data.resultCode == 200){
+        				yes_p('兑换成功');
+        				window.location.href = "convert_data.html";
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	
+        	}else{//混合
+        		ajaxGet(baseUrl + "/product/pay", params, function (data) {
+        			//console.log(data);
+        			if(data.resultCode == 200){
+        				window.location.href = "pay.html?orderNo="+data.odNo;
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	}
+        	
+        	$('.on-loading').removeClass('show');
+        }
+		
+		
+		
+        /*
+         * 判断是否是正确的手机号，以及手机的运营商
+         * @param {String} num
+         * 
+         * 返回值:
+         *      0 不是手机号码
+         *      1 移动
+         *      2 联通
+         *      3 电信
+         *      4 不确定
+         */
+        function isPhoneNum (num) {
+            var flag = 0;
+            var phoneRe = /^1\d{10}$/;  
+            var dx = [133,153,177,180,181,189]; /*电信*/
+            var lt = [130,131,132,145,155,156,176,185,186];/*联通*/
+            var yd = [134,135,136,137,138,139,147,150,151,152,157,158,159,182,183,184,187,188];/*移动*/
+             
+            function inArray(val,arr){
+                for(i in arr){
+                    if(val == arr[i]) return true;
+                }
+                return false;
+            }   
+         
+            if(phoneRe.test(num)){
+                var temp = num.slice(0,3);
+                
+                var mb7 = num.slice(0,7);
+                
+                if(inArray(temp,yd)) {
+                	if(inArray(mb7,gxMbNums)) {
+                		return -4;
+                	}
+                	return 1;
+                }
+                
+                if(inArray(temp,lt)) return 2;
+                if(inArray(temp,dx)) return 3;
+                return 4;
+            }
+            return flag;    
+        }
+         
+       
+		
+    });
+    
+</script>
+   
+</body>
+
+</html>

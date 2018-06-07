@@ -1,0 +1,106 @@
+
+// -----theme color----
+$color-theme: #2dd3c8;
+$color-gray: #999;
+$border-color: #e1e1e1;
+$color-orange: #fe5625;
+
+$color-red: #f74c31;
+
+$bkg-theme: -webkit-linear-gradient(left, #27d0c9, #75f9bf);
+$bkg-orange: -webkit-linear-gradient(left, #ff5533, #ff8b3e);
+$bkg-blue: -webkit-linear-gradient(left, #1980ff, #5cc5ff);
+$bkg-red: -webkit-linear-gradient(left, #f53b6a, #ff7f89);
+
+$lg-font: 16px;
+$md-font: 12px;
+$sm-font: 10px;
+// ----margin----
+$gauge: 12px;
+$bgMargin: 16px;
+
+@mixin box {
+    // display: -webkit-box;
+    // -webkit-box-orient: vertical;
+    // -webkit-box-pack: center;
+    // -webkit-box-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin height($bs:44px){
+    height:$bs;
+    line-height:$bs;
+}
+@mixin semicircle($bs:30px){
+    @include height($bs);
+    border-radius: $bs / 2;
+    text-align:center;
+} 
+@mixin circle($bs:24px){
+    width: $bs;
+    @include height($bs);
+    border-radius: $bs;
+    text-align:center;
+}
+@mixin btnRadius($bs:40px){
+    @include height($bs);
+    border-radius: 4px;
+    text-align:center; 
+    display: block;
+}
+@mixin btnBorder($bs:34px,$borderColor:#ccc){
+    @include btnRadius($bs);
+    border: 1px solid $borderColor;
+    color: #666;
+    padding: 0 10px;
+    box-sizing: border-box; 
+}
+
+%fixed-layout {
+    position:fixed;
+    left:0;
+    width: 100%;
+    z-index: 5; 
+}
+
+%fixed-body {
+    @extend %fixed-layout;
+    top: 0;
+    bottom: 0;
+}
+%fixed-bottom {
+    @extend %fixed-layout;
+    bottom: 0;
+    padding-bottom: constant(safe-area-inset-bottom);//为底下圆弧的高度 34px       
+    padding-bottom: env(safe-area-inset-bottom);//为底下圆弧的高度 34px       
+}
+%fixed-top {
+    @extend %fixed-layout;
+    top: 0;
+}
+
+%mini-border {
+    position: absolute;
+    display: block;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform:scale(.5);
+    transform:scale(.5);
+    box-sizing:border-box;
+}
+
+@function pxTorem($px){ 
+    @return $px / 40 * 1rem;
+}
+
+// 首页轮播图多出的高度
+$banBottom: pxTorem(24);

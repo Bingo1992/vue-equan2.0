@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>券详情</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+</head>
+
+<body>
+    <article id="eticketBaseInfo" class="bg-show">
+        <div class="title-bar border-bottom">
+            <h4>券信息</h4>
+        </div>
+        <ul class="border-list detail-list">
+            <li>
+                <span>产品名称：</span>
+                <span id="pname" class="nowrap">---</span>
+            </li>
+            <li>
+                <span>有效期：</span>
+                <span id="limitTime">---</span>
+            </li>
+            <li>
+                <span>状态：</span>
+                <span id="state" class="">---</span>
+            </li>
+            <li class="code">
+                <span>验证码：</span>
+                <span id="code" class="red-font" style="font-size:.8rem">---</span>
+            </li>
+        </ul>
+    </article>
+    
+    <div id="zrx1" class="ticket-banner hide">
+	        <div class="center-info">
+	            <div class="border-img">
+	                <img class="borderImg" src="images/zhierxing.png">
+	                <img class="borderImg" src="images/equan.png">
+	            </div>
+	            <h4 id="zrxPname">
+	            	###
+	            </h4>
+	            <p>有效期至:<span id="zrxLt"></span></p>
+	        </div>
+	    </div>
+	    <div id="zrx2" class="bar-code bg-show border-bottom  hide">
+	        <h3 id="zrxCode"></h3>
+	        <!-- <div id="bcTarget" class="barcodeImg"></div> -->
+	       	<div>
+				<img id="barcode128"/>
+			</div>
+	        
+	        <p>请在付款时向收银员出示此券</p>
+	    </div>
+    
+    
+    
+    <article id="esmPrd" class="bg-show-2 border-top border-bottom">
+       <a id="esmPda" class="check-shop" >
+           <span>查看可消费门店</span>
+           <!-- <span class="gray-font">(此商品可在<strong>30</strong>家店通用)</span> -->
+           <i class="icon-right"></i>
+       </a>
+    </article>
+    
+    <div class="lis_module bg-show-2">
+            <div class="title-bar border-bottom">
+                <h4>使用说明</h4>
+            </div>
+            <div class="text_box">
+                <p id="usage"></p>
+            </div>
+        </div>
+    <article class="bg-show-2 border-top border-bottom">
+        <div class="title-bar border-bottom">
+            <h4>客服电话</h4>
+        </div>
+        <div class="ticket-tel">
+            <a href="tel:4000408000">
+                <i class="icon-tel"></i> 4000408000
+            </a>
+        </div>
+    </article>
+   
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/JsBarcode.all.min.js"></script>
+<script type="text/javascript" src="js/equan.js"></script>
+        
+<script type="text/javascript">
+    $(function() {
+        var eticketId = equan.queryString("eticketId")
+        
+        console.log(eticketId);
+        console.log(baseUrl);
+        
+        ajaxGet(baseUrl + '/user/order/eticketDetail', {eticketId: eticketId }, function (data) {
+        	
+        	//console.log(data);
+        	
+            if (data.resultCode === 200) {
+                
+                $("#pname").html(data.resultMap.productName);
+                $('#zrxPname').html(data.resultMap.productName);
+                
+                $("#limitTime").html(data.resultMap.expiredTime);
+                $("#zrxLt").html(data.resultMap.expiredTime);
+                
+                if(data.resultMap.state == '0'){
+                	$("#state").html('未使用');
+                	
+                }else{
+                	$("#state").html('已使用');
+                }
+                
+                var code = data.resultMap.code;
+                var eticketProductId = data.resultMap.eticketProductId;
+                
+                if(eticketProductId==1025 || eticketProductId==2345 ){
+                	$('#eticketBaseInfo').addClass('hide');
+                	
+                	JsBarcode("#barcode128", code, {
+    					format:"CODE128C",
+    					displayValue:false,
+    					fontSize:20
+    				});
+                	
+                	$("#zrxCode").html(code.substr(0,4)+'-'+code.substr(4,4)+'-'+code.substr(8,4)+'-'+code.substr(12,4)+'-'+code.substr(16,2));
+                	
+                	$('#zrx1').removeClass('hide');
+                	$('#zrx2').removeClass('hide');
+                	
+                }
+                
+                if(eticketProductId==1279){//广西标准洗车 ---TODO
+                	
+                	$("#code").html(code);
+                	$('#esmPda').attr('href',"http://hecaiyun.cyzl.com/");
+                	
+                }else{
+                	$("#code").html(code.substr(0,4)+'-'+code.substr(4,4)+'-'+code.substr(8,4)+'-'+code.substr(12,4));
+                    if(code.length>16){
+                        $('#code').html(code.substr(0,4)+'-'+code.substr(4,4)+'-'+code.substr(8,4)+'-'+code.substr(12,4)+'-'+code.substr(16,2));
+                    }
+                	$('#esmPda').attr('href',"https://fs2.yesm.cn/equan/m/product?id="+eticketProductId);
+                }
+                
+                
+                $('#usage').html(data.resultMap.instructions);
+                
+                
+            	
+            } else {
+                alert(data.resultMsg);
+            }
+
+        });
+        
+    });
+</script>
+</body>
+
+</html>

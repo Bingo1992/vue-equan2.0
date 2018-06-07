@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>e券商城</title>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-white">
+    <div class="fixed-top bg-show">
+        <div class="list-box border-bottom">
+            <div class="bg-account">
+                <div class="list-box">
+                    <div class="list-info-h pdr"><i class="icon-coin"></i> e币 <span class="integral">0</span>
+                    </div>
+                    <i class="icon-right"></i>
+                </div>
+            </div>
+                <form action="" id="bar" class="search-bar list-info-h">
+                    <div class="list-box"><i class="icon-search"></i>
+                        <input type="search" name="pName" placeholder="请输入商品名称、品牌等" class="list-info-h" >
+                    </div>
+                </form>
+        </div>
+    </div>
+    <div class="banner-bt">
+        <!--banner-->
+       <!--  <div class="slide" id="slide">
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="images/banner1.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="images/banner1.jpg" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="images/banner1.jpg" alt="">
+                    </a>
+                </li>
+            </ul>
+            <div class="dot">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div> -->
+        <div class="swiper-container swiper-container0">
+            <div class="swiper-wrapper" id="index_top">
+                <!-- <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div> -->
+            </div>
+            <div class="swiper-pagination swiper-pagination-white swiper-pagination0"></div>
+        </div>
+        <!--banner end-->
+        <ul class="nav-list flex-layout">
+            <li>
+                <a href="product_area_list.html?areaId=6&title=e%E5%88%B8%E4%BC%98%E9%80%89">
+                    <img src="images/1.png">
+                    <p>e券优选</p>
+                </a>
+            </li>
+            <li>
+                <a href="product_area_list.html?areaId=4&title=%E8%B6%85%E5%B8%82%E5%8D%A1%E5%88%B8">
+                    <img src="images/2.png">
+                    <p>超市卡券</p>
+                </a>
+            </li>
+            <li>
+                <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8c6084ddf52977ec&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
+                    <img src="images/3.png">
+                    <p>违章查办</p>
+                </a>
+            </li>
+            <li>
+                <a href="recharge_center.html">
+                    <img src="images/4.png">
+                    <p>充值中心</p>
+                </a>
+            </li>
+        </ul>
+
+        <div class="activity-block">
+            <img src="images/activities.png" class="acitvity-bg">
+            <div class="activity-list">
+                <h3 class="activity-title"><span>活动专区</span></h3>
+                <ul>
+                    <li>
+                        <a href="product_area_list.html?areaId=5&title=%E6%AF%8F%E5%91%A8%E7%89%B9%E4%BB%B7&source=1">
+                        	<div class="hot"><span>HOT</span></div>
+                            <h3 class="font-red center-text">每周特价</h3>
+                            <p class="font-gray center-text">惊爆价9元起</p>
+                            <img class="act-img-2" src="images/5.jpg">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-box" href="product_area_list.html?areaId=7&title=%E8%BD%A6%E5%8F%8B%E5%BF%85%E5%A4%87&source=2">
+                            <div class="list-info">
+                                <h3 class="font-blue-2">车友必备</h3>
+                                <p class="font-gray">带上它出去浪</p>
+                            </div>
+                            <img class="act-img" src="images/1.jpg">
+                        </a>
+                    </li>
+                    <li>
+                       <a class="list-box" href="product_area_list.html?areaId=8&title=%E5%A5%B3%E7%A5%9E%E4%B8%93%E5%8C%BA&source=3">
+                       		<div class="discount"><span>精选</span></div>
+                            <div class="list-info">
+                                <h3 class="font-purple">最美妈妈</h3>
+                                <p class="font-gray">你值得被呵护</p>
+                            </div>
+                            <img class="act-img" src="images/2.jpg">
+                        </a>
+                    </li>
+                    <li>
+                       <a class="list-box" onclick="javascript:" href="product_area_list.html?areaId=9&title=%E7%B1%B3%E5%AE%B6%E6%9C%89%E5%93%81&source=4">
+                       <!-- <a class="list-box" href="javascript:"> -->
+                            <div class="list-info">
+                                <h3 class="font-theme">米家有品</h3>
+                                <p class="font-gray">革命你的生活</p>
+                            </div>
+                            <img class="act-img" src="images/3.jpg">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-box" href="product_area_list.html?areaId=10&title=%E7%B2%BE%E8%87%B4%E7%94%9F%E6%B4%BB&source=5">
+                            <div class="list-info">
+                                <h3 class="font-red-2">精致生活</h3>
+                                <p class="font-gray">好生活并不贵</p>
+                            </div>
+                            <img class="act-img" src="images/4.jpg">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 标题 -->
+        <div class="proListThree">
+            <a class="title-list" href="product_area_list.html?areaId=3&title=%E6%96%B0%E5%93%81%E9%A6%96%E5%8F%91&source=6">
+            	<h4>新品首发</h4>
+            	<i class="icon-right"></i>
+            </a>
+            <ul class="pro-list pro-list-1" id="index_area_new">
+
+            </ul>
+        </div>
+
+        <div class="swiper-container swiper-container-c1">
+            <div class="swiper-wrapper" id="index_middle">
+                <!-- <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/banner1.jpg')"></div> -->
+            </div>
+        </div>
+
+        <div>
+            <a class="title-list" href="product_area_list.html?areaId=2&title=%E4%BA%BA%E6%B0%94%E6%8E%A8%E8%8D%90">
+            	<h4>人气推荐</h4>
+            	<i class="icon-right"></i>
+            </a>
+            <ul class="pro-list pro-list-2" id="index_area_hot">
+
+            </ul>
+        </div>
+    </div>
+    <!-- banner end   -->
+    <!-- 底部导航 -->
+    <div class="fixed-bottom">
+        <ul class="nav-bar flex-layout">
+        	<li class="active">
+        		<a href="index.html">
+        			<i class="icon-home-2"></i>
+        			<p>首页</p>
+        		</a>
+        	</li>
+        	<li>
+                <a href="product_list.html">
+                    <i class="icon-sort"></i>
+                    <p>全部商品</p>
+                </a>
+            </li>
+        	<li>
+        		<a href="cart.html">
+        			<i class="icon-cart"></i>
+        			<span class="circlePoint">0</span>
+        			<p>购物车</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="enterprise_ticket.html">
+        			<i class="icon-ticket"></i>
+        			<p>企业赠券</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="personnel.html">
+        			<i class="icon-user"></i>
+        			<p>我的</p>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <script src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script src="js/swiper-4.2.0.min.js"></script>
+    <script src="js/equan.js?v=1.0.1.2"></script>
+
+    <script type="text/javascript">
+
+
+
+    $(function() {
+
+    	$('.bg-account').click(function(){
+    		window.location.href = 'my_account.html';
+    	});
+    	equan.findCartTotal('circlePoint');
+    	
+        equan.findIntegral('integral');
+        equan.findBanner('index_top', 'index_top');
+
+        equan.findBanner('index_middle', 'index_middle');
+
+        //新品首发专区
+        equan.findAreaProduct('3', 'index_area_new', 6);
+
+        //人气推荐专区
+        equan.findAreaProduct('2', 'index_area_hot', 30);
+        var hasNext = true;	//是否还有下一页
+        var odBy = '';
+        var pageNo = 1;
+        var pName = '';
+        var vFrom = '';
+        var vTo = '';
+        var showType = '';
+
+        $('input[name="pName"]').keypress(function(e){
+            pName = $('input[name="pName"]').val();
+            $('#bar').attr('action',baseHtmlUrl + '/wxhtml/product_list.html?pName='+pName);
+        })
+
+
+    });
+
+    </script>
+</body>
+
+</html>

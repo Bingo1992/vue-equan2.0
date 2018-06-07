@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>红包活动</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+
+</head>
+
+<body>
+   <!--测试  0015913649794605-->
+        <div class="bg-show-2 border-top">
+           <ul class="form-list border-list">
+                <li>
+                    <label for="">券码</label>
+                    <input class="ticket-num" id="ticketCode" type="text" placeholder="请输入16位券码">
+                </li>
+            </ul>
+        </div>
+        <!-- <div id="kelihu-captcha" data-sitekey="A93126F54CF592F584C550EDC6BC22F0"></div> -->
+		
+		 <!-- 提示 -->
+        <div class="tips">
+            <p>提示：本次活动只面向受邀用户！</p>
+        </div>    
+		
+        <p id="luckyBtn" class="btn">登记抽奖<p>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>--</p>
+    </div>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js"></script>    
+<script type="text/javascript">
+    
+	$(function(){
+		var interValObj,//timer变量，控制时间
+		curCount = 10;	//当前剩余秒数
+		
+      //点击提交按钮
+        $('#luckyBtn').click(function() {
+            var ticketNumValue = $('#ticketCode').val();
+            
+            //alert("尊敬的客户，因系统升级，红包兑换业务暂停，恢复时间另行通知。请选择其他增值服务。");
+            
+            
+            if (ticketNumValue == '' || ticketNumValue.length != 16) {
+                empty_p('请填写16位券码');
+                return false;
+                
+            }else{
+            	$(this).addClass('dis-btn');
+    	 		$(this).html("登记抽奖("+curCount+")");
+
+    	 		interValObj = window.setInterval(setRemainTime, 1000);//启动计时器，1秒执行一次
+            	
+         		ajaxGet(baseUrl + "/user/eticket/checkLucky", {ticketNumValue : ticketNumValue}, function (data) {
+         			if(data.resultCode == 200){
+         				
+         				
+         				
+         				var bid = data.eticket.senderId;
+         				var isRp= data.eticket.isRp;
+         				
+         				
+         				if(isRp=='y'){
+         					window.location.href = baseHtmlUrl + "/wxhtml/rpLuckyRes.html?redpacket=" + data.eticket.redPacket + "&code=" + ticketNumValue ;
+         				}else{
+         					wrong_p('无效的券码!');
+         				}
+         			}else{
+         				wrong_p(data.resultMsg);
+                	}
+                 });
+           	}
+            
+            
+            
+        });
+		 
+        function setRemainTime() {
+         	
+     		if (curCount == 0) {
+                 window.clearInterval(interValObj);			//停止计时器
+                 curCount = 10;
+                 $("#luckyBtn").removeAttr("disabled");
+                 $("#luckyBtn").removeClass('dis-btn');
+     			$("#luckyBtn").html("登记抽奖");
+            }else {
+             	curCount--;
+                $("#luckyBtn").html("登记抽奖("+curCount+")");
+            }
+     	}
+		
+	});
+	
+ </script>
+
+</body>
+
+</html>

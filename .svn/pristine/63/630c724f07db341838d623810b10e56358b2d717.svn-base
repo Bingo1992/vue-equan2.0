@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>输入交易密码</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+
+</head>
+
+<body>
+   
+    <form action="#">
+        <div class="bg-show-2 border-top">
+           <ul class="form-list border-list">
+                <li>
+                    <label for="">交易密码</label>
+                    <input class="password" type="password" placeholder="请输入6位交易密码">
+                </li>
+                <li>
+                    <label for="">手机号</label>
+                    <input type="tel" name="mobile" class="mobile" value="13800138000" disabled>
+                </li>
+                <li class="code">
+                    <label for="">验证码</label>
+                    <input type="tel" name="verify-code" class="verify-code" placeholder="请输入验证码">
+                    <button class="get-code">获取验证码</button>
+                </li>
+            </ul>
+        </div>   
+
+        <p class="confirm-btn btn">完成<p>
+    </form>
+
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+    <script type="text/javascript">
+    $(function(e) {
+        //点击提交按钮
+        $('.confirm-btn').click(function() {
+            var passValue = $('.password').val();
+            var verifyValue = $('.verify-code').val();
+            if (passValue == '') {
+                empty_p('您的密码不能为空');
+            }else if(verifyValue == ''){
+                empty_p('验证码不能为空');
+            } else {
+                yes_p('提交成功');
+            }
+        });
+
+        // 点击获取验证码
+        $('.get-code').click(function() {
+             $(this).addClass('dis-btn');
+        })
+
+
+    });
+
+    </script>
+
+</body>
+
+</html>

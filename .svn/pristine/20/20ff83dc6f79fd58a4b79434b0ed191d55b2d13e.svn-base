@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+    
+    <title>支付确认</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <style type="text/css">   
+		@media (max-device-width: 780px){#golist{display: block !important;}}	
+    </style>
+    
+    <script type="text/javascript">
+
+		var url = window.location.href;
+
+		if(url.indexOf('equan-wxweb//') != -1){
+			url = url.replace('equan-wxweb//', 'equan-wxweb/');
+
+			window.location.href = url;
+		}
+		
+			
+	</script>
+    
+</head>
+
+<body>
+	<article class="bg-show-2">
+        <!-- <h4 class="title border-bottom" id="odName">---</h4> -->
+        <ul class="border-list order-list">
+            <li>
+                <span>订单号：</span>
+                <span id="odNo">---</span>
+            </li>
+            <li>
+                <span>支付金额：</span>
+                <span id="odMy">---</span>
+            </li>
+            <li>
+                <span>下单时间：</span>
+                <span id="odTime">---</span>
+            </li>
+            <li>
+                <span>订单状态：</span>
+                <span class="red-font">未支付</span>
+            </li>
+        </ul>
+    </article>
+    
+    <a id="wxpay" class="btn" href="javascript:callpay();" style="display:none">重新支付</a>
+   
+<div class="tip-dialog">
+    <i class="icon-tip icon-gantan"></i>
+    <p></p>
+</div>   
+   
+   <div class="on-loading">
+        <div class="loading-cnt">
+          <i class="load-spin"></i>
+          <span>支付中...</span>
+        </div>
+          
+    </div>
+   
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>   
+
+<script type="text/javascript">
+var appId,timeStamp,nonceStr,packagestr,paySign;
+$(function(){
+	
+	//$('.on-submit').addClass('show');
+	//setTimeout("location.href = 'convert_data.html'", 4000 );
+	
+	var orderNo = equan.queryString("orderNo");
+	if(orderNo && orderNo!=''){
+		ajaxGet(baseUrl + "/wxpay/jsCall", {orderNo:equan.queryString("orderNo")}, function (data) {
+			//console.log(data);
+			if(data.resultCode == 200){
+				//$('#odName').html(data.describe);
+				$('#odNo').html(orderNo);
+				$('#odMy').html(data.money)
+				$('#odTime').html(data.oTime);
+				
+				appId = data.appid;
+				timeStamp = data.timeStamp;
+				nonceStr = data.nonceStr;
+				packagestr = data.packageValue;
+				paySign = data.sign;
+				
+				if (typeof WeixinJSBridge == "undefined"){
+					if(document.addEventListener){
+						document.addEventListener('WeixinJSBridgeReady', callpay, false);  
+					}else if(document.attachEvent){
+						document.attachEvent('WeixinJSBridgeReady', callpay);	
+						document.attachEvent('onWeixinJSBridgeReady', callpay);  
+					}
+				}else{
+					callpay();
+				}
+			
+				//callPay2();
+				//window.location.href = baseHtmlUrl + "convert_data.html";
+			}else{
+				wrong_p(data.resultMsg);
+			}
+	    });
+	}else{
+		wrong_p("非法请求！");
+	}
+	
+	
+});
+
+function callpay(){
+	WeixinJSBridge.invoke('getBrandWCPayRequest',{
+		 	"appId" : appId,
+		 	"timeStamp" : timeStamp,
+		 	"nonceStr" : nonceStr, 
+		 	"package" : packagestr,
+		 	"signType" : "MD5", 
+		 	"paySign" : paySign 
+ 		},function(res){
+		// WeixinJSBridge.log(res.err_msg);
+			//alert(res.err_msg);
+	        if(res.err_msg == "get_brand_wcpay_request:ok"){  
+	        	
+	        	
+	        	//interValObj = window.setInterval(setRemainTime, 1000);//启动计时器，1秒执行一次
+	        	$('.on-loading').addClass('show');
+	        	setTimeout("location.href = 'convert_data.html'", 4000 );
+	        	
+	        	//location.href = "convert_data.html";
+	        }else if(res.err_msg == "get_brand_wcpay_request:cancel"){  
+	            $("#wxpay").css("display","block");
+	        }else{  
+	        	wrong_p("支付失败");
+	        	//alert(res.err_code+"|"+res.err_desc+"|"+res.err_msg);
+	            $("#wxpay").css("display","block");
+	        }  
+	})
+}
+
+
+/* 
+function setRemainTime() {
+ 	
+		if (curCount == 0) {
+         window.clearInterval(interValObj);			//停止计时器
+         curCount = 120;
+         $(".get-code").removeAttr("disabled");
+         $(".get-code").removeClass('dis-btn');
+			$(".get-code").html("获取验证码");
+    }else {
+     	curCount--;
+        $(".get-code").html(curCount + "s后获取");
+    }
+	} */
+
+</script>   
+</body>
+
+</html>

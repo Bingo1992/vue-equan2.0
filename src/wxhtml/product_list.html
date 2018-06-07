@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>商品列表</title>
+    <link href="css/style.css?v=1.0" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" >
+</head>
+
+<body class="bg-white">	
+	<input type="hidden" id="pageNo" value="1">
+	<input type="hidden" id="hasNext" value="true">
+    <div class="fixed-top">
+    	<form action="" id="bar" onsubmit="return false">
+        <div class="list-box bg-show">
+            <div class="search-bar list-info-h">
+                <div class="list-box"><i class="icon-search"></i>
+                    <input type="search" id="pName" name="pName" placeholder="请输入商品名称、品牌等" class="list-info-h" >
+                </div>
+            </div>
+        </div>
+        </form>    
+            
+        <ul class="sort-tabs flex-layout bg-show">
+            <li>
+                <a>
+                    <span>分类</span>
+                    <i class="icon-arrow-down"></i>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span>价格</span>
+                    <i class="icon-arrow-down" id = "price"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+        
+    <div class="banner-3">
+        <div class="nothing hide" >
+            <img src="images/nothing.png" >
+            <h4 class="font-gray">暂时找不到该商品，我们会尽量引进更多商品</h4>
+        </div>
+         <!-- 标题 -->
+        <ul id="proList" class="pro-list pro-list-2"></ul>
+    </div>
+       
+   <div id="pullUp" class="scroll_loading">
+        <span class="pullUpIcon"></span><span class="pullUpLabel">加载中...</span>
+   </div>
+   
+   <!-- 底部导航 -->
+    <div class="fixed-bottom">
+        <ul class="nav-bar flex-layout">
+            <li>
+                <a href="index.html">
+                    <i class="icon-home"></i>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li class="active">
+                <a href="product_list.html">
+                    <i class="icon-sort-2"></i>
+                    <p>全部商品</p>
+                </a>
+            </li>
+            <li>
+                <a href="cart.html">
+                    <i class="icon-cart" id="cart"></i>
+        			<span class="circlePoint">0</span>
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li>
+                <a href="enterprise_ticket.html">
+                    <i class="icon-ticket"></i>
+                    <p>企业赠券</p>
+                </a>
+            </li>
+            <li>
+                <a href="personnel.html">
+                    <i class="icon-user"></i>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+	<!-- 右边图标 -->
+    <div class="fixed-right">
+        <a href="cart.html">
+            <i class="icon-cart"></i>
+            <span class="semiCirclePoint">12</span>
+        </a>
+        <a href="#proList"><i class="icon-top"></i></a>
+    </div>
+
+    <!-- //排序，筛选 -->
+    <div class="sort-box">
+        <ul class="box-cnt readList">
+            <li class="active"><span class="value">全部分类</span></li>
+            <li value="1" sho><span class="value">汽车用品</span></li>
+            <li value="2"><span class="value">超市卡券</span></li>
+            <li value="3"><span class="value">汽车打蜡</span></li>
+            <li value="4"><span class="value">生活服务</span></li>
+        </ul>
+        <div class="ui-dialog show"></div>
+    </div>
+
+    <div class="sort-box">
+        <div class="box-cnt">
+            <div>
+                <span>价格区间</span>
+                <div class="price-zone">
+                    <input class="low" type="tel" placeholder="最低价格">
+                    <span>-</span>
+                    <input class="high" type="tel" placeholder="最高价格">
+                </div>
+            </div>
+            <div class="sort-price">
+                <span>价格排序</span>
+                <ul id="odBy">
+                    <li class="active" value="1"><span class="value">价格从高到低</span></li>
+                    <li value="2"><span class="value" >价格从低到高</span></li>
+                </ul>
+            </div>
+            <div class="flex-layout price-btn">
+                <p class="btn-cancel">重置</p>
+                <p class="btn-sort-confirm btn-theme">确定</p>
+            </div>
+        </div>
+            
+        <div class="ui-dialog show"></div>
+    </div>
+
+	<script src="js/zepto.min.js"></script>
+    <script src="js/scripts.js?v=1.0.0.1" type="text/javascript"></script>
+    <script src="js/equan.js?v=1.0.0.5" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    
+    var hasNext = true;	//是否还有下一页
+    var odBy = '';
+    var pageNo = 1;
+    var pName = '';
+    var vFrom = '';
+    var vTo = '';
+    var showType = '';
+    
+    
+    
+    
+    $(function(){
+    	
+    	equan.findCartTotal('semiCirclePoint');
+    	equan.findCartTotal('circlePoint');
+
+
+        //点击排序。筛选
+        $('.sort-tabs li').click(function(){
+            $(this).switchSortTabs('.sort-tabs li','.sort-box');
+            // var showType = $(this).attr('showType');
+            // reset();
+            // equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+        });
+
+        //重置所有查询条件
+        $('.btn-cancel').click(function(){
+            $('input[name="pName"]').val('');
+            $('.low').val('')
+            $('.high').val('')
+            reset();
+            equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+        	
+        });
+        
+        
+        $(".readList").on("click","li",function(){      //给“全部分类”添加事件
+            var order = ''
+            $('#odBy li').each(function(){
+                var y = $(this).hasClass('active')
+                if(y){
+                    order = $(this).val()
+                }
+            })
+
+            var low = parseInt($('.low').val());
+            var high =  parseInt($('.high').val());
+            if(high < low) {
+                $('.btn-sort-confirm').isTip('最高价不能低于最低价');
+            } else {//关闭遮罩
+
+                reset();
+                odBy = order;
+                if(!isNaN(low)){
+                    vFrom = low
+                }
+                if(!isNaN(high)){
+                    vTo =high
+                }
+                if($('.readList .active').val() != 0){
+                    showType = $('.readList .active').val()
+                }
+                pName = $('input[name="pName"]').val();
+                if(pName == null || pName == "null" || pName == undefined){ // "",null,undefined
+                    pName = ""
+                }
+                equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+            }
+
+        });
+         function serch(){
+             var order = ''
+             $('#odBy li').each(function(){
+                 var y = $(this).hasClass('active')
+                 if(y){
+                     order = $(this).val()
+                 }
+             })
+
+             var low = parseInt($('.low').val());
+             var high =  parseInt($('.high').val());
+             if(high < low) {
+                 $('.btn-sort-confirm').isTip('最高价不能低于最低价');
+             } else {//关闭遮罩
+                 var value = $('.sort-price .active').find('.value').html();
+                 $('.sort-tabs .active').find('span').html(value);//赋值
+                 $('.sort-tabs').find('i.icon-arrow-up').attr('class','icon-arrow-down');
+                 $('.sort-box').removeClass('show');
+                 reset();
+                 odBy = order;
+                 if(!isNaN(low)){
+                     vFrom = low
+                 }
+                 if(!isNaN(high)){
+                     vTo =high
+                 }
+                 if($('.readList .active').val() != 0){
+                     showType = $('.readList .active').val()
+                 }
+                 pName = $('input[name="pName"]').val();
+                 if(pName == null || pName == "null" || pName == undefined){ // "",null,undefined
+                     pName = ""
+                 }
+                 equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+             }
+         }
+        //确定按钮
+        $('.btn-sort-confirm').on('click',function(){
+            serch();
+        });
+        
+        window.onscroll = function() {
+
+            var pullUpEl = document.getElementById('pullUp');
+
+            if(getScrollTop() + getClientHeight() == getScrollHeight()) {
+    	    	
+            	equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+            }
+        }
+
+        pName = $('input[name="pName"]').val()
+
+        if(decodeURIComponent(equan.queryString("pName")) != null){
+            pName = decodeURIComponent(equan.queryString("pName"));
+        }
+
+        if(pName == null || pName == "null" || pName == undefined){ // "",null,undefined
+            pName = ""
+        }
+        //进来页面初始化加载
+        $("#pageNo").val('1');
+        equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+
+        $('#bar').attr('action',baseUrl + '/shopCart/products?showType=""&odBy=""&vFrom=""&vTo=""&pageNo=""');
+        function reset(){
+        	$("#pageNo").val(1);
+        	$("#hasNext").val('true');
+        	
+        	hasNext = true;
+            odBy = '';
+            pageNo = 1;
+            pName = '';
+            vFrom = '';
+            vTo = '';
+            showType = '';
+        }
+        $('input[name="pName"]').keypress(function(e){
+            var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+            if (eCode == 13){
+                reset();
+                pName = $('input[name="pName"]').val();
+                equan.searchProduct(odBy, pName, vFrom, vTo, showType);
+            }
+        })
+
+    });
+    </script>
+
+</body>
+
+</html>

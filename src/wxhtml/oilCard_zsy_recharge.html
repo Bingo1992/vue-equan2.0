@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>加油充值</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" >
+</head>
+
+<body>
+
+<form id="oilCardOdForm">
+	<input type="hidden" name="productid" value="-5"/>
+	<input type="hidden" name="orderType" value="5"/>
+	<input type="hidden" name="returntype" value="0"/>
+	<input type="hidden" name="sendTotal" value="0"/>
+	<input type="hidden" id="supplierId" name="supplierid" value="2"/><!-- 油卡类型，1中石化，2中石油 -->
+	<input type="hidden" id="name" name="name" value="中石油加油卡充值100元"/>
+	<input type="hidden" id="amount" name="amount" value="100" />
+	
+    <div class="fixed-top">
+        <ul class="nav-tabs flex-layout border-bottom">
+            <li>
+                <a href="oilCard_recharge.html">中石化油卡</a><!-- onclick="showZshNotice();" -->
+            </li>
+            <li class="active">
+                <a href="#">中石油油卡</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="banner-3">
+         <article class="bg-show">
+         
+            <ul class="form-list border-list">
+            	<li>
+                    <input type="text" id="ocName" name="receivername" placeholder="请输入持卡人姓名">
+                </li>
+                <li>
+                    <input type="text" class="card1" id="ocNum" name="address" placeholder="9开头(不含91)非车队卡、非不记名16位卡号" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false"  />
+                	<ul class="hist-box border-bottom hide">
+                    </ul>
+                </li>
+                <li>
+                    <input type="text" class="card2" id="ocNum2" placeholder="再次确认卡号" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false"  />
+                </li>
+                <li id="ocIDCardLi">
+                    <input type="text" id="IDCardNum" name="expressnumber" placeholder="请输入持卡人身份证" />
+                </li>
+            </ul>
+            
+            <ul class="form-list border-list">
+                <li style="color:red;" style="line-height:25px;">*充值账号以所填油卡号为准，请仔细确认，一经提交，无法撤回！仅支持100倍数的面值在线充值。</li>
+            </ul>
+
+            <ul id="zsyFVul" class="face-value clearfix show">
+                <li class="active"><a><span>100</span>元</a></li>
+                <li><a><span>200</span>元</a></li>
+                <li><a><span>500</span>元</a></li>
+                <li><a><span>1000</span>元</a></li>
+                <li><a><input id="otFcVal" class="otherVal" type="tel" placeholder="其他面值" style="width:3.3rem;text-align:center">元</a></li>
+            </ul>
+            
+        </article>
+            
+        
+   	<article class="bg-show-2">
+	         <div class="title-bar border-bottom">
+	            <h4>支付选择</h4>
+	         </div>
+        
+        <ul class="border-list recharge-type"><!-- cpType;// 支付方式(1 积分+微信	2 纯积分 	3 微信支付 	4电子券) -->
+            <li id="eType" >
+                <span class="lb-type">e币支付</span>
+                <p class="red-font" id="eCost">--</p>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="cpType" value="2">
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            <!-- <li id="wxType" >
+                <span class="lb-type">微信支付</span>
+                <p class="red-font" id="wxMoney">--</p>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="cpType" value="3">
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            <li id="mxType">
+                <span class="lb-type">e币+微信支付</span>
+                <p class="red-font" id="mxMoney">--</p>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="cpType" value="1">
+                    <i class="icon-hook"></i>
+                </label>
+            </li> -->
+        </ul>
+    </article>
+</form>
+        <a class="btn" href="#">确定支付</a>
+</div>
+       
+    <div class="service-state">
+        <h4>服务说明</h4>
+        <p>1.本服务支持中国石化、中国石油卡充值(<font style="color:red">不支持公司卡、副卡及车队卡充值</font>)</p>
+        <p>2.加油款于工作时间72小时内充值至加油卡，充值成功平台发送通知。收到通知后，到加油站进行“圈存”即可消费。（工作时间：周一至周五9：00-18：00）</p>
+        <p>3.本服务不提供发票</p>
+        <p>4.充值成功后，请到加油站<font color="red">圈存</font>即可消费使用</p>
+        <p>&nbsp;&nbsp;<font color="red">什么叫圈存?</font></p>
+        <p>&nbsp;&nbsp;圈存就是将您在线充值的资金，写入（同步）到加油<br>
+        	&nbsp;&nbsp;卡的IC卡芯片上，就可以正常加油了</p>
+		<p>&nbsp;&nbsp;<font color="red">怎么圈存？</font></p>
+		<p>&nbsp;&nbsp;A. 去加油站点找工作人员办理圈存<br>
+			&nbsp;&nbsp;B. 加油站内设有24小时自助圈存机，可自行操作</p>        	
+        <p>5.如有疑问，请致电客服热线：<a href="tel:400-161-3580">400-161-3580</a></p>
+        
+    </div>
+
+    <div class="on-loading">
+        <i class="icon-spin6"></i>
+        <span>提交中,请稍后...</span>
+    </div>
+
+<!-- 信息确认遮罩begin -->
+    <div id="ocInfo" class="ui-dialog">
+        <div class="dialog-cnt">
+            <div class="dialog-content">
+                <h4>信息确认</h4>
+                <ul class="border-list form-list">
+                    <li>
+                        <span>持卡人姓名：</span>
+                        <span id="nameDsp">xx</span>
+                    </li>
+                    <li>
+                        <span>油卡号：</span>
+                        <span id="ocNumDsp">xx</span>
+                    </li>
+                    <li id="idNumLi" style="display:none">
+                        <span>身份证号：</span>
+                        <span id="idNumDsp">xx</span>
+                    </li>
+                    <li>
+                        <span>充值金额：</span>
+                        <span id="moneyDsp">xx</span>
+                    </li>
+                </ul>
+                <p class="red-font">*一旦充值成功，无法撤销，不支持退款服务，请核实好信息。</p>
+            </div>
+            <div class="two-btn">
+                <div id="cancel" class="btn-a btn-2">取消</div>
+                <a id="confirm" class="btn-a">确定</a>
+            </div>
+        </div>
+    </div>
+<!-- 信息确认遮罩end -->
+
+
+<div class="tip-dialog">
+    <i class="icon-tip icon-gantan"></i>
+    <p></p>
+</div>
+
+
+<!-- 公告提示遮罩   -->
+<div id="notice" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>公告</h4>
+            <p class="red-font">公告：尊敬的用户，您好！春节放假期间，客服值班时间为每日9:00-18:00，如有异常兑换或延迟到账等情况，您可以通过客服热线反馈，我们将在2月26日统一处理。恭祝您新春快乐！</p>
+        </div>
+    </div>
+</div>
+
+<script src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+    	
+    	/* $('#notice').addClass('show');
+         $('#notice').click(function(){
+            $(this).removeClass('show');
+        }); */
+    	
+    	
+    	var userIntegeral = 0,amount = 100;
+    	
+    	ajaxGet(baseUrl + "/user/integral", {}, function (data) {
+			//console.log(data);
+			if(data.success == true){
+				userIntegeral = data.obj;
+				
+				initFVandPayWay();
+				
+			}else{
+				wrong_p(data.resultMsg);
+				$('.btn').remove();
+			}
+	    });
+    	
+		ajaxGet(baseUrl + "/oil/recharge/record", {oilCardType : 2}, function (data) {
+			
+    		console.log(data);
+			if(data.success == true){
+				
+				var cardNo = "";	//油卡号
+				var name = "";		//用户名
+				var idNo = "";		//身份证号
+				
+				var items;
+				var html = '';
+				for(var i = 0; i < data.obj.length; i++){
+					
+					items = data.obj[i].split(",");
+					cardNo = items[0];
+					name = items[1];
+					idNo = items[2];
+					
+					if(i == 0){
+						$("#ocName").val(name);
+						$("#ocNum").val(cardNo);
+						$("#ocNum2").val(cardNo);
+						$("#IDCardNum").val(idNo);
+					}
+					
+					html += '<li  class="histNum" ocName="'+ name +'" IDCardNum="'+ idNo +'">';
+					html += '<span class="historynum">'+ cardNo +'</span>';
+					html += '</li>';
+				}
+				
+				$('.hist-box').html(html);
+			}
+	    });
+    	
+    	//输入油卡号
+        $('.card1').focus(function(){
+            //$(this).attr('type','text');
+        });
+    	
+        $('.card2').focus(function(){
+            $('.card1').attr('type','password');
+        });
+    	
+        $('.card2').blur(function(){
+            $('.card1').attr('type','text');
+        });
+        
+        $('.btn').click(function(){ //提交
+        	
+        	/* 
+        	$('#notice').addClass('show');
+        	return false; 
+        	*/
+        	
+        	if($('#ocName').val()==''){
+        		wrong_p("持卡人姓名不能为空");
+        		$('#ocName').focus();
+        		return false;
+        	}
+        	
+        	var ocNum = $('#ocNum').val();
+        	if(ocNum==''){
+        		wrong_p("油卡号码不能为空");
+        		$('#ocNum').focus();
+        		return false;
+        	}
+            
+            if(ocNum.length !=16 || ocNum.substring(0, 2) == "91"){
+            	empty_p("9开头(不含91)非车队卡、非不记名16位卡号");
+            	return false;
+            } 
+        	
+            var ocNum2 = $('#ocNum2').val();
+        	if(ocNum2==''){
+        		wrong_p("请再次输入油卡号码");
+        		$('#ocNum2').focus();
+        		return false;
+        	}
+        	
+        	if(ocNum2!=ocNum){
+        		wrong_p("两次输入的油卡号码不一致");
+        		$('#ocNum2').focus();
+        		return false;
+        	}
+        	
+        	if(amount==0){
+        		wrong_p("请输入一个100的倍数的面值!");
+        		$('#otFcVal').focus();
+        		return false;
+        	}
+        	
+       		var idNumber = $('#IDCardNum').val();
+           	if(idNumber == ''){
+           		empty_p('请输入持卡人身份证号码');
+               	return false;
+           	}
+            	
+           	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if(reg.test(idNumber) === false){
+       	    	wrong_p("持卡人身份证号码不合法");
+       	    	return false;
+       	    }
+        	
+        	var cpType = $('input[name="cpType"]:checked').val();
+   		 
+            if(cpType){
+                
+            }else{
+	 			empty_p('请选择支付方式');
+	            return false;
+			 }
+   		
+   			$('#nameDsp').html($('#ocName').val());
+   			$('#ocNumDsp').html($('#ocNum').val());
+   			
+			$('#idNumDsp').html(idNumber);
+			$('#idNumLi').css('display','-webkit-box');
+   			
+   			$('#moneyDsp').html(amount);
+			$('#ocInfo').addClass('show');
+			
+			$('#cancel').click(function(){// 取消按钮
+			    $('#ocInfo').removeClass('show');
+			});
+			
+			$('#confirm').click(function(){//确定按扭
+			    $('#ocInfo').removeClass('show');
+			    $('.on-loading').addClass('show');
+			    exchange(cpType);
+			})
+        	
+        });
+
+
+         //面值切换
+        $('.face-value li').click(function() {
+        	amount = $(this).find('span').html();
+        	//name" value="中石化加油卡充值50元
+        	//alert(amount);
+        	if("元"==amount){
+        		var otFv = $('#otFcVal').val();
+        		if(otFv!='' && otFv%100==0){
+        			amount = otFv;
+        		}else{
+        			amount = 0;
+        			$('#otFcVal').val('')
+        		}
+        	}
+        	
+        	
+        	initFVandPayWay();
+        	
+            $(this).switchTabs('.face-value li');
+        });
+        
+      //聚焦输入框
+        $('.card1').bind('click',function(event){
+
+            event.stopPropagation();
+            var $_this = $(this);
+            
+            $(this).siblings('.hist-box').removeClass('hide');
+
+            $_this.on('input propertychange', function(event){
+                event.stopPropagation();
+                var flag = false;
+                var inputLen = $_this.val().length; //输入框输入的文字长度
+
+                $('.hist-box li').each(function(){//判断字符串是否匹配
+                    var shortStr = $(this).find('.historynum').html().substring(0,inputLen);
+                    if($_this.val().match(shortStr)){
+                        flag = true;
+                    }
+                });
+              
+                if(flag == true && inputLen < 11){
+                    $_this.siblings('.hist-box').removeClass('hide');
+                }else {
+                    $_this.siblings('.hist-box').addClass('hide');
+                }
+            });
+           
+            //点击历史号码
+            $('.hist-box li').on('click',function(event) {
+                var histNum = $(this).find('.historynum').html();
+                var IDCardNum = $(this).attr('IDCardNum');
+                var ocName = $(this).attr('ocName');
+                $_this.val(histNum);
+                
+                $("#ocName").val(ocName);
+				$("#ocNum").val(histNum);
+				$("#ocNum2").val(histNum);
+				$("#IDCardNum").val(IDCardNum);
+                
+                /* $('#ocNum2').parent().hide(); */
+                
+                // $(this).parent('.hist-box').addClass('hide');
+            });
+            
+            //点击其他地方隐藏遮罩
+            $(document).click(function(event) {
+               $('.hist-box').addClass('hide');
+            }); 
+        });
+       
+        function initFVandPayWay(){
+        	
+        	//面值切换
+        	$('#amount').val(amount);
+        	var name = "中石油加油卡充值"+amount+"元";
+        	$('#name').val(name);
+        	
+        	
+        	 //计算并重画支付方式 
+    		$("#eCost").html(amount+"e币");
+       		$('#wxMoney').html(amount+"元");
+       		//alert(amount+"-"+userIntegeral)
+       		
+			if(amount>userIntegeral){
+       			$('#eType').css('display','none');
+       			
+       			if(userIntegeral>0){
+       				$('#mxMoney').html(userIntegeral+"e币+"+(amount-userIntegeral)+"元");
+       				$('#mxType').css('display','-webkit-box');
+       			}else{
+       				$('#mxType').css('display','none');
+       			}
+       		}else{
+       			$('#eType').css('display','-webkit-box');
+       			$('#mxType').css('display','none');
+       		}
+    	}
+       
+        
+      	//兑换
+        function exchange(cpType){
+        	
+        	$('.on-loading').addClass('show');
+        	
+        	var params = $('#oilCardOdForm').serializeArray();
+        	
+        	//console.log(params);
+        	
+        	if(cpType==2){//全e币
+        		ajaxGet(baseUrl + "/product/exchange", params, function (data) {
+        			console.log(data);
+        			if(data.resultCode == 200){
+        				yes_p('兑换成功');
+        				window.location.href = "convert_data.html";
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	
+        	}else{//混合
+        		ajaxGet(baseUrl + "/product/pay", params, function (data) {
+        			//console.log(data);
+        			
+        			if(data.resultCode == 200){
+        				window.location.href = "pay.html?orderNo="+data.odNo;
+        			}else{
+        				wrong_p(data.resultMsg);
+        			}
+        	    });
+        	}
+        	
+        	$('.on-loading').removeClass('show');
+        	
+        }
+      	
+      //其他面值
+      	$("#otFcVal").blur(function(){
+      		
+      		//var otFv = #('#otFcVal').val();
+      		var otFv = $(this).val();
+    		if(otFv!='' && otFv%100==0){
+    			amount = otFv;
+    		}else{
+    			$("#otFcVal").val('');
+    			amount = 0;
+    		}
+    		
+    		initFVandPayWay();
+      	});
+        
+    });
+    
+    function showZshNotice(){
+    	$('#notice').addClass('show');
+    }
+    
+  
+    
+</script>
+   
+</body>
+
+</html>

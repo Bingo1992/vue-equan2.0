@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>订单确认</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    
+</head>
+
+<body class="bg-white">
+<form id="orderForm">
+	<input type="hidden" id="addressid" name="addressid"/>
+	<input type="hidden" id="params" name="params"/>
+
+    <div class="banner-2">
+       <div id="defaultAddress" class="logistics bg-show" style="display:none">   
+          <a id="address_link" href="address.html" class="list-box">
+              <i class="icon-map font-gray"></i>
+              <div class="list-info pdl">
+                  <h4>
+                      <span class="pdr" id="address_name">--</span>
+                      <span id="address_mobile">--</span>
+                  </h4>
+                  <p class="font-gray nowrap-2" id="address_full">--</p>
+              </div>  
+              <i class="icon-right"></i>
+          </a>
+      </div>
+      
+      <div id="newAddress_li" class="logistics bg-show">   
+          <a id="newAddress" href="address.html" class="list-box">
+              <i class="icon-map font-gray"></i>
+              <div class="list-info pdl">
+                  新增收货地址
+              </div>  
+              <i class="icon-right"></i>
+          </a>
+      </div>
+    
+     <!-- 订单列表 -->
+      <ul class="confirm-order">
+      </ul>
+
+      <div class="bg-mgShow">
+          <div class="title-bar border-bottom">
+            <h5>给卖家留言</h5>
+          </div>
+          <textarea class="txtArea" name="remark" cols="30" rows="3" placeholder="请输入留言"></textarea>
+      </div>
+
+      <div class="bg-mgShow">
+          <div class="title-bar border-bottom">
+            <h5>支付方式</h5>
+          </div>
+          <ul>
+              <li class="list-box" id="e_pay">
+               <i class="icon-coin font-red" style="width: 30px; text-align: center;font-size: 24px;margin-right: 10px"></i>
+                 <p class="list-info-h">e币支付</p>
+                 <label class="checkbox">
+                    <input type="radio" checked readonly>
+                    <i class="icon-hook"></i>
+                </label>
+              </li>
+              <li class="list-box" id="wx_pay">
+               <img class="list-img" id="showpic" src="images/chat.png" style="height:40px">
+                 <p class="list-info-h">微信支付</p>
+                 <label class="checkbox">
+                    <input type="radio" checked readonly>
+                    <i class="icon-hook"></i>
+                </label>
+              </li>
+          </ul>
+      </div>
+
+    </div>
+     
+    <div class="fixed-bottom">
+      <div class="cal-banner list-box border-top">
+          <div class="list-info">
+              <p>
+                	应付现金：
+                <span class="font-orange" id="paymoney">￥545</span>
+              </p>
+              <p>
+                  	应付e币：
+                 <i class="icon-coin"></i>
+                 <span class="font-orange" id="ecoin">--</span>
+              </p>
+          </div>
+          <a class="btn-theme" onclick="exchange()">去付款</a>
+      </div>
+    </div>
+</form>
+
+    <div class="on-loading">
+        <i class="icon-spin6"></i>
+        <span>提交中,请稍后...</span>
+    </div>
+    
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p></p>
+    </div>
+
+	<script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script type="text/javascript" src="json/PlaceJson.js"></script>
+    <script type="text/javascript" src="js/equan.js"></script>
+    
+    <script type="text/javascript">
+    
+    var productStr = decodeURIComponent(equan.queryString("productStr"));
+    var orderJson = new Array();
+    var cpType = 1;	//1-e币,2-微信支付,3-混合支付
+    var allVirtualProduct = true;	//判断是否有实物产品
+    
+    $(function(){
+    	
+    	var addressid = equan.queryString("addressid");
+    	var productType; 
+    	
+    	initOrderInfo(addressid);
+    	
+    	//initOrderInfo(productid,addressid);
+    })
+    
+    
+    function initOrderInfo(addressid){
+    	var totalCost = 0;
+    	
+    	var productJson = eval( '(' + productStr + ')');
+    	
+    	var orderProductJsonStr = "{";
+    	
+    	var html = '';
+    	for(var i=0; i<productJson.length; i++){
+    		
+    		html += '<li class="list-box border-bottom" v-for="(item,i) in cartList" :key="i" v-if="item.check">';
+    		html += '    <img class="list-img" src="'+ baseImgUrl + productJson[i].showpic +'">';
+    		html += '    <div class="list-info">';
+    		html += '        <div class="list-box">';
+    		html += '          <div class="list-info-h">';
+    		html += '             <h5 class="nowrap-2 top-text">'+ productJson[i].name +'</h5>';
+    		html += '          </div>';
+    		html += '          <h5 class="pdl">X'+ productJson[i].total +'</h5>';
+    		html += '        </div>';
+    		html += '        <div class="price-big">';
+    		html += '           <span class="font-orange"><i class="icon-coin"></i>'+ productJson[i].eCost +'</span>';
+    		html += '           <s class="font-gray">市场价：￥'+ productJson[i].price +'</s>';
+    		html += '        </div>';
+    		html += '    </div>';
+    		html += '</li>';
+    		
+    		totalCost += parseInt(productJson[i].eCost) * parseInt(productJson[i].total);
+    		
+    		//"9": 1,
+
+    		
+    		orderProductJsonStr += productJson[i].id + ':' + productJson[i].total + ',';
+    		
+    		if(productJson[i].type == 1){
+    			allVirtualProduct = false;
+    		}
+    	}
+    	
+    	if(orderProductJsonStr != ''){
+    		orderProductJsonStr = orderProductJsonStr.substr(0, orderProductJsonStr.length - 1) + '}';
+    	}
+    	
+    	$('#params').val(orderProductJsonStr);
+    	$('.confirm-order').html(html);
+    	
+    	
+		//$("#productid").val(productid);
+           	
+           	ajaxGet(baseUrl + "/product/placeorder", {addressid : addressid}, function (data) {
+
+           		console.log(data);
+           		
+           		var userIntegeral = data.userIntegeral;
+           		
+           		/* $("#amount").val(eCost);
+           		
+           		$('#showpic').attr("src",baseImgUrl + data.showpic);
+           		$("#pname").html(data.productName);
+           		$("#orgiPrice").html(data.price);
+           		$(".credits").html(eCost);
+           		$("#eCost").html(eCost+"e币");
+           		$('#wxMoney').html(eCost+"元"); */
+           		
+           		//productType = data.pType;
+           		
+           		if(userIntegeral == 0){
+           			
+           			$('#paymoney').html('￥' + totalCost);
+           			$('#ecoin').parent().remove();
+           			
+           			$('#e_pay').remove();
+           			cpType = 2;	//1-e币,2-微信支付,3-混合支付
+           		}
+           		else if(userIntegeral < totalCost){
+           			$('#paymoney').html('￥' + (totalCost - userIntegeral));
+           			$('#ecoin').html(userIntegeral);
+           			cpType = 3;	//1-e币,2-微信支付,3-混合支付
+           		}
+           		else{
+           			$('#ecoin').html(totalCost);
+           			$('#paymoney').parent().remove();
+           			
+           			$('#wx_pay').remove();
+           			cpType = 1;	//1-e币,2-微信支付,3-混合支付
+           		}
+           		
+           		
+           		/* if(productType && productType==3){
+           			$('#carInfo').show();
+           			$('#newAddress').attr('href',"contact_form.html?productid=" + productid);
+           		}else{
+           			$('#carInfo').hide();
+           		} */
+           		
+           		/* if(productType && productType==2){
+           			$('#addrInfo').hide();
+           		
+           			$('#wxType').css('display' , 'none');
+        			$('#mxType').css('display' , 'none');
+           			
+           		}else{
+           			$('#addrInfo').show();
+           		} */
+           		
+           		console.log(data);
+           		
+           		//默认所有都需要填写收货地址
+           		//allVirtualProduct = false;
+           		
+           		if(allVirtualProduct == false){
+	           		if(data.hasDefault == 0){
+	           			$('#newAddress').attr('href',"contact_form.html?productStr=" + productStr);
+	           			$("#defaultAddress").css("display" , "none");
+	           		}else{
+	           			$("#address_name").html(data.receiverName);
+	           			$("#address_mobile").html(data.mobile);
+	           			$("#address_full").html(data.fullAddress);
+	           			$("#address_link").attr("href", "address.html?productStr="+ productStr +"&addressid=" + data.addressid);
+	           			
+	           			//params.addressid = data.addressid;
+	           			//$("#productid").val(productid);
+	           	    	$("#addressid").val(data.addressid);
+	           			
+	           	    	$("#defaultAddress").css("display" , "block");
+	           			$("#newAddress_li").css("display" , "none");
+	           		}
+           		}
+           		else{
+           			$("#newAddress_li").css("display" , "none");
+           			$("#defaultAddress").css("display" , "none");
+           		}
+           		
+           		hideLoading();
+           		
+            });
+        }
+    
+	    //兑换
+	    function exchange(){
+	    	
+	    	$('.btn-theme').removeAttr('onclick');
+	    	
+	    	$('.on-loading').addClass('show');
+	    	
+	    	/* if(productType==3){
+	    		$('#suppliername').val($('.slideValue').html()+$('#suppliername').val().toUpperCase());
+	    	} */
+	    	
+	    	var addressid = $('#addressid').val();
+	    	if(addressid == '' && allVirtualProduct == false){
+	    		wrong_p('收货地址为空');
+	    		
+	    		return false;
+	    	}
+	    	
+	    	params = $('#orderForm').serializeArray();
+	    	
+	    	
+	    	ajaxPost(baseUrl + "/shopCart/exchangeOrder", params, function (data) {
+
+	    		console.log(data);
+    			if(data.success == true){
+    				
+    				if(data.attributes.wxPayTotal == 0){
+    					window.location.href = "convert_data.html";
+    				}
+    				else{
+    					window.location.href =   "pay.html?orderNo="+data.attributes.payOrderId;
+    				}
+    				
+    				//yes_p('兑换成功');
+    				
+    				
+    				//window.location.href = "convert_data.html";
+    			}else{
+    				
+    				wrong_p(data.msg);
+    				
+    				$('.btn-theme').attr('onclick', 'exchange()');
+    			}
+    			
+    			
+    	    });
+	    	
+	    	$('.on-loading').removeClass('show');
+	    	
+	    }
+    
+    </script>
+   
+</body>
+
+</html>

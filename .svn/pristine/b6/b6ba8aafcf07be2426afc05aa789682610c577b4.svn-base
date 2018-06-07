@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <title>兑换服务</title>
+    <link rel="stylesheet" href="css/style.css?v=1.0">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+<body>
+
+    <p class="eb-cost border-bottom">本次可用积分：<span id="etotal">－－</span></p>
+	
+    <div class="bg-show-2">
+        <div class="title-bar border-bottom">
+            <h4>请选择兑换类型</h4>
+        </div>
+        
+        <ul class="border-list recharge-type" style="font-size:16px;">
+        	<!-- <li id="rpLi" onclick="setCheck(2)">
+                <span class="lb-type">兑换微信红包：<p class="red-font" id="redpacket">0.00</p>元</span>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" value="2"/>onclick="showNotice2();" 
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            <li id="eAccount" onclick="setCheck(1)">
+                <span class="lb-type">充入我的e券账户：<p class="red-font" id="inetotal">0.00</p>e币</span>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" value="1"/>onclick="showNotice();"
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            
+            <li id="carLi" style="display:none;" onclick="setCheck(8)">
+                <span class="lb-type">车主权益登记：<p class="red-font">人保VIP服务账户</p></span>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" value="8"/>onclick="showNotice();"
+                    <i class="icon-hook"></i>
+                </label>
+            </li> -->
+            
+            <li class="list-box" id="rpLi" onclick="setCheck(2)">
+                <span class="list-info-h">兑换微信红包：<span class="red-font" id="redpacket">0.00</span>元</span>
+                <label class="checkbox" for="type">
+                    <input id="rpRd1"  type="radio" name="type" value="2">
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            <li class="list-box" id="eAccount" onclick="setCheck(1)">
+                <span class="list-info-h">充入我的e券账户：<span class="red-font" id="inetotal">0</span>e币</span>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" value="1" checked>
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            <li class="list-box" id="carLi" style="display:none;" onclick="setCheck(8)">
+                <span class="list-info-h">车主权益登记：<span class="red-font" >人保VIP服务账户</span></span>
+                <label class="checkbox" for="type">
+                    <input type="radio" name="type" value="8">
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            
+        </ul>
+    </div>
+
+    <a class="btn" href="javascript:">确定兑换</a>
+    
+    <div class="service-state"　id="sercInfo">
+        <p>1.充值e券账户可获得“e币”，“e币”可在<a href="index.html" style="color:#87CEEB;">e券商城</a>购买汽车用品、汽车服务,加油充值、手机充值等。</p>
+        <p id="serD">2.e币不可兑换红包。</p>
+        <p id="rpD">
+        	3.点击<a href="http://mp.weixin.qq.com/s/d1P9LERBt6W9gGo54zs_7A" style="color:#87CEEB;"> 使用说明</a> 查看详情。
+        	<br>4.兑换微信红包需先实名认证,认证方式：【微信】-【我】-【钱包】-【…】-【支付管理】-【实名认证】。
+        </p>
+    </div>
+    
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>--</p>
+    </div>
+    
+<!-- 公告提示遮罩   -->
+<div id="notice" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>公告</h4>
+            <p class="red-font"> 尊敬的用户，您好！春节放假期间，客服值班时间为每日9:00-18:00，如有异常兑换或延迟到账等情况，您可以通过客服热线反馈，我们将在2月26日统一处理。恭祝您新春快乐！</p>
+        </div>
+    </div>
+</div>        
+    
+<!-- 公告提示遮罩   -->
+<div id="notice2" class="ui-dialog">
+    <div class="dialog-cnt">
+        <div class="dialog-content">
+            <h4>公告</h4>
+            <p class="red-font">
+             	尊敬的客户，因系统升级，红包兑换业务暂停，恢复时间另行通知。请选择其他增值服务。
+            </p>
+        </div>
+    </div>
+</div>    
+    
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js"></script>
+	
+<script type="text/javascript">
+    
+$(function(){
+	
+	/* $('#notice').addClass('show');
+		$('#notice').click(function(){
+		$(this).removeClass('show');
+	}); */
+	
+	$('#notice2').click(function(){
+        $(this).removeClass('show');
+    });
+	
+	var etotal,redpacket,isRp,code,canExRp,redpacket,
+		bid = equan.queryString("bid"),
+		rType = equan.queryString("rType"),
+		tkid = equan.queryString("tkid");
+	
+
+	if(rType && rType!='' && tkid && tkid!=''){
+		if(rType==1){
+			initEticketExchangeData(tkid);
+		}else if(rType==9){
+			etotal = equan.queryString("etotal");
+			redpacket = equan.queryString("redpacket");
+			isRp = equan.queryString("isRp");
+			canExRp = equan.queryString("canExRp");
+			code = equan.queryString("code");
+			
+			//alert(etotal+"-"+redpacket);
+			
+			
+			$("#inetotal").html(etotal);
+        	//$("#oilcard").html(etotal);
+        	$("#etotal").html(etotal);
+        	
+        	//如果是0，默认显示人保积分
+        	if(etotal == 0 || etotal == 0.00){
+        		$('#rpLi').css({"display" : "none"});
+        		$('#eAccount').css("display" , "none");
+        		$('#carLi').css("display" , "-webkit-box");
+        		
+        		$('.service-state').html("<p>尊敬的VIP客户：车主权益将在7天内发放至您的账户，请注意查收，谢谢！</p>");
+        		
+        		$('#carLi').find("input[type=radio]").attr("checked", 'checked');
+        	}
+        	else if(isRp=='y'){
+				
+        		$("#redpacket").html(redpacket);
+        		$('#rpLi').css({"display" : "-webkit-box"});
+        		
+        		if(canExRp==2){
+        			$('#eAccount').css("display" , "none");
+        			$('#sercInfo').css("display" , "none");
+        		}
+        		
+        		$('#serD').css("display" , "-webkit-box");
+        		$('#rpD').css("display" , "-webkit-box");
+        		
+        		
+        	}else{
+        		
+        		$('#rpLi').css({"display" : "none"});
+        		$('#serD').css("display" , "none");
+        		$('#rpD').css("display" , "none");
+        	}
+			
+			 $('.btn').click(function() {//点击提交按钮
+             	recharge();
+             });
+		}
+	}else{
+		wrong_p("非法请求。");
+	}
+	
+	
+	function initEticketExchangeData(tkid) {
+		
+	    ajaxGet(baseUrl + '/user/eticket/detail', {eticketid:tkid}, function (data) {
+	    	//console.log(data);
+	    	 if (data.resultCode === 200) {
+	                
+	                var exchange = data.eticket.exchange;
+	                
+	                if(exchange == 'y'){//初始化显示 
+	                	etotal = data.eticket.price;
+	                	$("#inetotal").html(etotal);
+	                	//$("#oilcard").html(etotal);
+	                	$("#etotal").html(etotal);
+	                	
+	                	isRp = data.eticket.isRp;
+	                	canExRp = data.eticket.canExRp;
+	                	code = data.eticket.tks;
+	                	
+	                	//如果是0，默认显示人保积分
+	                	if(etotal == 0 || etotal == 0.00){
+	                		$('#rpLi').css({"display" : "none"});
+	                		$('#eAccount').css("display" , "none");
+	                		$('#carLi').css("display" , "-webkit-box");
+	                		
+	                		$('.eb-cost').css("display" , "none");
+	                		$('.service-state').html("<p>尊敬的VIP客户：车主权益将在7天内发放至您的账户，请注意查收，谢谢！</p>");
+	                		
+	                	}
+	                	else if(isRp=='y'){
+	                		redPacket = data.eticket.redPacket;
+	                		$("#redpacket").html(redPacket);
+	                		$('#rpLi').css({"display" : "-webkit-box"});
+	                		
+                			if(canExRp==2){
+                    			$('#eAccount').css("display" , "none");
+                    			$('#sercInfo').css("display" , "none");
+                    		}
+	                		
+	                		$('#serD').css("display" , "-webkit-box");
+	                		$('#rpD').css("display" , "-webkit-box");
+	                	}else{
+	                		
+	                		showNotice2();
+	                		
+	                		$('#rpLi').css({"display" : "none"});
+	                		$('#serD').css("display" , "none");
+	                		$('#rpD').css("display" , "none");
+	                	}
+	                	
+	                    $('.btn').click(function() {//点击提交按钮
+	                    	recharge();
+	                    });
+	                	
+	                }else{
+	                    $('.btn').click(function() {//点击提交按钮
+	                    	wrong_p('不可兑换的券！');
+	                    });
+	                }
+	    	 }
+	    });
+	}	
+
+	function recharge(){
+		
+		var type = $('input[name="type"]:checked').val();
+		
+		if(type){
+			
+		}else{
+			wrong_p('请选择兑换类型');
+			return false;
+		}
+
+		/* if(type == "2" && bid!='250' && bid!='387' && bid!='384' && bid!=319 && bid!=328 && bid !=421 && bid!=150 && bid!=248 && bid!='5ac0d4757dc6480a92bb5a3f69d5ba6e' && bid!='4a387f40e7aa48d4bfc2c515579d2b37'  && bid!='7edc273a8c7e4914ad016eefa8cd5fda' && bid!='b9ac85ba4a2a463f9dcbe3297bea2251' && bid!='f87e2f6974e04b7abaa0217d40e1afe4' && bid!='a6828d4acafa4b69a519d40435989259' && bid!='cca7ddb29d2049b78c9fd2a3e04ce210' && bid!='c3ae590111544802adf86459b5436775' && bid!='49d56ae1f66f47799bd8c7f283c17690' && bid!='5a6270fe27de4f238b04c433e46dba57' && bid!='c2a936fe00cb4879a6853122e368f29e' && bid!='85e212cf0565483a865dd5f56c2a60da'){//
+			 $('#notice2').addClass('show');
+			
+		}else{ */ 
+			//进入兑换
+			ajaxGet(baseUrl + "/user/eticket/recharge", {tkid : tkid, type : type, code : code}, function (data) {
+				
+				if(data.resultCode == 200){
+					var msg = "";
+					if(type == 1){
+						msg = "<font style='font-size:1rem;'>兑换成功!</font><br><br>本次共增加"+ etotal +"e币";
+					}
+					else if(type == 8){
+						msg = "<font style='font-size:1rem;'>兑换成功!</font><br><br>尊敬的VIP客户：车主权益将在7天内发放至您的账户，请注意查收，谢谢！";
+					}
+					else{
+						msg = "<font style='font-size:1rem;'>兑换成功!</font><br><br><div style='width:100%;text-align:left;margin:.5rem;'>1.红包将在24小时内发送,如出现\"待发送\"状态请耐心等待;<br>2.由于微信系统限制，建议兑换操作不能过于频密。<div>";
+					}
+					window.location.href = baseHtmlUrl + "wxhtml/result.html?type="+type+"&redpacket="+redpacket+"&msg=" + encodeURIComponent(msg);
+					
+	       		}else{
+					wrong_p(data.resultMsg);
+	       		}
+	        });
+		/* } */
+	}
+	
+});
+
+function showNotice(){
+	$('#notice').addClass('show');
+}
+
+function showNotice2(){
+	$('#notice2').addClass('show');	
+}
+
+function setCheck(value){
+	
+	$('input[type=radio]').each(function(){
+		
+		if($(this).attr('value') == value){
+			$(this).prop('checked', 'checked');
+		}
+		else{
+			$(this).removeAttr('checked');
+		}
+	});
+	
+}
+
+</script>
+</body>
+</html>

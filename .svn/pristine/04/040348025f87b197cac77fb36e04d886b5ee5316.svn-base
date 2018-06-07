@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>积分卡充值</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+   
+    <form action="#">
+        <div class="bg-show-2 border-top">
+           <ul class="form-list border-list">
+                <li>
+                    <label for="">密码</label><!--测试  0019847130701006     1358 -->
+                    <input class="ticket-num" id="ticketCode" type="text" placeholder="请输入16位券码">
+                </li>
+                <li>
+                    <label for="">安全码</label>
+                    <input class="ticket-num" id="ticketPcode" type="text" placeholder="请输入安全码(在卡片背面右下方)">
+                </li>
+            </ul>
+        </div>
+        <!-- <div id="kelihu-captcha" data-sitekey="A93126F54CF592F584C550EDC6BC22F0"></div> -->
+		
+        <!-- 提示 -->
+        <div class="tips">
+            <p>提示：请输入e券积分卡上的密码及卡片背面右下方4位数字的安全码进行充值</p>
+        </div>    
+        <p id="recharge-btn" class="btn">充值<p>
+    </form>
+
+    <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+	
+<script type="text/javascript">
+    
+$(function(){
+
+	var interValObj,//timer变量，控制时间
+		curCount = 10;	//当前剩余秒数
+	
+	//点击提交按钮
+    $('#recharge-btn').click(function() {
+        var ticketNumValue = $('#ticketCode').val();
+        var ticketPcode = $('#ticketPcode').val();
+        //var kelihuCaptchaResponse = $("#kelihu-captcha-response").val();
+        var kelihuCaptchaResponse = "fkfkckck15";
+        if (ticketNumValue == '') {
+            empty_p('密码不能为空');
+        } else if(ticketPcode==''){
+        	empty_p('安全码不能为空');
+        }else {
+        	
+        	if(ticketNumValue.length != 16){
+        		wrong_p('请输入16位券码');
+        		return false;
+        	}else if(ticketPcode.length != 4){
+    			empty_p('请输入卡序后4位数字');
+    			return false;
+    		}else{
+    			
+    			$(this).addClass('dis-btn');
+    	 		$(this).html("充值("+curCount + ")");
+
+    	 		interValObj = window.setInterval(setRemainTime, 1000);//启动计时器，1秒执行一次
+    			
+        		check(ticketNumValue, ticketPcode,kelihuCaptchaResponse);
+        	}
+        	
+        }
+    });
+	
+		
+    function setRemainTime() {
+     	
+ 		if (curCount == 0) {
+             window.clearInterval(interValObj);			//停止计时器
+             curCount = 10;
+             $("#recharge-btn").removeAttr("disabled");
+             $("#recharge-btn").removeClass('dis-btn');
+ 			$("#recharge-btn").html("充值");
+        }else {
+         	curCount--;
+            $("#recharge-btn").html("充值("+curCount + ")");
+        }
+ 	}	
+});
+
+
+function check(ticketNumValue, ticketPcode,kelihuCaptchaResponse){
+	
+	ajaxGet(baseUrl + "/user/eticket/check", {ticketid : 0, ticketNumValue : ticketNumValue, ticketPcode : ticketPcode, kelihu_captcha_response : kelihuCaptchaResponse}, function (data) {
+		//console.log(data);
+		if(data.resultCode == 200){
+			
+			window.location.href = "recharge_type.html?rType=9&tkid=" + data.eticket.ticketId+ "&etotal=" + data.eticket.price + "&redpacket=" + data.eticket.redPacket + "&code=" + ticketNumValue + "&isRp=" + data.eticket.isRp + "&canExRp=" + data.eticket.canExRp +"&bid="+data.eticket.senderId;
+   		}else{
+			wrong_p(data.resultMsg);
+   		}
+		
+    });
+}
+</script>
+
+</body>
+
+</html>

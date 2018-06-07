@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>产品详情</title>
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+   
+    <div class="banner" style="display: block">
+        <!--图片轮播r-->
+       <!--  <div class="slide" id="slide3">
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="images/p1.jpg">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="images/p1.jpg">
+                    </a>
+                </li>
+            </ul>
+            <div class="dot">
+                <span></span>
+                <span></span>
+            </div>
+        </div> -->
+        <div class="swiper-container swiper-container1">
+            <div class="swiper-wrapper" id="slide_image">
+                <!-- <div class="swiper-slide" style="background-image: url('images/p1.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/p2.jpg')"></div>
+                <div class="swiper-slide" style="background-image: url('images/p3.jpg')"></div> -->
+            </div>
+            <div class="swiper-pagination swiper-pagination1"></div>
+                
+        </div>
+        <!--图片轮播 end-->
+          <div class="pro-list pdl pdr pdb bg-show">
+            <!-- <div class="label"><span class="label-orange">满99-10</span>
+            </div> -->
+            <h5 class="pro-title" id="name">--
+            </h5>
+            <div  class="price">
+                <span class="font-orange lg-font">
+                    <i class="icon-coin"></i><span id="eCost">--</span>
+                </span>
+                <s class="right-text font-gray">市场价￥<span id="price">--</span></s>
+            </div>
+        </div>
+
+        <div class="bg-show-2 pro-detail">
+            <h4 class="center-text">商品详情</h4>
+            
+        </div>
+    </div>
+        
+    <div class="fixed-bottom" style="display: block">
+        <div class="bttomBtn two-btn border-top">
+            <a href="cart.html" class="backNav border-right">
+                <i class="icon-cart"></i>
+            	<span class="circlePoint">0</span>
+            </a> 
+            <a class="btn-cart" onclick="addShopCart()">加入购物车</a> 
+            <a href="#" class="btn-theme" onclick="goPay()">立即购买</a></div>
+    </div>
+    
+	<!-- 公告提示遮罩   -->
+	<div id="notice" class="ui-dialog" style="display: none">
+	    <div class="dialog-cnt">
+	        <div class="dialog-content">
+	            <h4>出错啦~</h4>
+	            <p class="red-font">
+	    			抱歉，该产品已下架，去商城选其他的试试
+				</p>
+	        </div>
+	    </div>
+	</div>
+    <div class="nothing " style="display: none">
+        <i class="icon-order"></i>
+        <h3>该商品已经下架了</h3>
+        <a href="index.html">逛逛商城&nbsp;→</a>
+    </div>
+
+	 <div class="tip-dialog">
+        <i class="icon-gantan"></i>
+        <p>手机号不能为空</p>
+    </div>
+
+	<script type="text/javascript" src="js/zepto.min.js"></script>
+    <script src="js/swiper-4.2.0.min.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+    <script type="text/javascript" src="js/equan.js"></script>
+
+    <script type="text/javascript">
+    
+    var productid = equan.queryString("productid");
+    
+    var map;
+    
+    //$('.btn-theme').attr('href', 'order_confirm.html?productid=' + productid);
+    
+    $(function() {
+    	
+    	equan.findCartTotal('circlePoint');
+    	
+    	//显示 右上角的分享按钮
+    	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    		WeixinJSBridge.call('showOptionMenu');
+    	});
+    	
+		ajaxGet(baseUrl+'/product/detail', {productid: productid}, function (data) {
+
+    		if(data.resultCode == 200){
+    			
+    			var imageHtml = '';
+    			var dotHtml = '';
+
+    			if(data.state == '0'){
+    				$('#notice').addClass('show');
+    				$('.fix_box_bottom').remove();
+                    $('.nothing').css('display', 'block');
+                    $('.fixed-bottom').css('display', 'none');
+                    $('.banner').css('display', 'none');
+    			}
+    			
+    			for(var i = 0; i < data.pic.length; i++){
+
+    				imageHtml += '<div class="swiper-slide" style="background-image: url('+ baseImgUrl + data.pic[i] +')"></div>';
+    			}
+
+    			var eCost = parseInt(data.cost);
+    			var count = data.count;
+    			var type = data.type;
+
+    			$("#slide_image").html(imageHtml);
+    			$("#name").html(data.name);
+    			$("#eCost").html(eCost);
+    			$("#price").html(data.price);
+    			$("h4").after('<div class="rich-box">' + data.description + '</div>');
+
+    			map = {
+					id : productid,
+					name: data.name,
+					eCost: eCost,
+					price: data.price,
+					showpic: data.showPic,
+					showType : data.showType,
+					type : data.type,
+					total: 1
+    			};
+
+    			if(type && type==2){
+    				var esmPdaUrl = "https://fs2.yesm.cn/equan/m/product?id="+data.esmId;
+
+    				if(data.esmId==1279){
+    					esmPdaUrl = 'http://hecaiyun.cyzl.com/';
+    				}
+
+    				$('#esmPda').attr('href',esmPdaUrl);
+    				$('#esmPrd').removeClass('hide');
+    			}
+
+
+    			if(count>0){
+    				$(".btn").attr("href" , "order_confirm.html?productid=" + data.id);
+    			}
+    			else{
+    				$(".btn").addClass('dis-btn');
+        	 		$(".btn").html("库存不足");
+    			}
+
+    			initSlide();
+    			
+    		}
+    		
+        });
+    	
+    	
+		function initSlide(){
+	    	
+	    	var swiper1 = new Swiper('.swiper-container1', {
+	            pagination: {
+	                el: '.swiper-pagination1',
+	                clickable: true
+	            },
+	            loop: true,
+	            autoplay: {
+	                stopOnLastSlide: true,
+	                disableOnInteraction: false
+	            }
+	        });
+	    	
+	    	// 只有一张图时禁止轮播
+	        if($('.swiper-slide').length <= 3) {
+	            swiper1.autoplay.stop();
+	            swiper1.detachEvents(); //移除所有监听事件
+	            swiper1.pagination.$el.addClass('hide');
+	        }
+	    }
+        
+    });
+    
+    function goPay(){
+    	
+    	var productArray = new Array(map);
+    	
+    	var productStr = JSON.stringify(productArray);
+    	//JSON.stringify(array);
+    	
+    	
+    	productStr = encodeURIComponent(productStr);
+    	
+    	window.location.href = "order_confirm.html?productStr=" + productStr;
+    }
+    
+    function addShopCart(){
+    	
+    	$('.btn-cart').removeAttr('onclick');
+    	
+    	var url = baseUrl + '/shopCart/addorder/'+ productid +'/1';
+    	
+    	ajaxPost(url, {}, function (data) {
+    		
+    		console.log(data);
+    		
+    		if(data.resultCode === 200){
+    			yes_p('增加成功');
+    			equan.findCartTotal('circlePoint');
+    		}
+    		else{
+    			$(this).isTip('增加失败');
+    		}
+    		
+    		$('.btn-cart').attr('onclick', 'addShopCart();');
+    	});
+    }
+    
+    </script>
+</body>
+
+</html>
+

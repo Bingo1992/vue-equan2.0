@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>欧飞充值测试</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+</head>
+
+<body>
+   
+    <form action="#">
+        <div class="bg-show-2 border-top">
+           <ul class="form-list border-list">
+           		<li>
+                    <label for="">提交链接</label>
+                    <select id="url">
+                    	<option value="/ofpay/notify">代充模式</option>
+                    	<option value="/ofpay/online/notify">直充模式</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="">ret_code</label>
+                    <input class="ticket-num" id="ret_code" type="text" placeholder="请输入安全码(在卡片背面右下方)">
+                </li>
+                <li>
+                    <label for="">sporder_id</label>
+                    <input class="ticket-num" id="sporder_id" type="text" placeholder="请输入安全码(在卡片背面右下方)">
+                </li>
+                <li>
+                    <label for="">rechargeinfo</label>
+                    <input class="ticket-num" id="rechargeinfo" type="text" placeholder="请输入安全码(在卡片背面右下方)">
+                </li>
+            </ul>
+        </div>
+		
+        <p id="recharge-btn" class="btn">提交测试<p>
+    </form>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+<script type="text/javascript" src="js/equan.js?v=1.0"></script>
+	
+<script type="text/javascript">
+    
+$(function(){
+	
+	//点击提交按钮
+    $('#recharge-btn').click(function() {
+    	
+        var ret_code = $('#ret_code').val();
+        var sporder_id = $('#sporder_id').val();
+        var rechargeinfo = $('#rechargeinfo').val();
+        var url = $('#url').val();
+        
+        ajaxPost(baseUrl + url, {ret_code : ret_code, sporder_id : sporder_id, rechargeinfo : rechargeinfo}, function (data) {
+    		
+        	alert(data);
+        });
+        
+    });
+	
+	
+});
+
+</script>
+
+</body>
+
+</html>

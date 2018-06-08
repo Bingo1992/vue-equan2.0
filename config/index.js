@@ -15,7 +15,6 @@ module.exports = {
            // target: 'http://localhost:9090',
            target: 'http://192.168.4.48:8080/equan-wxweb',
            // target:'http://192.168.4.70/equan-wxweb',
-           // target:'http://equan.yesm.cn/equan-wxweb', 
            changeOrigin: true,
            pathRewrite: {'^/api': ''}
          }

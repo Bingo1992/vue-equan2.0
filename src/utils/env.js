@@ -6,15 +6,25 @@
  * imgBaseUrl: 图片所在域名地址
  * 
  */
-// let baseUrl; 
-let routerMode;
+let baseUrl, esmUrl; 
+// let routerMode;
 const imgBaseUrl = 'http://img.yesm.cn';
-//正式环境
-const baseUrl = 'https://equan.yesm.cn/equan-wxweb/wxhtml';
-const esmUrl = 'https://fs2.yesm.cn/equan/m';
-// 测试环境
-// const baseUrl = 'http://t1.yesm.cn/equan-wxweb/wxhtml';
-// const esmUrl = 'http://files.joysim.cn:30123/equan/m';
+
+if(process.env.NODE_ENV === 'development') {
+	// 测试环境
+	baseUrl = 'http://t1.yesm.cn/equan-wxweb/wxhtml';
+	esmUrl = 'http://files.joysim.cn:30123/equan/m';
+} else if(process.env.type === 'test') {
+	// 测试环境
+	 baseUrl = 'http://t1.yesm.cn/equan-wxweb/wxhtml';
+	 esmUrl = 'http://files.joysim.cn:30123/equan/m';
+} else {
+	//正式环境
+	baseUrl = 'https://equan.yesm.cn/equan-wxweb/wxhtml';
+	esmUrl = 'https://fs2.yesm.cn/equan/m';
+
+}
+
 
 // if (process.env.NODE_ENV == 'development') {
 // 	baseUrl = '';

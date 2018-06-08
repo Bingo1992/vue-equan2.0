@@ -9,6 +9,7 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
+    "test": "node build/build-test.js",
     "mock": "json-server --watch mock/mock.js --m mock/post-to-get.js --port 9090",
     "mockdev": "npm run mock | npm run dev"
   },

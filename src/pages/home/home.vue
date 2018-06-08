@@ -144,6 +144,32 @@
 	                            <img class="act-img" src="../../assets/images/4.jpg">    
 	                        </router-link> 
 	                    </li>
+						<li>
+	                       <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 30}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-orange">精英型男</h4>
+	                                	<p class="font-gray">造型态度兼备</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/6.jpg">    
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 31}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-yellow">美女厨房</h4>
+	                                	<p class="font-gray">让烹饪更有趣</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/7.jpg">    
+	                        </router-link> 
+	                    </li>
 	                </ul>
 	            </div>
 	        </div>
@@ -155,6 +181,12 @@
 		    <product :proList="proList1" proThree="true"></product>
 
 		    <banner :listImg="adsImg" myClass="-c1"></banner>
+
+			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 25}}">
+				<h4>夏日精选</h4>
+				<i class="icon-circle"></i>
+			</router-link>
+		    <product :proList="proList3" proThree="true"></product>
 
 		    <router-link class="title-list" :to="{path: '/proList', query: {areaId: 2}}">
 				<h4>人气推荐</h4>
@@ -196,7 +228,8 @@ export default {
 			adsImg: [],
 			listImg: [],
 			proList1: [],
-			proList2: []
+			proList2: [],
+			proList3: []
 		}
 	},
 	components: {
@@ -270,6 +303,17 @@ export default {
 				}
 				
 			});
+			//商品列表(夏日精选)
+			proList({params:{areaId: 25,pageSize: 9}}).then(res => {
+				this.proList3 = res.attributes.resultList;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                })
+				if(this.proList3.length % 3 != 0){
+					this.proList3.splice(this.proList3.length-1, 1);
+				}
+			});
 			//商品列表(推荐)
 			proList({params:{areaId: 2,pageSize: 30}}).then(res => {
 				this.proList2 = res.attributes.resultList;
@@ -281,6 +325,7 @@ export default {
 					this.proList2.splice(this.proList2.length-1, 1);
 				}
 			});
+			
 	
 		},
 		//搜索商品

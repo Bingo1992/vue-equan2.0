@@ -4,11 +4,11 @@
 				<div :class="[proThree? 'pro-img-1':'pro-img-2']">
 					<div class="imgLoad" :style="{ backgroundImage: 'url(' + getImgPath(item.pic.split(';')[0]) + ')' }"></div>
 					<!-- <img v-lazy="getImgPath(item.pic)"> -->
-		<!-- 			<div class="label">
-						<span v-if="item.label1" class="label-orange">{{item.label1}}</span>
-						<span v-if="item.label2 && !proThree" class="label-blue">{{item.label2}}</span>
-						<span v-if="item.label3 && !proThree" class="label-red">{{item.label3}}</span>
-					</div> -->
+					<div class="label">
+						<span v-if="item.ebuy == 1" class="label-blue">e购</span>
+						<span  class="label-orange">e币</span>
+						<!-- <span v-if="item.label3" class="label-red">{{item.label3}}</span> -->
+					</div>
 					<img class="soldOut" v-if="item.count === 0" src="../assets/images/soldOut.png">
 				</div>
 				<h6 v-if="proThree" class="pro-title nowrap-2">
@@ -92,11 +92,11 @@ export default {
 		width: pxTorem(120) !important;
 		height: pxTorem(120) !important;
 	}
-	[class^="label-"] {
-		position: absolute;
-		bottom: 4px;
-		left: 4px;
-	}
+	// [class^="label-"] {
+	// 	position: absolute;
+	// 	bottom: 4px;
+	// 	left: 4px;
+	// }
 }
 .proListThree {
 	padding-bottom: 16px;
@@ -114,7 +114,7 @@ export default {
 	li {
 		width: pxTorem(228);
 		padding: 0 pxTorem(4);
-		height: pxTorem(368);
+		height: pxTorem(420);
 	}
 }
 	
@@ -124,12 +124,9 @@ export default {
 		width: 50%;
 		float: left;
 		padding: 0 pxTorem(10);
-		height: 12.5rem;
+		height: 13.5rem;
 	}
-	// h5 {
- //        padding-top: .3rem;
- //        line-height: pxTorem(44);
- //    }
+
     img {
     	height: pxTorem(341);
     }

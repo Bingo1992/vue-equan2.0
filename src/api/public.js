@@ -5,7 +5,23 @@ axios.defaults.timeout = 10000
 
 var HOST = '/api/eshop';
 export default {
-  fetchGet (url, params = {}) {
+  // fetchGet (url, params = {}) {
+  //   if (process.env.NODE_ENV == 'development') {
+  //       HOST = '/api/eshop'
+  //   } else {
+  //      HOST = '/equan-wxweb/eshop'
+  //   }
+  //   url = HOST + url;
+  //   return new Promise((resolve, reject) => {
+  //     axios.get(url, params).then(res => {
+  //       resolve(res.data)
+  //     }).catch(error => {
+  //       reject(error)
+  //     })
+    
+  //   })
+  // },
+  fetchGet (url, data) {
     if (process.env.NODE_ENV == 'development') {
         HOST = '/api/eshop'
     } else {
@@ -13,7 +29,7 @@ export default {
     }
     url = HOST + url;
     return new Promise((resolve, reject) => {
-      axios.get(url, params).then(res => {
+      axios.get(url, data).then(res => {
         resolve(res.data)
       }).catch(error => {
         reject(error)

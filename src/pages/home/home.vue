@@ -47,18 +47,26 @@
 			<banner :listImg="listImg" myClass="0" hasPoint="true"></banner>
 		
 			<ul class="nav-list flex-layout">
-				<li>
+				<!-- <li>
 					<router-link :to="{path:'/proList',query: {
 	                        	areaId: 6}}">
 						<img src="../../../static/images/1.png">
 						<p>e券优选</p>
 					</router-link>
+				</li> -->
+				<li>
+					<a :href="getUrlPath('/wechatArticle.html?wechatArticleId=7')">
+						<span class="saleLabel">HOT</span>
+						<img src="../../../static/images/1.png">
+						<p>品牌专区</p>
+					</a>
 				</li>
 
 				<li>
 					<router-link :to="{path:'/proList',query: {
 	                        	areaId: 4}}">
-						<img src="../../../static/images/new.png" style="position: absolute;right:.5rem;top: .5rem;width: 1.5rem;">
+						<span class="saleLabel">NEW</span>
+						<!-- <img src="../../../static/images/new.png" style="position: absolute;right:.5rem;top: .5rem;width: 1.5rem;"> -->
 						<img src="../../../static/images/2.png">
 						<p>苏宁易购卡</p>
 					</router-link>
@@ -69,6 +77,18 @@
 						<p>违章查办</p>
 					</a>
 				</li>
+				<!-- <li>
+					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd0cc97b55aebf775&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
+						<img src="../../../static/images/3.png">
+						<p>违章查办</p>
+					</a>
+				</li> -->
+				<!-- <li>
+					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdc6970cc1f6a41fb&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
+						<img src="../../../static/images/3.png">
+						<p>违章查办</p>
+					</a>
+				</li> -->
 				<li>
 					<router-link to="/rechargeCenter">
 						<img src="../../../static/images/4.png">
@@ -85,24 +105,33 @@
 	                    <li>
 	                        <router-link class="list-box" :to="{path: '/proList', query: {
 	                        	areaId: 5}}">
-	                            <div class="hot"><span>HOT</span></div>
+	                            <div class="hot"><span>SALE</span></div>
 	                            <h4 class="font-red center-text">每周特价</h4>
-	                            <p class="font-gray center-text">惊爆价58元起</p>
+	                            <p class="font-gray center-text">优惠低至2.3折</p>
 	                            <img class="act-img-2" src="../../assets/images/5.jpg">
+								<!-- <p class="font-gray md-font center-text">裤子没了皮带 e券给您依赖</p> -->
 	                        </router-link> 
 	                    </li>
 	                    <li>
-	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        <!-- <router-link class="list-box" :to="{path: '/proList', query: {
 	                        	areaId: 7}}">
 	                            <div class="list-info-v">
 	                            	<div>
 	                            		<h4 class="font-blue-2">车友必备</h4>
                                 		<p class="font-gray">解决关键需求</p>
 	                            	</div>
-	                                
 	                            </div>
 	                            <img class="act-img" src="../../assets/images/1.jpg">    
-	                        </router-link> 
+	                        </router-link>  -->
+							 <a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=8')">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-blue-2">车友必备</h4>
+                                		<p class="font-gray">已为您分好类</p>
+	                            	</div>
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/1.jpg">    
+	                        </a> 
 	                    </li>
 	                    <li>
 	                       <router-link class="list-box" :to="{path: '/proList', query: {
@@ -111,7 +140,7 @@
 	                            <div class="list-info-v">
 	                            	<div>
 	                            		<h4 class="font-purple">女神专区</h4>
-                                		<p class="font-gray">你值得被呵护</p>
+                                		<p class="font-gray" >你值得被呵护</p>
 	                            	</div>
 	                                
 	                            </div>
@@ -123,7 +152,7 @@
 	                       	areaId: 9}}">
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-theme">米家有品</h4>
+	                            		<h4 class="font-theme">数码达人</h4>
 	                                	<p class="font-gray">革命你的生活</p>
 	                            	</div>
 		                                
@@ -131,19 +160,31 @@
 	                            <img class="act-img" src="../../assets/images/3.jpg">    
 	                        </router-link> 
 	                    </li>
-	                    <li>
+						 <li>
+	                        <a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=9')">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-red-2">家居精选</h4>
+	                                	<p class="font-gray">凉席特价中…</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/4.jpg">    
+	                        </a> 
+	                    </li>
+	                    <!-- <li>
 	                        <router-link class="list-box" :to="{path: '/proList', query: {
 	                        	areaId: 10}}">
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-red-2">居家好物</h4>
-	                                	<p class="font-gray">享受美好生活</p>
+	                            		<h4 class="font-red-2">家居日用</h4>
+	                                	<p class="font-gray">实用优质生活</p>
 	                            	</div>
 		                                
 	                            </div>
 	                            <img class="act-img" src="../../assets/images/4.jpg">    
 	                        </router-link> 
-	                    </li>
+	                    </li> -->
 						<li>
 	                       <router-link class="list-box" :to="{path: '/proList', query: {
 	                       	areaId: 30}}">
@@ -162,8 +203,8 @@
 	                        	areaId: 31}}">
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-yellow">美女厨房</h4>
-	                                	<p class="font-gray">让烹饪更有趣</p>
+	                            		<h4 class="font-yellow">厨具电器</h4>
+	                                	<p class="font-gray">让生活更方便</p>
 	                            	</div>
 		                                
 	                            </div>
@@ -187,13 +228,62 @@
 				<i class="icon-circle"></i>
 			</router-link>
 		    <product :proList="proList3" proThree="true"></product>
+			<!-- <div class="outter-list">
+				<table class="inner-list">
+					<tr>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/1.jpg">
+								<h6 class="nowrap-2">造型态度</h6>
+							</a>
+						</td>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/2.jpg">
+								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
+							</a>
+						</td>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/3.jpg">
+								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
+							</a>
+						</td>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/4.jpg">
+								<h6 class="nowrap-2">造型态度</h6>
+							</a>
+						</td>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/5.jpg">
+								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
+							</a>
+						</td>
+						<td>
+							<a href="#">
+								<img src="../../assets/images/4.jpg">
+								<h6 class="nowrap-2">造型态度兼备</h6>
+							</a>
+						</td>
+						<td class="getmore_pro">
+							<a href="#">
+								<p>查看更多 <i class="icon-down"></i></p>
+							</a>
+						</td>
+					</tr>
+					
+					
+				</table>
+			</div> -->
 
 		    <router-link class="title-list" :to="{path: '/proList', query: {areaId: 2}}">
 				<h4>人气推荐</h4>
 				<i class="icon-circle"></i>
 			</router-link>
 			<product :proList="proList2"></product>
-			
+
 			<transition name="router-slid" mode="out-in">
 		        <router-view></router-view>
 		    </transition>
@@ -214,6 +304,7 @@ import Banner from '/components/swiperDefault'
 import loading from '/components/loading'
 import FooterNav from '/components/footer'
 import product from '/components/product'
+import { getUrlPath } from '/components/mixin'
 // import Swiper from 'swiper'
 // import '/utils/swiper-3.4.2.min.js'
 export default {
@@ -235,9 +326,12 @@ export default {
 	components: {
 	   Banner, product, FooterNav, loading
 	},
+	mixins: [getUrlPath],
 	mounted() {
 		if(!this.$route.query.productid) {
 			document.title = "e券商城";
+			// document.title = "易购积分汇";
+			// document.title = "商城首页";
 		}	
 		this._initData();
 
@@ -254,6 +348,7 @@ export default {
 			// 轮播图1
 			banner({params:{location: "index_top"}}).then(res => {
 				this.listImg = res.obj;
+				// console.log(res)
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
                     window.scrollTo(0,0);
@@ -309,13 +404,17 @@ export default {
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
                     window.scrollTo(0,0);
-                })
-				if(this.proList3.length % 3 != 0){
+				})
+			
+				if(this.proList3.length % 3 == 1){
 					this.proList3.splice(this.proList3.length-1, 1);
 				}
-			});
+				if(this.proList3.length % 3 == 2){
+					this.proList3.splice(this.proList3.length-2, 2);
+				}
+			}); 
 			//商品列表(推荐)
-			proList({params:{areaId: 2,pageSize: 30}}).then(res => {
+			proList({params:{areaId: 2,pageSize: 40}}).then(res => {
 				this.proList2 = res.attributes.resultList;
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
@@ -424,7 +523,7 @@ export default {
 	&:after {
 	 	background-image: url(../../assets/images/rightLine.png);
 	}
-}
+}  
 .activity-list {
 	position: relative;
 	z-index: 2;
@@ -470,11 +569,22 @@ export default {
     span {
     	position: absolute;
 	    top: -18px;
-	    left: -18px;
+	    left: -24px;
 		font-size: 12px;
 		transform: rotate(-45deg);
 	    -webkit-transform: rotate(-45deg);
     }
+}
+.saleLabel {
+	position: absolute;
+	right:.5rem;
+	top: .55rem;
+	@include semicircle(12px);
+	color: #49271c;
+	background-color: #fff000;
+	box-shadow: 1px 2px 2px rgba(184, 76, 255,.1);
+	font-size: 8px;
+	padding: 0 3px;
 }
 .discount {
     position: absolute;
@@ -496,4 +606,5 @@ export default {
 	    -webkit-transform: rotate(-45deg);
 	}
 }
+
 </style>

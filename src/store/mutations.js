@@ -16,7 +16,8 @@ export default {
       currPrice, 
       check = false, 
       total = 1, 
-      ebuy}) {
+      ebuy,
+      type}) {
     let cart = state.cartList; // 购物车
     let falg = true;
     let goods = {
@@ -25,7 +26,8 @@ export default {
       productName,
       currCost,
       currPrice,
-      ebuy
+      ebuy,
+      type
     }
     if (cart.length) { // 有内容
       cart.forEach(item => {
@@ -102,6 +104,24 @@ export default {
   //选择的商品分类
   ['CHOOSE_PROSORT'](state, {sortPro, index}) {
     state.sortProIndex = index;
+    // state.sortProIndex2 = index2;
     state.sortPro = sortPro;
-  }
+  },
+  // 两级分类的id
+  ['CHOOSE_LEVERONEID'](state, {oneId, twoId}) {
+    state.oneId = oneId;
+    state.twoId = twoId;
+  },
+  ['CHOOSE_LEVERONEID'](state, oneId) {
+    state.oneId = oneId;
+    // state.twoId = twoId;
+  },
+  ['CHOOSE_LEVERTWOID'](state, twoId) {
+    // state.oneId = oneId;
+    state.twoId = twoId;
+  },
+  //初始化分类列表
+  ['INIT_SORTLIST'](state, list) {
+		 state.sortList = list;
+	}
 }

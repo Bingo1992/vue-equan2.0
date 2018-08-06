@@ -1,0 +1,6 @@
+1、api.js，购物车，商品详情，地址（三个页面）修改了post；
+2、添加sort页面，proList，sortTabs做修改；
+3、index.html， main.js添加百度统计；
+4、新增红包充值页面，接口，exchange除去红包
+5、api.js 增加充值接口， 几个充值页面， rechargeCenter添加图片
+7、添加娱乐充值，static图片

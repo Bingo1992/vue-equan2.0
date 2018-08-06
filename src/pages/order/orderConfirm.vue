@@ -1,9 +1,9 @@
 <template>
   <div class="orderConfirm banner-b">
-    <loading v-if="showLoading"></loading>
+    <!-- <loading v-if="showLoading"></loading> -->
 
-    <section v-if="!showLoading">
-        <div class="logistics bg-show">   
+    <!-- <section v-if="!showLoading"> -->
+        <div v-if="!flag" class="logistics bg-show">   
             <router-link to="/chooseAddress" class="list-box">
                 <i class="icon-map font-gray pdr"></i>
                 <h5 class="list-info-v pdt pdb" v-if="chooseAddress.length === 0">请添加一个收货地址</h5>
@@ -88,28 +88,32 @@
                 </li>
             </ul>
         </div>   
-
-
         <div class="fixed-bottom  bg-gray">
           <div class="cal-banner list-box border-top">
-              <div class="list-info-v">
-                <div>
-                    <p v-if="pay.money != 0">
+              <!-- <div class="list-info-v"> -->
+                <div class="pdr">
+                    <p class="md-font" v-if="pay.money != 0">
                         应付现金：
                         <span class="font-orange">￥{{pay.money}}</span>
                     </p>
-                    <p v-if="userIntegeral && userIntegeral != 0">
+                    <p class="md-font" v-if="userIntegeral && userIntegeral != 0">
                         应付e币：
                         <i class="icon-coin"></i>
                         <span class="font-orange">{{pay.ebi}}</span>
                     </p>
                 </div>
-                  
+              <!-- </div> -->
+              <div class="list-info-v">
+                <p class="font-gray sm-font" v-if="pay.egou != 0">
+                    e购抵扣{{pay.egou}}元
+                </p> 
               </div>
-              <button :class="[{disbtn: chooseAddress.length==0},'btn-theme']" @click="gotoPay1"> 立即付款</button>
+            
+              <button class="btn-theme" @click="gotoPay1"> 立即付款</button>
           </div>
         </div>
-    </section>
+    <!-- </section> -->
+    
 
     <!-- 提交遮罩 -->
     <alert-tip v-show="showAlertTip" :formLoading="formLoading" :alertText="alertText"></alert-tip>
@@ -119,7 +123,7 @@
 
 <script>
     import {mapState, mapMutations} from 'vuex'
-    import loading from '/components/loading'
+    // import loading from '/components/loading'
     import alertTip from '/components/alertTip'
     import { orderConfirm, addressList, gotoPay } from '/api/api'
     import { getStore, setStore } from '/utils/storage'
@@ -128,7 +132,7 @@
       name: 'orderConfirm',
       data () {
         return {
-            showLoading: false, //显示加载中  
+            // showLoading: false, //显示加载中  
             proList:[],
             unCheckCartList: [],
             address: [],
@@ -154,7 +158,7 @@
         }
       },
       components: {
-        loading, alertTip
+          alertTip
       }, 
       mixins: [getImgPath, getUrlPath],
       created() {
@@ -183,6 +187,8 @@
                 })
                 setStore('unCheckCartList', this.unCheckCartList);
             }
+
+
            let virtual = 0;//虚拟商品个数
            this.proList.forEach((item, index) => {
                if(item.type == 2) {//虚拟商品
@@ -259,34 +265,44 @@
         },
         //支付
         gotoPay1() {
-          this.showAlertTip = true;//提交中提示
-          this.formLoading = true;
-          this.alertText = '提交中，请稍候'; 
-          let str = "{" + this.paramsList.join(",") + "}";
-    
-          gotoPay({params:{
-              addressid: this.curAdsId, 
-              params:str, 
-              remark: this.remark
-          }}).then(res => {
+            if(!this.flag && this.chooseAddress.length === 0) {
+                this.showHideAlert("请添加地址");
+            } else {
+                this.showAlertTip = true;//提交中提示
+                this.formLoading = true;
+                this.alertText = '提交中，请稍候'; 
+                let str = "{" + this.paramsList.join(",") + "}";
             
-              if(res.success == false) {
-                  this.formLoading = false;
-                  this.showHideAlert(res.msg);
-              } else if(Number(res.attributes.wxPayTotal) > 0) {
-                // console.log(res.attributes.payOrderId)
-                window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.payOrderId);
-                // window.location.href = "https://equan.yesm.cn/equan-wxweb/wxhtml/pay.html?orderNo="+res.attributes.payOrderId;
-                  setStore('buyCart', getStore('unCheckCartList'));
-                  this.INIT_BUYCART();
-              } else {
-                  this.$router.push('/result');
-                  setStore('buyCart', getStore('unCheckCartList'));
-                  this.INIT_BUYCART();
-                 // this.$router.push({path:'/pay', query: {orderNo: res.attributes.payOrderId}});
-              }
+              
+                // gotoPay({
+                //     addressid: this.curAdsId, 
+                //     content:str, 
+                //     remark: this.remark
+                // })
+
+                gotoPay({params:{
+                    addressid: this.curAdsId, 
+                    params:str, 
+                    remark: this.remark
+                }}).then(res => {
+                    if(res.success == false) {
+                        this.showHideAlert(res.msg);
+                    } else if(Number(res.attributes.wxPayTotal) > 0) {
+                        // console.log(res.attributes.payOrderId)
+                        window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.payOrderId);
+                        // window.location.href = "https://equan.yesm.cn/equan-wxweb/wxhtml/pay.html?orderNo="+res.attributes.payOrderId;
+                        setStore('buyCart', getStore('unCheckCartList'));
+                        this.INIT_BUYCART();//重新修改购物车
+                    } else {
+                        this.$router.push('/result');
+                        setStore('buyCart', getStore('unCheckCartList'));
+                        this.INIT_BUYCART();
+                        // this.$router.push({path:'/pay', query: {orderNo: res.attributes.payOrderId}});
+                    }
+                
+                })
+            }
          
-          })
         },
         // 获取地址
         _initAddress() {
@@ -309,6 +325,7 @@
         },
          //显示隐藏提示框
         showHideAlert(text) { 
+            this.formLoading = false;
             this.showAlertTip = true;
             this.alertText = text;
             setTimeout(() => {
@@ -354,5 +371,5 @@
   line-height: 20px;
 }
 .top-text {margin-bottom: 15px;}
-.icon-coin {font-size: 15px;}
+.icon-coin {font-size: 15px;vertical-align: middle;}
 </style>

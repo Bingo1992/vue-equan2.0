@@ -1,0 +1,371 @@
+<template>
+  <div style="margin-top: 44px">
+    <div class="fixed-top">
+         <ul class="flex-layout nav-bar-2 border-bottom bg-show">
+            <li :class="[tabIdx == 0? 'active': '']" @click="tabIdx = 0">
+              <a>中石化油卡</a>
+            </li>
+            <li :class="[tabIdx == 1? 'active': '']" @click="tabIdx = 1">
+              <a>中石油油卡</a>
+            </li>
+         </ul>
+    </div>   
+
+    <div v-if="tabIdx == 0">
+        <ul class="form-list border-list">
+            <li>
+                <input v-bind:type="oil1.inputType" placeholder="请输入卡号100011开头共19位的卡号" v-model="oil1.cardNum">
+            </li>
+            <li>
+                <input type="tel" placeholder="请再次确认卡号" v-model="oil1.cardNumConfirm" @focus="insite()" @blur="outsite()">
+            </li>
+            <li>
+                <input type="text" placeholder="请输入持卡人姓名" v-model="oil1.name">
+            </li>
+        </ul>
+        <p class="font-red pdl pdb pdr md-font">*请确认油卡号信息，一经提交，无法撤回！(仅支持50倍数的面值在线充值！)</p>
+
+        <ul class="face-list">
+            <li :class="{'active': oil1.idx===i}" v-for="(item, i) in feeList" @click="getVal1(item.ebi, i)" :key="i">
+                <p class="face-value">{{item.faceVal}}元</p>
+            </li>
+            <li :class="{'active': oil1.idx===4}" @click="getVal1(oil1.otherVal, 4)">
+                <p class="face-value">  <input type="number" v-model="oil1.otherVal" placeholder="其他面值" style="width:60px">元</p>
+            </li>
+        </ul>
+    
+        <div class="bg-mgShow">
+            <div class="title-bar border-bottom">
+            <h5>支付选择</h5>
+            </div>
+            <ul>
+                <li class="list-box">
+                <p class="list-info-h">e币支付</p>
+                <span class="font-orange pdr">{{oil1.idx===4? oil1.otherVal : oil1.ebi}} e币</span>
+                <label class="checkbox">
+                    <input type="radio" name="type" checked>
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            </ul>
+        </div> 
+    </div> 
+
+    <div v-if="tabIdx == 1">
+        <ul class="form-list border-list">
+            <li>
+                <input type="text" placeholder="请输入持卡人姓名" v-model="oil2.name">
+            </li>
+            <li>
+                <input  v-bind:type="oil2.inputType" placeholder="9开头（不含91）非车队卡、非不记名16位卡号" v-model="oil2.cardNum">
+            </li>
+            <li>
+                <input type="tel" placeholder="请再次确认卡号" v-model="oil2.cardNumConfirm" @focus="insite()" @blur="outsite()">
+            </li>
+            <li>
+                <input type="tel" placeholder="请输入持卡人身份证" v-model="oil2.IDcard">
+            </li>
+        </ul>
+        <p class="font-red pdl pdb pdr md-font">*充值账号以所填油卡为准，请仔细确认，一经提交，无法撤回！(仅支持100倍数的面值在线充值！)</p>
+
+        <ul class="face-list">
+            <li :class="{'active': oil2.idx===i}" v-for="(item, i) in feeList2" @click="getVal2(item.ebi, i)" :key="i">
+                <p class="face-value">{{item.faceVal}}元</p>
+            </li>
+            <li :class="{'active': oil2.idx===4}" @click="getVal2(oil2.otherVal, 4)">
+                <p class="face-value">  <input type="number" v-model="oil2.otherVal" placeholder="其他面值" style="width:60px">元</p>
+            </li>
+        </ul>
+
+        
+        <div class="bg-mgShow">
+            <div class="title-bar border-bottom">
+            <h5>支付选择</h5>
+            </div>
+            <ul>
+                <li class="list-box">
+                <p class="list-info-h">e币支付</p>
+                <span class="font-orange pdr">{{oil2.idx===4? oil2.otherVal : oil2.ebi}} e币</span>
+                <label class="checkbox">
+                    <input type="radio" name="type" checked>
+                    <i class="icon-hook"></i>
+                </label>
+            </li>
+            </ul>
+        </div> 
+    </div> 
+   
+    <dl class="bg-mgShow rich-box">
+        <dt>服务说明</dt>
+        <dd class="font-gray md-font">
+            <p>1.本服务支持中国石化、中国石油卡充值(<font class="font-red">不支持公司卡、副卡及车队卡充值</font>)</p>
+            <p>2.加油款于工作时间72小时内充值至加油卡，充值成功平台发送通知。收到通知后，到加油站进行“圈存”即可消费。（工作时间：周一至周五9：00-18：00）</p>
+            <p>3.本服务不提供发票</p>
+            <p>4.充值成功后，请到加油站<font class="font-red">圈存</font>即可消费使用</p>
+            <p>&nbsp;&nbsp;<font class="font-red">什么叫圈存?</font></p>
+            <p>&nbsp;&nbsp;圈存就是将您在线充值的资金，写入（同步）到加油<br>
+            &nbsp;&nbsp;卡的IC卡芯片上，就可以正常加油了</p>
+            <p>&nbsp;&nbsp;<font class="font-red">怎么圈存？</font></p>
+            <p>&nbsp;&nbsp;A. 去加油站点找工作人员办理圈存<br>
+            &nbsp;&nbsp;B. 加油站内设有24小时自助圈存机，可自行操作</p>        	
+            <p>5.如有疑问，请致电客服热线：<a href="tel:400-161-3580">400-161-3580</a></p>
+            <p>6.单张中石化油卡每日提交充值次数不超过8次</p> 
+        </dd>
+    
+    </dl>
+	     
+    <div class="btn">
+        <p class="btn-pure-theme" @click="gotoPay()">立即支付</p>
+    </div>
+
+    <alert-tip v-show="showAlertTip" :formLoading="formLoading"  :alertText="alertText"></alert-tip>
+
+    <!-- 中石化确认遮罩 -->
+    <div  v-if="tabIdx == 0 && oil1.showDialog" class="ui-dialog">
+        <div class="dialog-cnt" style="width:15rem">
+            <h4 class="border-bottom">温馨提示</h4>
+            <ul class="form-list border-list">
+                <li>
+                    <label>油卡号：</label>
+                    <input type="text"  v-model="oil1.cardNum">
+                </li>
+                <li>
+                    <label>持卡人姓名：</label>
+                    <input type="text"  v-model="oil1.name">
+                </li>
+                <li>
+                    <label>充值金额：</label>
+                    <input v-if="oil1.idx===4" type="text"  v-model="oil1.otherVal">
+                    <input v-else type="text" v-model="oil1.ebi">
+                </li>
+            </ul>
+            <p class="font-red pd md-font">*一旦充值成功，无法撤销，不支持退款服务，请核实好信息。<br>
+            注：单张中石化油卡每日充值金额累计不超过3900元，敬请留意；<br>
+            注：单张中石化油卡每日提交订单次数不超过8次，敬请留意；</p>
+
+            <div class="two-btn">
+                <a class="btn-cancel" @click="closeConfirmDialog">取消</a>
+                <a class="btn-theme" @click="confirmBtn">确定</a>
+            </div>
+        </div>
+　  </div>
+    <!-- 中石油卡确认 -->
+    <div  v-if="tabIdx == 1 && oil2.showDialog" class="ui-dialog">
+        <div class="dialog-cnt" style="width:15rem">
+            <ul class="form-list border-list">
+                <li>
+                    <label>持卡人姓名：</label>
+                    <input type="text"  v-model="oil2.name">
+                </li>
+                <li>
+                    <label>油卡号：</label>
+                    <input type="text"  v-model="oil2.cardNum">
+                </li>
+                <li>
+                    <label>身份证号：</label>
+                    <input type="text"  v-model="oil2.IDcard">
+                </li>
+                <li>
+                    <label>充值金额：</label>
+                    <input v-if="oil2.idx===4" type="text"  v-model="oil2.otherVal">
+                    <input v-else type="text" v-model="oil2.ebi">
+                </li>
+            </ul>
+            <p class="font-red pdt pdb md-font">*一旦充值成功，无法撤销，不支持退款服务，请核实好信息。</p>
+
+            <div class="two-btn">
+                <a class="btn-cancel" @click="closeConfirmDialog">取消</a>
+                <a class="btn-theme" @click="confirmBtn">确定</a>
+            </div>
+        </div>
+　  </div>
+  </div> 
+</template>
+
+<script>
+import { oilCharge } from "/api/api";
+import alertTip from "/components/alertTip";
+import axios from 'axios'
+
+export default {
+  name: "oilCard",
+  data() {
+    return {
+      showAlertTip: false,
+      formLoading: false,
+      alertText: "",
+      feeList: [
+        { faceVal: 50, ebi: 50 },
+        { faceVal: 100, ebi: 100 },
+        { faceVal: 500, ebi: 500 },
+        { faceVal: 1000, ebi: 1000 }
+      ],
+      feeList2: [
+        { faceVal: 100, ebi: 100 },
+        { faceVal: 200, ebi: 200 },
+        { faceVal: 500, ebi: 500 },
+        { faceVal: 1000, ebi: 1000 }
+      ],
+      tabIdx: 0,
+      oil1: {
+        cardNum: "",
+        cardNumConfirm: "",
+        inputType: "tel",
+        ebi: 50,
+        idx: -1,
+        name: "",
+        otherVal: "",
+        showDialog: false
+      },
+      oil2: {
+        cardNum: "",
+        cardNumConfirm: "",
+        name: "",
+        IDcard: "",
+        inputType: "tel",
+        ebi: 100,
+        idx: -1,
+        otherVal: "",
+        showDialog: false
+      }
+    };
+  },
+  components: {
+    alertTip
+  },
+
+  methods: {
+    getVal1(ebi, i) {
+      this.oil1.idx = i;
+      this.oil1.ebi = ebi;
+    },
+    getVal2(ebi, i) {
+      this.oil2.idx = i;
+      this.oil2.ebi = ebi;
+    },
+    insite() {
+      if (this.tabIdx == 0) {
+        this.oil1.inputType = "password";
+      } else {
+        this.oil2.inputType = "password";
+      }
+    },
+    outsite() {
+      if (this.tabIdx == 0) {
+        this.oil1.inputType = "tel";
+      } else {
+        this.oil2.inputType = "tel";
+      }
+    },
+    // 保存
+    gotoPay() {
+      if (this.tabIdx == 0) {
+        //中石化充值
+        if (
+          this.oil1.cardNum == "" ||
+          this.oil1.cardNum.length != 19 ||
+          this.oil1.cardNum.substring(0, 6) != "100011"
+        ) {
+          this.showHideAlert("请输入卡号100011开头共19位的卡号");
+        } else if (this.oil1.cardNum != this.oil1.cardNumConfirm) {
+          this.showHideAlert("两次卡号不一致，请再次确认");
+        } else if (this.oil1.name == "") {
+          this.showHideAlert("请输入姓名");
+        } else if (this.oil1.idx == -1) {
+          this.showHideAlert("请选择面值");
+        } else if (
+          this.oil1.idx == 4 &&
+          (this.oil1.otherVal == "" || this.oil1.otherVal % 50 != 0)
+        ) {
+          this.showHideAlert("请输入50倍数的面值");
+        } else if (this.oil1.otherVal > 3900) {
+          this.showHideAlert(
+            "单张中石化油卡每日充值金额不超过3900元，请调整金额"
+          );
+        } else {
+          // 弹窗确认框
+          this.oil1.showDialog = true;
+          // this.showAlertTip = true; //提交中提示
+          // this.formLoading = true;
+          // this.alertText = "提交中，请稍候";
+          // oilCharge({
+          //     params:{
+          //         orderType: 5,
+          //         productid: -5,
+          //         returntype: 0,
+          //         sendTotal: 0,
+          //         supplierId: 1
+          //     }
+          // }).then(res => {
+
+          // })
+        }
+      } else {
+        //中石油充值
+        let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (this.oil2.name == "") {
+          this.showHideAlert("请输入姓名");
+        } else if (
+          this.oil2.cardNum == "" ||
+          this.oil2.cardNum.length != 16 ||
+          this.oil2.cardNum.substring(0, 2) == "91"
+        ) {
+          this.showHideAlert("请输入9开头(不含91)非车队卡、非不记名16位卡号");
+        } else if (this.oil2.cardNum != this.oil2.cardNumConfirm) {
+          this.showHideAlert("两次卡号不一致，请再次确认");
+        } else if (!reg.test(this.oil2.IDcard)) {
+          this.showHideAlert("请输入正确的身份证号");
+        } else if (this.oil1.idx == -1) {
+          this.showHideAlert("请选择面值");
+        } else if (
+          this.oil2.idx == 4 &&
+          (this.oil2.otherVal == "" || this.oil2.otherVal % 100 != 0)
+        ) {
+          this.showHideAlert("请输入100倍数的面值");
+        } else {
+          this.oil2.showDialog = true;
+          // this.showAlertTip = true; //提交中提示
+          // this.formLoading = true;
+          // this.alertText = "提交中，请稍候";
+        }
+      }
+    },
+    //显示隐藏提示框
+    showHideAlert(text) {
+      this.showAlertTip = true;
+      this.formLoading = false;
+      this.alertText = text;
+      setTimeout(() => {
+        this.showAlertTip = false;
+      }, 2000);
+    },
+    closeConfirmDialog() {
+      this.oil1.showDialog = false;
+      this.oil2.showDialog = false;
+    },
+    // fetchGet(url, data) {
+    //   return new Promise((resolve, reject) => {
+    //     axios.get(url, data).then(res => {
+    //       resolve(res.data)
+    //     }).catch(error => {
+    //       reject(error)
+    //     })
+
+    //   })
+    // },
+  }
+};
+</script>
+<style lang="scss" scoped>
+@import "../../assets/scss/var.scss";
+.nav-bar-2 {
+  li {
+    padding: 0;
+  }
+  .active a {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 2px solid $color-theme;
+  }
+}
+</style>

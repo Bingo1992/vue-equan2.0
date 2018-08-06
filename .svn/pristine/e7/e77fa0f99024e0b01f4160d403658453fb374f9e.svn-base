@@ -1,0 +1,230 @@
+<template>
+	<div>
+		<!-- //排序，筛选 -->
+	    <div class="sort-box" >
+	        <div class="box-cnt">
+
+                <ul class="sortNav-fl">
+                    <li :class="{'active': sortProIndex==i}" v-for="(item, i) in sortList1" :key="i" @click="sortPro(item.classifyName, item.id, i)">
+                        <span>{{item.classifyName}}</span>
+                    </li>
+                </ul>
+                <ul class="sortNav-fr list-info-v">
+                    <li>
+                        <a :href="bannerUrl"><img :src="getImgPath(bannerImg)"></a>
+						<!-- <a :href="bannerUrl"><img src="../../assets/images/banner1.jpg"></a> -->
+                        <ul class="second-sortNav">
+							<li v-for="(item, i) in sortList2" :key="i">
+                                <router-link :to="{path:'/proList', query: {levelOneCid: item.parentId,levelTwoCid: item.id}}">
+                                    <img :src="getImgPath(item.classifyImgSrc)">
+									<!-- <img src="../../assets/images/3.jpg"> -->
+                                    <p>{{item.classifyName}}</p>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+	        </div>
+	    </div>
+	</div>
+		
+</template>
+<script>
+import {mapState, mapMutations} from 'vuex'
+import {sortList} from '/api/api'
+import alertTip from '/components/alertTip'
+import { getImgPath } from '/components/mixin'
+export default {
+	name: 'sort',
+	data() {
+		return {
+			// sortList1: [{
+			// 	classifyName: '全部分类',
+			// 	value: '',
+			// }, {
+			// 	classifyName: '汽车用品',
+			// 	value: 1,
+			// }, {
+			// 	classifyName: '鞋类',
+			// 	value: 2,
+			// }, {
+			// 	classifyName: '汽车打蜡',
+			// 	value: 3,
+			// }, {
+			// 	classifyName: '生活服务',
+			// 	value: 4,
+			// }],
+			// sortList2: [{
+			// 	classifyName: '全部分类',
+			// 	value: '',
+			// }, {
+			// 	classifyName: '汽车用品',
+			// 	value: 1,
+			// }, {
+			// 	classifyName: '鞋类',
+			// 	value: 2,
+			// }, {
+			// 	classifyName: '汽车打蜡',
+			// 	value: 3,
+			// }, {
+			// 	classifyName: '生活服务',
+			// 	value: 4,
+			// }],
+			bannerUrl: '',
+			bannerImg: '',
+			sortList1: [],
+			sortList2: []
+		
+		}
+	},
+	mixins: [getImgPath],
+	created() {
+		this._initData();
+	},
+	components: {
+        alertTip
+    },
+	computed: {
+		...mapState(['sortProIndex'])
+	},
+	methods: {
+		...mapMutations(['CHOOSE_PROSORT']),
+		_initData() {
+			sortList().then(res => {
+                this.sortList1 = res.obj;
+                this.CHOOSE_PROSORT({sortPro: this.sortList1[0].classifyName, index: 0});
+				this.bannerUrl = this.sortList1[0].classifyImgHref;
+				this.bannerImg = this.sortList1[0].classifyImgSrc;
+				this.sortList2 = this.sortList1[0].subGoodsClassifyList;
+			});
+		},
+		
+		// 分类筛选
+		sortPro(name, id, i) {
+            this.CHOOSE_PROSORT({sortPro: name, index: i});
+            
+			this.bannerUrl = this.sortList1[i].classifyImgHref;
+			this.bannerImg = this.sortList1[i].classifyImgSrc;
+			this.sortList2 = [];
+		
+            let list = this.sortList1[i].subGoodsClassifyList;
+            list && list.forEach((item, index) => {
+                if(item.parentId == id) {
+                    this.sortList2.push(item);
+                }
+            })
+		
+		}
+	
+	}
+}
+</script>
+<style lang="scss" scoped>
+@import '../../assets/scss/var.scss';
+.ui-dialog {
+	@extend %fixed-body;
+	background: rgba(246,247,249,.95);
+	z-index: 3;
+}
+.sort-box {
+    padding-top: 10px;
+    // position: fixed;
+    // top: 41px;
+    // left: 0;
+    // width: 100%;
+    // height: 100%;
+    // margin: 0;
+    // z-index: 4;
+    // display: none;
+    .active, .active .font-gray {
+	    color: #2dd3c8 !important;
+	}
+}
+.sortNav-fl {
+    padding: 0 10px;
+    text-align: center;
+}
+.sortNav-fr {
+    padding-right:  10px;
+}
+.second-sortNav { 
+	 display: flex;
+	 display: -webkit-flex;
+	 flex-wrap: wrap;
+	 -webkit-flex-wrap: wrap;
+	 justify-content: flex-start;
+	 -webkit-justify-content: flex-start;
+	 padding: .5rem;
+	 li {
+		width: 33.333%;
+    	text-align: center;
+	 }
+	 a {
+		 display: block;
+	 }
+	 img {
+		width: 3.5rem;
+        height: 3.5rem;
+        /* padding: .5rem; */
+        margin: .2rem auto;
+        object-fit: contain;
+	 }
+}
+.box-cnt {
+    background-color: #fff;
+    position: relative;
+    z-index: 4;
+    line-height: 40px;
+    width: 100%;
+	height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    font-size: 12px;
+	padding-left: 0;
+	display: box;
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+}
+
+.sort-price .active {
+    background: #f2f3f5;   
+}
+.sort-price {
+	ul,li {
+		display: inline-block;
+	}
+	li {
+		display: inline-block;
+	    line-height: 30px;
+	    border-radius: 30px;
+	    padding: 0 10px;
+	    margin-left: 10px;
+	}
+}
+.price-zone {
+    display: inline-block;
+    margin-left: 10px;
+    input {
+	    height: 30px;
+	    line-height: 30px;
+	    width: 98px;
+	    border-radius: 2px;
+	    background-color: #f2f3f5;
+	    padding: 0 10px;
+	    display: inline-block;
+	    vertical-align: middle;
+	}
+}	
+.price-btn {
+    margin-left: -10px;
+    margin-top: 10px;
+    [class^='btn-'] {
+	    width: 50%;
+	    text-align: center;   
+	    line-height: 50px;
+	}
+	.btn-cancel {
+	    background-color: #eee;
+	}
+}
+</style>

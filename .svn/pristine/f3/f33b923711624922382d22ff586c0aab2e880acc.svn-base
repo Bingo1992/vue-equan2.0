@@ -1,0 +1,357 @@
+<template>
+  <div style="margin-top: 44px">
+    <div class="fixed-top">
+         <ul class="flex-layout nav-bar-2 border-bottom bg-show">
+            <li :class="[tabIdx == 0? 'active': '']" @click="tabIdx = 0">
+              <a>话费充值</a>
+            </li>
+            <li :class="[tabIdx == 1? 'active': '']" @click="tabIdx = 1">
+              <a>流量充值</a>
+            </li>
+         </ul>
+    </div>    
+    <ul class="form-list border-list">
+        <li>
+            <input type="tel" maxlength="11" placeholder="请输入11位手机号码" v-model="ads.mobile" @focus="showHistory = 1" @blur="showHistory = 0">
+            <p v-if="isPhoneNum == 1" class="motion-shop"><i class="icon-hook"></i>中国移动</p>
+            <p v-if="isPhoneNum == 2" class="motion-shop"><i class="icon-hook"></i>中国联通</p>
+            <p v-if="isPhoneNum == 3" class="motion-shop"><i class="icon-hook"></i>中国电信</p>
+            <ul v-if="showHistory == 1 && historyList.length != 0" class="history-mobile border-top">
+                <li class="list-box" v-for="(item, i) in historyList" :key="i" @click="getMobile(item)">
+                  <p class="list-info-h">{{item}}</p>
+                  <!-- <i class="icon-wrong"></i> -->
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <p class="font-red pdl pdb md-font">*请确认手机号信息，一经提交，无法撤回！</p>
+
+    <div v-if="tabIdx == 0">
+       <ul class="face-list">
+            <li :class="{'active': m1.idx===i}" v-for="(item, i) in feeList" @click="getVal(item.faceVal, i)" :key="i">
+              <p class="face-value">{{item.faceVal}}元</p>
+            </li>
+        </ul>
+        
+        <div class="bg-mgShow">
+          <div class="title-bar border-bottom">
+              <h5>支付选择</h5>
+            </div>
+            <ul>
+                <li class="list-box">
+                <p class="list-info-h">e币支付</p>
+                <span class="font-orange pdr">{{m1.ebi}} e币</span>
+                <label class="checkbox">
+                    <input type="radio" name="type" checked style="margin-right:0">
+                    <i class="icon-hook"></i>
+                </label>
+              </li>
+            </ul>
+        </div> 
+    </div>
+
+    <div v-if="tabIdx == 1">
+      <ul class="face-list" v-if="isPhoneNum == 0">
+            <li v-for="(item, i) in feeList0" :key="i">
+              <div class="face-value">
+                  <p>{{item.flow}}</p>
+              </div>  
+            </li>
+        </ul>
+       <ul class="face-list" v-if="isPhoneNum == 1">
+            <li :class="{'active': m2.idx===i}" v-for="(item, i) in feeList1" @click="getVal(item.faceVal, i)" :key="i">
+              <div class="face-value">
+                  <p>{{item.flow}}</p>
+                  <p>售价：{{item.faceVal}}元</p>
+                  <p class="font-gray md-font">月底失效</p>
+              </div>  
+            </li>
+        </ul>
+        <ul class="face-list" v-if="isPhoneNum == 2">
+            <li :class="{'active': m2.idx===i}" v-for="(item, i) in feeList2" @click="getVal(item.faceVal, i)" :key="i">
+              <div class="face-value">
+                  <p>{{item.flow}}</p>
+                  <p>售价：{{item.faceVal}}元</p>
+                  <p class="font-gray md-font">月底失效</p>
+              </div>  
+            </li>
+        </ul>
+
+        <ul class="face-list" v-if="isPhoneNum == 3">
+            <li :class="{'active': m2.idx===i}" v-for="(item, i) in feeList3" @click="getVal(item.faceVal, i)" :key="i">
+              <div class="face-value">
+                  <p>{{item.flow}}</p>
+                  <p>售价：{{item.faceVal}}元</p>
+                  <p class="font-gray md-font">月底失效</p>
+              </div>  
+            </li>
+        </ul>
+        
+        <div class="bg-mgShow">
+          <div class="title-bar border-bottom">
+              <h5>支付选择</h5>
+            </div>
+            <ul>
+                <li class="list-box">
+                <p class="list-info-h">e币支付</p>
+                <span class="font-orange pdr">{{m2.ebi}} e币</span>
+                <label class="checkbox">
+                    <input type="radio" name="type" checked style="margin-right:0">
+                    <i class="icon-hook"></i>
+                </label>
+              </li>
+            </ul>
+        </div> 
+    </div>
+
+		<div class="bg-mgShow rich-box">
+			 <h5>服务说明</h5>
+	      <p class="font-red">每天23:00-01:00暂停充值。</p>
+		</div>
+	     
+    <div class="btn">
+        <p class="btn-pure-theme" @click="gotoPay()">立即支付</p>
+    </div>
+
+    <alert-tip v-show="showAlertTip" :formLoading="formLoading" :alertText="alertText"></alert-tip>
+  </div> 
+</template>
+
+<script>
+import alertTip from "/components/alertTip"
+import {historyMobile, reCharge} from "/api/api"
+export default {
+  name: "addAddress",
+  data() {
+    return {
+      showAlertTip: false,
+      formLoading: false,
+      showAlertTip: false,
+      alertText: "",
+      
+      feeList: [
+        { faceVal: 10},
+        { faceVal: 30},
+        { faceVal: 50 },
+        { faceVal: 100}
+      ],
+      feeList0: [
+        {flow: '30M'},
+        {flow: '50M'},
+        {flow: '100M'},
+        {flow: '500M'}
+      ],
+      feeList1: [//移动
+        { faceVal: 6, flow: '30M' },
+        { faceVal: 21, flow: '150M' },
+        { faceVal: 32, flow: '500M' }
+      ],
+      feeList2: [//联通
+        { faceVal: 7, flow: '350M' },
+        { faceVal: 11, flow: '100M' },
+        { faceVal: 32, flow: '500M' }
+      ],
+      feeList3: [//电信
+        { faceVal: 6, flow: '30M' },
+        { faceVal: 8, flow: '50M' },
+        { faceVal: 11, flow: '100M' },
+        { faceVal: 32, flow: '500M' }
+      ],
+      historyList: [],
+      showHistory: 0,
+      tabIdx: 0,
+      ads: {
+        mobile: ""
+      },
+      m1: {
+        ebi: 10,
+        idx: 0
+      },
+      m2: {
+        ebi: 0,
+        idx: 0
+      }
+    };
+  },
+  components: {
+    alertTip
+  },
+  created() {
+    document.title = "手机充值";
+  },
+  computed: {
+    /*
+        * 判断是否是正确的手机号，以及手机的运营商
+        * @param {String} num
+        * 
+        * 返回值:
+        *      0 不是手机号码
+        *      1 移动
+        *      2 联通
+        *      3 电信
+        *      4 不确定
+        */
+    isPhoneNum() {
+        var flag = 0;
+        this.m2.ebi = 0;
+        var phoneRe = /^1\d{10}$/;  
+        var dx = [133,153,177,180,181,189,199]; /*电信*/
+        var lt = [130,131,132,145,155,156,176,185,186,166];/*联通*/
+        var yd = [134,135,136,137,138,139,147,150,151,152,157,158,159,182,183,184,187,188,198];/*移动*/
+        if(phoneRe.test(this.ads.mobile)){
+            var temp = this.ads.mobile.slice(0,3); 
+            var mb7 = this.ads.mobile.slice(0,7);
+            if(this.inArray(temp,yd)) {
+              this.m2.idx = 0;
+              this.m2.ebi = this.feeList1[0].faceVal;
+              return 1;
+            } 
+            if(this.inArray(temp,lt)) {
+              this.m2.idx = 0;
+              this.m2.ebi = this.feeList2[0].faceVal;
+              return 2;
+            }
+            if(this.inArray(temp,dx)) {
+              this.m2.idx = 0;
+              this.m2.ebi = this.feeList3[0].faceVal;
+              return 3;
+            }
+            else return 4;
+        }
+        return flag;    
+    }
+  },
+  methods: {
+    _initData() {
+      historyMobile({
+        params:{
+          orderType: 4,
+          crType: 2
+        }}).then(res => {
+          this.historyList = res.obj;
+        })
+    },
+    getVal(ebi, i) {
+      if(this.tabIdx == 0) {//话费充值
+          this.m1.idx = i;
+          this.m1.ebi = ebi;
+      } else {
+          this.m2.idx = i;
+          this.m2.ebi = ebi;
+      }
+     
+    },
+    //选择历史号码
+    getMobile(mobile) {
+      this.ads.mobile = mobile;
+    },
+    // 保存
+   gotoPay(params) {
+      if (!this.isPhoneNum) {
+        this.showHideAlert("手机号不正确");
+      } else {
+          this.showAlertTip = true;//提交中提示
+          this.formLoading = true;
+          this.alertText = '提交中，请稍候';
+          if(this.tabIdx == 0) {//话费充值
+              reCharge({
+                params:{
+                  orderType: 4, //（手机充值类型）
+                  productid:-4, //(代表充值产品)
+                  returntype: 0,
+                  sendTotal: 0,
+                  receivermobile: this.ads.mobile, //(要充值手机号)
+                  cpType: 2
+                }
+              }).then((res) => {
+                if(res.resultCode == 200) {
+                  this.$router.push({path: '/result', query:{mobile: 1}});
+                } else {
+                  this.showHideAlert(res.msg);
+                }
+                
+              })
+          } else {//流量充值
+            reCharge({
+                params:{
+                  orderType: 6, //（流量充值类型）
+                  productid:-4, //(代表充值产品)
+                  returntype: 0,
+                  sendTotal: 0,
+                  receivermobile: this.ads.mobile, //(要充值手机号)
+                  amount: 0,
+                  cpType: 2
+                }
+            }).then((res) => {
+                if(res.resultCode == 200) {
+                  this.$router.push({path: '/result', query:{mobile: 2}});
+                } else {
+                  this.showHideAlert(res.msg);
+                }
+                
+            })
+          }
+      }
+    },
+     
+    inArray(val, arr){
+        for(var i in arr){
+            if(val == arr[i]) return true;
+        }
+        return false;
+    },   
+    //显示隐藏提示框
+    showHideAlert(text) {
+      this.showAlertTip = true;
+      this.alertText = text;
+      setTimeout(() => {
+        this.showAlertTip = false;
+      }, 2000);
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+@import '../../assets/scss/var.scss';
+.nav-bar-2 {
+  li {
+    padding: 0;
+  }
+  .active a {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 2px solid $color-theme;
+  }
+}
+.motion-shop {
+  color: #898989;
+  // font-size: 12px;
+  i {
+    @include circle(18px);
+    background-color: $color-theme;
+    color: #fff;
+    margin-right: 4px;
+    font-size: 18px;
+  }
+}
+.history-mobile {
+  position: absolute;
+  width: 100%;
+  top: 45px;
+  left: 0;
+  background-color: #fff;
+  z-index: 2;
+  li {
+    padding: 10px;
+  }
+  i {
+    @include circle(20px);
+    background-color: rgb(219, 217, 217);
+    color: #fff;
+    font-size: 14px;
+  }
+}
+.face-value {
+  -webkit-box-orient: vertical;
+}
+</style>

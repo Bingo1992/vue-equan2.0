@@ -22,12 +22,18 @@
 						<p>娱乐充值</p>
 					</a>
 				</li>
+				<li>
+					<router-link to="/redPacketCharge">
+						<img src="../../assets/images/redpacket.png">
+						<p>红包充值</p>
+					</router-link>
+				</li>
 			</ul>
-			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 2, title: '人气推荐'}}">
+			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 11, title: '人气推荐'}}">
 				<h4>人气推荐</h4>
 				<i class="icon-circle"></i>
 			</router-link>
-			<product :proList="proList"></product>
+			<product :proList="proList" proThree="true"></product>
 		</div>
 	 
 	</div>
@@ -74,10 +80,13 @@ export default {
 	        
 				})
 			});
-			proList({params:{areaId: 2,pageSize: 30}}).then(res => {
+			proList({params:{areaId: 11,pageSize: 40}}).then(res => {
 				this.proList = res.attributes.resultList;
-				if(this.proList.length % 2 != 0){
+				if(this.proList.length % 3 == 1){
 					this.proList.splice(this.proList.length-1, 1);
+				}
+				if(this.proList.length % 3 == 2){
+					this.proList.splice(this.proList.length-2, 2);
 				}
 			});
 			
@@ -100,9 +109,10 @@ export default {
 	padding: $gauge .3rem 0 .3rem;
 	li {
 		background-color: #f8f8f8;
-	    border-radius: .6rem;
-	    margin: 0 .3rem;
-    	padding: 1rem 0;
+	    border-radius: .3rem;
+		margin: 0 .3rem;
+		padding: 1.1rem 0;
+    	// padding: .8rem 0;
 	}
 		
 	img {

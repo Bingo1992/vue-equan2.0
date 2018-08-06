@@ -21,8 +21,8 @@ if(process.env.NODE_ENV === 'development') {
 } else {
 	//正式环境
 	baseUrl = 'https://equan.yesm.cn/equan-wxweb/wxhtml';
+	// baseUrl = 'https://api.xiaolianqiandai.com/equan-wxweb/wxhtml';
 	esmUrl = 'https://fs2.yesm.cn/equan/m';
-
 }
 
 

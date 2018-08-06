@@ -27,7 +27,7 @@
                 <div class="bg-mgShow pro-detail">
                     <h4 class="center-text">商品详情</h4>
                     <img v-for="(item,i) in proDetail.detailImg" :src="getImgPath(item.showPic)" :key="i">
-                    <div class="rich-box" v-html="proDetail.description"></div>
+                    <div class="pdb pdr pdl" v-html="proDetail.description"></div>
                 </div>
             </div>
 
@@ -47,13 +47,15 @@
                     proDetail.name, 
                     proDetail.cost, 
                     proDetail.price, 
-                    proDetail.ebuy)">加入购物车</a>
+                    proDetail.ebuy,
+                    proDetail.type)">加入购物车</a>
                 <a v-if="count != 0" @click="goToBuy(
                     proDetail.showPic, 
                     proDetail.name, 
                     proDetail.cost, 
                     proDetail.price, 
-                    proDetail.ebuy)" class="btn-theme">立即购买</a>
+                    proDetail.ebuy,
+                    proDetail.type)" class="btn-theme">立即购买</a>
                 <a v-else class="btn-pure-theme disbtn">商品已售罄</a>
             </div>
         </div>
@@ -148,8 +150,8 @@ export default {
             }, 1500);
         },
         //加入购物车
-        addToCart(img, title, price, marketPrice, ebuy) {
-            addCart({params:{}}, this.$route.query.productid, 1).then(res => {
+        addToCart(img, title, price, marketPrice, ebuy, type) {
+            addCart({quality:1}, this.$route.query.productid).then(res => {
                 this.ADD_CART({
                     productId: this.$route.query.productid,
                     productImg: img,
@@ -158,13 +160,14 @@ export default {
                     currPrice: marketPrice,
                     check: false,
                     total: 1,
-                    ebuy: ebuy
+                    ebuy: ebuy,
+                    type: type
                 });
                 this.showHideAlert('已成功加入购物车');
             });
         },
         // 点击购买
-        goToBuy(img, title, price, marketPrice, ebuy) {
+        goToBuy(img, title, price, marketPrice, ebuy, type) {
             let goods = [];
             goods.push({
                 productId: this.$route.query.productid,
@@ -174,7 +177,8 @@ export default {
                 currPrice: marketPrice,
                 total: 1,
                 check: true,
-                ebuy: ebuy
+                ebuy: ebuy,
+                type: type
             });
          
             setStore('buyPro',goods);//将当前购买的商品信息存储到buyPro
@@ -254,6 +258,9 @@ export default {
     h4 {
         padding: 24px 0;
     }
+    // p {
+    //     padding: 10px;
+    // }
 }
 
 </style>

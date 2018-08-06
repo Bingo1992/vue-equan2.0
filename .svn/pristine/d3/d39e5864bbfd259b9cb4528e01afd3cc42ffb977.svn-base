@@ -1,0 +1,500 @@
+<template>
+	<div class="banner-bt">	
+		<!-- <loading v-if="showLoading"></loading> -->
+		<!-- <div>		 -->
+			<div class="fixed-top bg-show">
+				<!-- <div class="list-box border-bottom">
+					<router-link class="bg-account" to="/account">
+						<div class="list-box">
+							<div class="list-info-h">
+								<i class="icon-coin"></i>
+								e币 {{account}}
+							</div>
+							<i class="icon-right"></i>
+						</div>	
+					</router-link>
+
+					<form class="search-bar list-info-h" action="javascript:return true;">
+						<div class="list-box">
+							<i class="icon-search"></i>
+							<input class="list-info-h" type="search" placeholder="请输入商品名称、品牌等" v-model="searchVal"  @keyup.13="searchTarget(searchVal)">
+							<input type="submit" name="submit" class="search_submit" style="display:none" @click.prevent="searchTarget(searchVal)">
+						</div>
+					</form>	
+				</div> -->
+				<ul class="flex-layout index-top border-bottom">
+					<li>
+						<router-link class="border-right" :to="{path:'/account',query:{type: 0}}">
+							<i class="icon-coin"></i>
+								e币 <span class=" font-orange">&nbsp;{{account}}</span>
+						</router-link>
+					</li>
+					<li>
+						<router-link class="border-right" :to="{path:'/account',query:{type: 1}}">
+							<i class="icon-ebuy"></i>
+								e购 <span class=" font-orange">&nbsp;{{ebuy}}</span>
+						</router-link>
+					</li>
+					<li>
+						<router-link :to="{path:'/proList', query:{searchVal: 'search'}}">
+							<i class="icon-search"></i>
+							 搜索
+						</router-link>
+					</li>
+				</ul>
+			</div>	
+			<!-- 图片轮播 -->
+			<banner :listImg="listImg" myClass="0" hasPoint="true"></banner>
+		
+			<ul class="nav-list flex-layout">
+				<li>
+					<router-link :to="{path:'/proList',query: {
+	                        	areaId: 6}}">
+						<img src="../../../static/images/1.png">
+						<p>e券优选</p>
+					</router-link>
+				</li>
+
+				<li>
+					<router-link :to="{path:'/proList',query: {
+	                        	areaId: 4}}">
+						<img src="../../../static/images/new.png" style="position: absolute;right:.5rem;top: .5rem;width: 1.5rem;">
+						<img src="../../../static/images/2.png">
+						<p>苏宁易购卡</p>
+					</router-link>
+				</li>
+				<li>
+					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8c6084ddf52977ec&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
+						<img src="../../../static/images/3.png">
+						<p>违章查办</p>
+					</a>
+				</li>
+				<li>
+					<router-link to="/rechargeCenter">
+						<img src="../../../static/images/4.png">
+						<p>充值中心</p>
+					</router-link>
+				</li>
+			</ul>
+
+			<div class="activity-block">
+	            <img src="../../assets/images/activities.png" class="acitvity-bg">
+	            <div class="activity-list">
+	                <h3 class="activity-title"><span>活动专区</span></h3>
+	                <ul>
+	                    <li>
+	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 5}}">
+	                            <div class="hot"><span>HOT</span></div>
+	                            <h4 class="font-red center-text">每周特价</h4>
+	                            <p class="font-gray center-text">优惠低至6折</p>
+	                            <img class="act-img-2" src="../../assets/images/5.jpg">
+								<p class="font-gray md-font center-text">裤子没了皮带 e券给您依赖</p>
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 7}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-blue-2">车友必备</h4>
+                                		<p class="font-gray">解决关键需求</p>
+	                            	</div>
+	                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/1.jpg">    
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                       <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 8}}">
+	                       		<!-- <div class="discount"><span>精选</span></div> -->
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-purple">女神专区</h4>
+                                		<p class="font-gray">你值得被呵护</p>
+	                            	</div>
+	                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/2.jpg">    
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                       <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 9}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-theme">数码达人</h4>
+	                                	<p class="font-gray">革命你的生活</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/3.jpg">    
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 10}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-red-2">家居日用</h4>
+	                                	<p class="font-gray">实用优质生活</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/4.jpg">    
+	                        </router-link> 
+	                    </li>
+						<li>
+	                       <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 30}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-orange">精英型男</h4>
+	                                	<p class="font-gray">造型态度兼备</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/6.jpg">    
+	                        </router-link> 
+	                    </li>
+	                    <li>
+	                        <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 31}}">
+	                            <div class="list-info-v">
+	                            	<div>
+	                            		<h4 class="font-yellow">美女厨房</h4>
+	                                	<p class="font-gray">让烹饪更有趣</p>
+	                            	</div>
+		                                
+	                            </div>
+	                            <img class="act-img" src="../../assets/images/7.jpg">    
+	                        </router-link> 
+	                    </li>
+	                </ul>
+	            </div>
+	        </div>
+
+			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 3}}">
+				<h4>新品首发</h4>
+				<i class="icon-circle"></i>
+			</router-link>
+		    <product :proList="proList1" proThree="true"></product>
+
+		    <banner :listImg="adsImg" myClass="-c1"></banner>
+
+			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 25}}">
+				<h4>夏日精选</h4>
+				<i class="icon-circle"></i>
+			</router-link>
+		    <product :proList="proList3" proThree="true"></product>
+
+		    <router-link class="title-list" :to="{path: '/proList', query: {areaId: 2}}">
+				<h4>人气推荐</h4>
+				<i class="icon-circle"></i>
+			</router-link>
+			<product :proList="proList2"></product>
+			
+			<transition name="router-slid" mode="out-in">
+		        <router-view></router-view>
+		    </transition>
+
+		     <div class="fixed-bottom bg-show">
+		    	<footer-nav></footer-nav>
+		    </div>
+
+		<!-- </div> -->
+
+			
+	
+	</div>
+</template>
+<script>
+import {integral, banner, proList} from '/api/api'
+import Banner from '/components/swiperDefault'
+import loading from '/components/loading'
+import FooterNav from '/components/footer'
+import product from '/components/product'
+// import Swiper from 'swiper'
+// import '/utils/swiper-3.4.2.min.js'
+export default {
+	name: 'home',
+	data() {
+		return {
+			list: [],
+			showLoading: true,
+			account: 0, //e币
+			ebuy: 0,//e购
+			searchVal: '',//搜索内容
+			adsImg: [],
+			listImg: [],
+			proList1: [],
+			proList2: [],
+			proList3: []
+		}
+	},
+	components: {
+	   Banner, product, FooterNav, loading
+	},
+	mounted() {
+		if(!this.$route.query.productid) {
+			document.title = "e券商城";
+		}	
+		this._initData();
+
+	},
+	methods: {
+		async _initData() {
+			// E币数量
+			integral().then(res => {
+				if(res.success) {
+					this.account = res.attributes.ecoin;
+					this.ebuy = res.attributes.ebuy;
+				}
+			});
+			// 轮播图1
+			banner({params:{location: "index_top"}}).then(res => {
+				this.listImg = res.obj;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                    var swiper0 = new Swiper('.swiper-container0', {
+			            pagination: '.swiper-pagination0',
+			            paginationClickable: true,
+			            loop: true,
+			            autoplay: 3000,
+			            autoplayDisableOnInteraction: false
+			        });
+			        // 只有一张图时禁止轮播
+	                if(this.listImg.length <= 1) {
+	                    swiper0.stopAutoplay();//停止自动播放    
+	                    swiper0.detachEvents(); //移除所有监听事件    
+	                    swiper0.paginationHide = false;        
+	                }
+                });	
+			});
+			// // 轮播图2
+			banner({params:{location: "index_middle"}}).then(res => {
+				this.adsImg = res.obj;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                    var swiperc1 = new Swiper('.swiper-container-c1', {
+			            slidesPerView: 'auto',
+			            centeredSlides: true,
+			            paginationClickable: true,
+			            spaceBetween: 16,
+			            loop: true,
+			            autoplay: 4500,
+			            observer:true,//修改swiper自己或子元素时，自动初始化swiper
+	       				observeParents:true,//修改swiper的父元素时，自动初始化swiper
+			            autoplayDisableOnInteraction: false
+			        });
+                });
+			});
+			//商品列表(首发)
+			proList({params:{areaId: 3,pageSize: 9}}).then(res => {
+				this.proList1 = res.attributes.resultList;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                })
+				if(this.proList1.length % 3 != 0){
+					this.proList1.splice(this.proList1.length-1, 1);
+				}
+				
+			});
+			//商品列表(夏日精选)
+			proList({params:{areaId: 25,pageSize: 9}}).then(res => {
+				this.proList3 = res.attributes.resultList;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                })
+				if(this.proList3.length % 3 != 0){
+					this.proList3.splice(this.proList3.length-1, 1);
+				}
+			}); 
+			//商品列表(推荐)
+			proList({params:{areaId: 2,pageSize: 30}}).then(res => {
+				this.proList2 = res.attributes.resultList;
+				this.$nextTick(() => {
+                    window.scrollTo(0,1);
+                    window.scrollTo(0,0);
+                })
+				if(this.proList2.length % 2 != 0){
+					this.proList2.splice(this.proList2.length-1, 1);
+				}
+			});
+			
+	
+		},
+		//搜索商品
+		searchTarget(searchVal) {
+			this.$router.push({path:'/proList', query:{searchVal: searchVal}})
+		}
+	}
+
+}
+</script>
+<style lang="scss">
+@import '../../assets/scss/var.scss';
+.index-top {
+	a {
+		display: block;
+		width: 100%;
+	}
+}
+.swiper-pagination {
+    bottom: $banBottom !important;
+}
+.swiper-container-c1 {
+	height: pxTorem(180) !important;
+	.swiper-slide {
+		width: pxTorem(640) !important;
+		border-radius: 12px;
+	}
+}
+.bg-account {
+	background: $bkg-theme;
+	padding: 0 4px;
+	@include semicircle;
+	color: #fff;
+	margin-right: 10px;
+	[class^="icon-"] {
+		color: #fff;
+		font-size: 14px;	
+	}
+	.icon-coin {
+		padding-right: 4px;
+	}
+	.icon-right {
+		padding-left: 10px;
+	}
+}
+
+.nav-list {
+	position: relative;
+	top: - $banBottom;
+    z-index: 2;
+	padding: 0 $banBottom;
+	background-color: #fff;
+    border-top-left-radius: $banBottom;
+    border-top-right-radius: $banBottom;
+	img {
+		width: pxTorem(88);
+		margin: 0 auto;
+	}
+}
+.activity-block {
+	position: relative;
+	margin-top: -.6rem;
+	background: -webkit-linear-gradient(top, #9af6f1, #ccfdff);
+	// height: pxTorem(750);
+}
+.acitvity-bg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+.activity-title {
+	color: #fff;
+	padding: pxTorem(40) 0;
+	line-height: pxTorem(20);
+	width: 100%;
+	text-align: center;
+	display: inline-block;
+	span {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	&:before, &:after {
+		content: '';
+		display: inline-block;
+		vertical-align: middle;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		width: pxTorem(168);
+		height: pxTorem(14);
+		margin: 0 6px;
+	}
+	&:before {
+		background-image: url(../../assets/images/leftLine.png);
+	}
+	&:after {
+	 	background-image: url(../../assets/images/rightLine.png);
+	}
+}  
+.activity-list {
+	position: relative;
+	z-index: 2;
+	ul {
+		padding: 0 .5rem 1rem .5rem;
+	    overflow: hidden;
+	    width: 100%;
+	    box-sizing: border-box;
+	    position: relative;
+	}
+	a {
+		background-color: #fff;
+	    height: 4.65rem;
+	    box-sizing: border-box;
+	}
+	li {
+		box-sizing: border-box;
+	    width: 50%;
+	    float: left;
+	    padding: .1rem;
+	    &:first-child a {
+	    	height: 9.46rem;
+		    display: block;
+		    padding: 10px;
+	    }
+	}
+	
+}
+.act-img {
+    width: auto;
+    height: 3.5rem;
+}
+.hot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-width: 24px;
+    border-style: solid;
+    border-color: #dd4537 transparent transparent  #dd4537;
+    color: #fff;
+    span {
+    	position: absolute;
+	    top: -18px;
+	    left: -18px;
+		font-size: 12px;
+		transform: rotate(-45deg);
+	    -webkit-transform: rotate(-45deg);
+    }
+}
+.discount {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-width: 24px;
+    border-style: solid;
+    border-color: #dd4537 #dd4537 transparent transparent;
+    color: #fff;
+    span {
+	    position: absolute;
+	    top: -30px;
+	    right: -22px;
+	    font-size: 12px;
+		line-height: 18px;
+		transform: rotate(-45deg);
+	    -webkit-transform: rotate(-45deg);
+	}
+}
+</style>

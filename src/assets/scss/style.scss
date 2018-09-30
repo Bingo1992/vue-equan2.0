@@ -23,7 +23,7 @@ span[class^="font-"] {font-size: $md-font;}
     font-size: 10px;
     color: #fff;
     border-radius: 2px;
-    line-height: 14px;
+    line-height: 18px;
     padding: 0 4px;
     display: inline-block;
     vertical-align: middle;
@@ -73,7 +73,6 @@ span[class^="font-"] {font-size: $md-font;}
 .sm-font {font-size: 10px;}
 
 .bg-show {background-color: #fff;}
-.bg-gray {background-color: #fafafa;}
 
 .bg-mgShow{
     border-top: $gauge solid #f4f4f4;
@@ -172,7 +171,7 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
   // height: 100%;
   z-index: 6;
   background-color: #fff;
-  overflow-y: hidden;
+  overflow-y: auto;
       // padding-bottom: 84px;
   -webkit-overflow-scrolling: touch;
   padding-bottom: constant(safe-area-inset-bottom);
@@ -325,6 +324,8 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
     max-width: 350px;
     background-color: rgba(253,253,253,.95);
     border-radius: 6px;
+    max-height: 90%;
+    overflow: auto;
     i.icon-wrong {
         position: absolute;
         top: 8px;
@@ -342,7 +343,7 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
     } 
     .btn-cancel,.btn-theme {
         margin: 0 16px $gauge 16px;
-        @include height(32px);
+        @include height(36px);
         border-radius: 4px;
     }
 }
@@ -662,18 +663,18 @@ li.vcode-box{
 }
 
 .two-btn {
-    // display: -webkit-box;
-    
+    // display: -webkit-box; 
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
     -webkit-flex-direction: row;
+    justify-content: center;
     a {
-
+        width: 40%;
         display: flex;
         display: -webkit-box;
-        flex: 1;
-        -webkit-flex: 1;
+        // flex: 1;
+        // -webkit-flex: 1;
         box-orient: horizontal;
         box-align: center;
         box-pack: center;
@@ -714,7 +715,7 @@ li.vcode-box{
 }
 .price-small {
     line-height: 1rem;
-    padding: 2px 0 8px 0;
+    // padding: 2px 0 8px 0;
     s {
         font-size: 10px;
         padding-left: 2px;
@@ -815,15 +816,16 @@ li.vcode-box{
 .face-value {
     border: 1px solid #e1e1e1;
     border-radius: 4px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    display: box;
-    box-pack: center;
-    box-align: center;
-    display: -webkit-box;
-    -webkit-box-pack: center;
-    -webkit-box-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    // display: box;
+    // box-pack: center;
+    // box-align: center;
+    // display: -webkit-box;
+    // -webkit-box-pack: center;
+    // -webkit-box-align: center;
     padding: 14px 4px;
     line-height: 20px;
     
@@ -850,6 +852,7 @@ li.vcode-box{
     transform: translate3d(2rem, 0, 0);
     opacity: 0;
 }
+ 
 .show {display: block !important;}
 .hide {display: none !important;}
 .disbtn {pointer-events:none;background: #ccc;}

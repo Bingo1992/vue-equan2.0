@@ -30,7 +30,8 @@
 
 <script>
 import alertTip from '/components/alertTip'
-import {register, sendCode, sendRegister} from '/api/api'
+import {register, sendCode, sendRegister, userInfo} from '/api/api'
+import { setStore } from "/utils/storage"
 export default {
   name: 'register',
   data () {
@@ -131,7 +132,9 @@ export default {
                 this.showHideAlert(res.resultMsg);
                 if(res.resultCode == 200) {
                     setTimeout(() => {
+                        setStore("mobile", this.mobileNum);
                         this.$router.push('/home');
+                        // this.$router.go(-1);
                     },1000);
                 } 
             })

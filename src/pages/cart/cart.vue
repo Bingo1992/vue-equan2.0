@@ -14,7 +14,8 @@
       <div class="bg-show fixed-top" v-if="cartList.length > 0">
           <div class="border-bottom" style="width:100%;overflow:hidden">
              <div class="fr btn-edit">
-                <span v-if="edit" :class="['btn-border', checkedCount > 0 ? '':'dis-btn']" @click="showConfirmDialog">删除</span>
+                <span v-if="edit" :class="['btn-border', checkedCount > 0 ? '':'dis-btn']"
+                   @click="showConfirmDialog">删除</span>
                 <span class="btn-default" @click="editPro()">{{edit? '完成': '编辑'}}</span>
              </div>
           </div>
@@ -32,29 +33,36 @@
          </li>
       </ul>
       <ul v-if="cartList.length > 0" class="cart-list border-list">
-          <li class="list-box" v-for="(cart) in cartList" :key="cart.id">
+          <li class="list-box" v-for="(cart) in cartList" :key="cart.skuId">
                 <label class="checkbox checkbox-2">
-                    <input type="checkbox" name="checkbox" :value="cart.check" v-model="cart.check"  @change="selectPro(cart.productId, cart.total,cart.check)">
+                    <input type="checkbox" name="checkbox" :value="cart.check" v-model="cart.check" 
+                     @change="selectPro(cart.skuId, cart.total,cart.check)">
                     <i class="icon-hook"></i>
                 </label>
                 <img class="list-img" :src="getImgPath(cart.productImg)">
                 <div class="list-info-v">
                     <div class="list-box">
                         <div class="list-info-v">
-                            <div>
+                          <div class="price-small">
                               <h5 class="nowrap-2">
                                 <!-- <span v-if="cart.ebuy" class="label-red">支持e购</span>&nbsp; -->
                                 {{cart.productName}}
                               </h5>
-                              <div class="list-box">
-                                  <div class="list-info-h price-small">
-                                    <span class="font-orange"><i class="icon-coin"></i>{{cart.currCost}}</span>
-                                    <s class="font-gray">市场价:￥{{cart.currPrice}}</s>
-                                  </div>
-                                  <buy-num :proID="cart.productId" :proNum="cart.total" :check="cart.check" @editNum="editNum"></buy-num>
-                              </div>
+                             
+                              <p class="attrSelect" @click="changeAttr(cart.skuId, cart.skuValue, cart.productName, cart.total, cart.check, cart.ebuy, cart.type)">
+                                    已选：{{cart.skuValue}}
+                                    <i class="icon-down"></i>  
+                              </p>
+
+                              <p>
+                                <span class="font-orange"><i class="icon-coin"></i>{{ cart.currCost}}</span>
+                                <!-- <s class="font-gray">市场价:￥{{cart.currPrice}}</s> -->
+                              </p>
+ 
+                              <buy-num class="cartAmount" :proID="cart.skuId" :proNum="cart.total" :check="cart.check" 
+                              @editNum="editNum"></buy-num>
                             </div>
-                           
+                                              
                         </div>
                     </div>
                 </div>
@@ -64,7 +72,8 @@
       <div class="fixed-bottom bg-show">
         <div v-if="cartList.length > 0" class="cal-banner list-box border-top">
               <label class="all-check">
-                  <input type="checkbox" :value="checkAllFlag" v-model="isCheckAll" @change="selectAll()">
+                  <input type="checkbox" :value="checkAllFlag" v-model="isCheckAll" 
+                  @change="selectAll()">
                   <i class="icon-hook"></i>
                   全选
               </label>
@@ -82,8 +91,20 @@
           <footer-nav></footer-nav>
         </div>
       </div>
+
+      <!-- 属性遮罩 -->     
+      <attr-dialog v-if="showAttrDialog" 
+       @closeAttrDialog="closeAttrDialog" cartDialog="true"
+       :skuCartId="oldSkuId" :skuCartValue="skuCartValue"></attr-dialog>
+      
+   
       <!-- 删除遮罩 -->
-       <confirm-dialog v-if="showDialog" :confirm-text="confirmText" showBtn="true" @closeConfirmDialog="closeConfirmDialog" @confirmBtn="confirmBtn" centerText="true"></confirm-dialog>
+       <confirm-dialog v-if="showDialog" :confirm-text="confirmText" showBtn="true" 
+       @closeConfirmDialog="closeConfirmDialog" @confirmBtn="confirmBtn" 
+       centerText="true"></confirm-dialog>
+
+        <!-- 提示遮罩 -->
+        <alert-tip v-if="showAlertTip" :alert-text="alertText"></alert-tip>
  
   </div>
 </template>
@@ -94,6 +115,8 @@ import { mapState, mapMutations } from "vuex";
 import FooterNav from "/components/footer";
 import confirmDialog from "/components/confirmDialog";
 import buyNum from "/components/buyNum";
+import alertTip from '/components/alertTip'
+import attrDialog from '/components/attrDialog'
 import { getImgPath } from "/components/mixin";
 import { getCartList, addCart, delCart, orderConfirm } from "/api/api";
 import { setStore, removeStore } from "/utils/storage";
@@ -106,6 +129,20 @@ export default {
       edit: false, //是否编辑
       checkID: [], //被选中的商品ID
       isCheckAll: true, //全选
+      oldSkuId: '', //已选属性的商品id
+      skuCartValue: '',//旧属性
+      pro: {
+        newSkuId: '',
+        newImg: '',
+        newName: '',
+        newPrice: 0,
+        newMarketPrice: 0,
+        newCheck: false,
+        newTotal: 1,
+        newEbuy: 0,
+        NewType: 1,
+        newSkuValue: '' //修改属性 
+      },  
       flag: true,
       showDialog: false,
       confirmTitle: "",
@@ -116,7 +153,10 @@ export default {
       total_price2: 0, //总额
       userEbuy: 0, //'e购数量'
       userIntegeral: 0, //e币数量
-      hasEbuy: 0, //0表示支持e购
+      showAttrDialog: false,
+      showLoading: true,
+      showAlertTip: false,
+      alertText: "",
       pay: {
         egou: 0,
         ebi: 0,
@@ -127,7 +167,9 @@ export default {
   components: {
     FooterNav,
     confirmDialog,
-    buyNum
+    buyNum, 
+    alertTip, 
+    attrDialog
   },
   mixins: [getImgPath],
   mounted() {
@@ -153,7 +195,7 @@ export default {
         this.cartList.forEach(item => {
           if (item.check) {
             i++;
-            this.checkID.push(item.productId);
+            this.checkID.push(item.skuId);
           }
         });
       return Number(i);
@@ -166,22 +208,67 @@ export default {
       this._getUserTotal();
     },
     // 修改购物车
-    _editCart(productid, quality, check) {
-      addCart({quality:quality}, productid).then(res => {
-        // console.log(quality)
-        this.EDIT_CART({ productid, quality, check });
+    _editCart(skuId, quality, check) {
+      addCart({quality:quality}, skuId).then(res => {
+        this.EDIT_CART({ skuId, quality, check });
         this.calcuPay();
       });
     },
-
+    // 删除购物车
+    _delCart(productIds, checkID){
+      delCart({ productIds: productIds }).then(res => {
+        this.DELETE_CART(checkID);
+        this.calcuPay();
+      });
+    },
+    //添加购物车
+    _addCart() {
+       // 商品信息
+        let proInfo = {
+            skuId: this.pro.newSkuId,
+            productImg: this.pro.newImg,
+            productName: this.pro.newImg,
+            currCost: this.pro.newPrice,
+            currPrice: this.pro.newMarketPrice,
+            check: this.pro.newCheck,
+            total: this.pro.newTotal,
+            ebuy: this.pro.newEbuy,
+            type: this.pro.NewType,
+            skuValue: this.pro.newSkuValue
+        };
+    },
     // 修改数量
-    editNum(productid, quality, check) {
-      this._editCart(productid, quality, check);
+    editNum(skuId, quality, check) {
+       this._editCart(skuId, quality, check);
+    },
+    // 修改属性
+    changeAttr(oldSkuId, skuVal, name, total, check, ebuy, type) {
+        this.showAttrDialog = true;
+        this.oldSkuId = oldSkuId;
+        this.skuCartValue = skuVal;
+        this.pro.newName = name;
+        this.pro.newTotal = total;
+        this.pro.newCheck = check;
+        this.pro.newEbuy = ebuy;
+        this.pro.NewType = type;
+    },
+    //关闭属性遮罩
+    closeAttrDialog(flag, skuValue, skuId, price, marketPrice, img) {
+        this.showAttrDialog = false;
+        if(flag) {//有选择属性
+            this.pro.newSkuValue = skuValue;
+            this.pro.newSkuId = skuId;
+            this.pro.newPrice = price;
+            this.pro.newMarketPrice = marketPrice;
+            this.pro.newImg = img;
+        } 
+         
+
     },
     //勾选产品
-    selectPro(productid, quality, check) {
+    selectPro(skuId, quality, check) {
       this.calcuPay();
-      this.EDIT_CART({ productid, quality, check });
+      this.EDIT_CART({ skuId, quality, check });
     },
     //全选
     selectAll() {
@@ -232,25 +319,7 @@ export default {
       this.pay.egou = 0;
       this.pay.ebi = 0;
       this.pay.money = 0;
-      // if(this.userEbuy && this.userEbuy > this.calcTotalMoney()) {//e购的值够
-      //     this.pay.egou = this.calcTotalMoney();
-      // } else {
-      //     if(this.userEbuy) {
-      //        leaveCost1 = this.calcTotalMoney() - this.userEbuy;//e购存在但数量不够
-      //         this.pay.egou = this.userEbuy;
-      //     }
-      //     if(this.userIntegeral && this.userIntegeral > leaveCost1) {//e币数量够
-      //         this.pay.ebi = leaveCost1;
-
-      //     } else { //e币数量不够
-      //       let leaveCost2 = leaveCost1;
-      //       if(this.userIntegeral) { //e币存在
-      //         leaveCost2 = leaveCost1 - this.userIntegeral;
-      //         this.pay.ebi = this.userIntegeral;
-      //       }
-      //       this.pay.money = leaveCost2;
-      //     }
-      // }
+     
       if (this.userEbuy) {
         //有e购
         if (this.userEbuy >= this.calcTotalEbuy()) {
@@ -302,10 +371,7 @@ export default {
     //删除购物车
     confirmBtn() {
       let productIds = this.checkID.join(","); //以逗号分隔
-      delCart({ productIds: productIds }).then(res => {
-        this.DELETE_CART(this.checkID);
-        this.calcuPay();
-      });
+      this._delCart(productIds, this.checkID);
     },
     //显示遮罩
     showConfirmDialog() {
@@ -315,7 +381,7 @@ export default {
     //关闭遮罩
     closeConfirmDialog() {
       this.showDialog = false;
-    }
+    } 
   },
   watch: {
     $route: "initData"
@@ -332,6 +398,7 @@ export default {
 //         background-color: #fff;
 //     }
 // }
+ 
 .banner-bt-3 {
   margin-top: 50px;
   margin-bottom: 99px;
@@ -362,13 +429,28 @@ export default {
     float: left;
   }
 }
-.cart-list {
-  h5 {
-    margin-bottom: 12px;
+ 
+.attrSelect {
+  background-color: #f4f4f4;
+  padding: 0 6px;
+  margin: 4px 0;
+  display: inline-block;
+  // text-align: center;
+  // margin-right: 1rem;
+  border-radius: 2px;
+  i {
+    font-size: 14px;
   }
 }
+// @media screen and (min-width: 414px) {
+//   .attrSelect {
+//      margin-right: 1.5rem;
+//   }
+ 
+// }
 .nothing {
   position: fixed;
+  left: 0;
   top: 0;
   bottom: 50px;
 }
@@ -376,5 +458,10 @@ export default {
   color: #999;
   border: 1px solid #e0e0e0;
   pointer-events: none;
+}
+.cartAmount {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 </style>

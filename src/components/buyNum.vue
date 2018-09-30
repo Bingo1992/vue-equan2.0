@@ -41,7 +41,8 @@ export default {
         type: [Number, String]
       },
       check: {
-        type: [String, Boolean]
+		type: [String, Boolean],
+		default: false
       },
 	},
 	methods: {

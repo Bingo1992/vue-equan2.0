@@ -54,6 +54,10 @@
            <p class="btn-pure-theme" @click="gotoExchange()">确定支付</p>
         </div>
    
+        <div class="rich-box font-gray">
+          <h4>温馨提示</h4>
+          <p>兑换微信红包需先实名认证,认证方式：【微信】-【我】-【钱包】-【…】-【支付管理】-【实名认证】。</p>
+        </div>
     <!-- </div> -->
 
      <banner :listImg="adsImg" myClass="-c2"></banner>

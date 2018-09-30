@@ -4,11 +4,17 @@
 		<div v-else>
 			<banner :listImg="adsImg" myClass="-c2"></banner>
 			<ul class="recharge-list flex-layout">
-				<li>
+				<!-- <li>
 					<a :href="getUrlPath('/mobile_recharge.html')">
 						<img src="../../assets/images/mobile.png">
 						<p>手机充值</p>
 					</a>
+				</li> -->
+				<li>
+					<router-link to="/mobileCharge">
+						<img src="../../assets/images/mobile.png">
+						<p>手机充值</p>
+					</router-link>
 				</li>
 				<li>
 					<a :href="getUrlPath('/oilCard_recharge.html')">
@@ -16,12 +22,36 @@
 						<p>油卡充值</p>
 					</a>
 				</li>
-				<li>
+				<!-- <li>
 					<a :href="getUrlPath('/media_recharge.html')">
 						<img src="../../assets/images/media.png">
 						<p>娱乐充值</p>
 					</a>
+				</li> -->
+				<li>
+					<router-link to="/mediaCharge">
+						<img src="../../assets/images/media.png">
+						<p>娱乐充值</p>
+					</router-link>
 				</li>
+				<!-- <li>
+					<router-link to="/mobileCharge">
+						<img src="../../assets/images/mobile.png">
+						<p>手机充值</p>
+					</router-link>
+				</li>
+				<li>
+					<router-link to="/oilCharge">
+						<img src="../../assets/images/oil.png">
+						<p>油卡充值</p>
+					</router-link>
+				</li>
+				<li>
+					<router-link to="/mediaCharge">
+						<img src="../../assets/images/media.png">
+						<p>娱乐充值</p>
+					</router-link>
+				</li> -->
 				<li>
 					<router-link to="/redPacketCharge">
 						<img src="../../assets/images/redpacket.png">

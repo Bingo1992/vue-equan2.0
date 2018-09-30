@@ -21,7 +21,7 @@
                 <h4>选择地区</h4>
             </a>
             <ul class="selDistrict dialog-end-list whole-list">
-                <li v-for="item in zone"  @click="getDisName(item.DisName)">{{item.DisName}}</li>
+                <li v-for="item in zone"  @click="getDisName(item.DisName)" :key="item">{{item.DisName}}</li>
             </ul>
         </div>   
 
@@ -33,7 +33,6 @@ export default {
     name : 'slideDialog',
     data() {
 　　  return {
-       
         province:[],//省份列表
         city:[],//城市列表
         zone:[],//地区列表
@@ -65,9 +64,9 @@ export default {
                     });
                     //根据城市查找城市id
                     city().then(res => {
-                       this.provName = this.provVal;
-                       let allCity = res;
-                       let cityArr = [];
+                        this.provName = this.provVal;
+                        let allCity = res;
+                        let cityArr = [];
                         allCity.forEach((item) => {
                             if(item.ProID === id){
                                 cityArr.push(item);

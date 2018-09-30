@@ -4,3 +4,23 @@
 4、新增红包充值页面，接口，exchange除去红包
 5、api.js 增加充值接口， 几个充值页面， rechargeCenter添加图片
 7、添加娱乐充值，static图片
+
+
+8.27更新：
+多公众号修改页面 
+①、main.js白名单；②、App.vue白名单； ③、productDetail.vue 加入购物车;④、login.vue跳回上一页
+
+添加accountNew.vue , accountDetail.vue, orderList, orderDetail, activity,
+修改:
+router-> index.js  
+api.js  
+static->img  fonts
+result.vue 查看订单链接
+orderConfirm.vue 链接
+user.vue 链接
+
+-----9-20------添加属性------
+添加attrDialog.vue
+修改：productDetail.vue, orderConfirm.vue, orderList.vue, cart.vue, api.js, style.scss
+修改最大宽度： 文件，style.scss，rem.js
+	

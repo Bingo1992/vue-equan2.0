@@ -9,29 +9,31 @@ export default {
 	},
 	  // 加入购物车
   	['ADD_CART'](state, { 
-      productId, 
+      skuId, 
       productImg, 
       productName, 
       currCost,
       currPrice, 
       check = false, 
-      total = 1, 
+      total, 
       ebuy,
-      type}) {
+      type,
+      skuValue}) {
     let cart = state.cartList; // 购物车
     let falg = true;
     let goods = {
-      productId,
+      skuId,
       productImg,
       productName,
       currCost,
       currPrice,
       ebuy,
-      type
+      type,
+      skuValue
     }
     if (cart.length) { // 有内容
       cart.forEach(item => {
-        if (item.productId === productId) {
+        if (item.skuId === skuId) {
           if (item.total >= 0) {
             falg = false;
             item.total += total;
@@ -39,7 +41,7 @@ export default {
         }
       })
     }
-    if (!cart.length || falg) {
+    if (!cart.length || falg) {//添加新的购物车列表
       goods.total = total;
       goods.check = false;
       cart.push(goods);
@@ -49,26 +51,18 @@ export default {
     // 存入localStorage
     setStore('buyCart', cart);
   },
-   // 修改购物车
-  ['EDIT_CART'] (state, {productid, quality, check}) {
+   // 修改购物车修改购物车
+  ['EDIT_CART'] (state, {skuId, quality, check, skuValue}) {
     let cart = state.cartList;
 
-    if(productid) {
+    if(skuId) {//数量，单选
        cart.forEach((item) => {
-        if(item.productId === productid) {
-  
+        if(item.skuId === skuId) {
           item.total = quality;
           item.check = check;
-        }
+        }  
       })
     }
-    // else if(productId) {//单个勾选
-    //   cart.forEach((item) => {
-    //     if(item.productId === productId) {
-    //       item.check = check;
-    //     }
-    //   })
-    // }
      else { //全选
       cart.forEach((item) => {
         item.check = check ? true : false;
@@ -84,7 +78,7 @@ export default {
     let cart = state.cartList;
     checkID && checkID.forEach((id, idx) => {
        cart.forEach((item,i) => {
-          if(item.productId === id) {
+          if(item.skuId === id) {
             cart.splice(i, 1);
           }
         })

@@ -152,8 +152,7 @@ export default {
 		},
 		
 		// 分类筛选
-		sortPro(name, id, i) {
-         
+		sortPro(name, id, i) { 
             this.levelOneIdx = i;
 			this.bannerUrl = this.sortList[i].classifyImgHref;
 			this.bannerImg = this.sortList[i].classifyImgSrc;
@@ -172,7 +171,7 @@ export default {
 			this.CHOOSE_PROSORT({sortPro: name, index: this.levelOneIdx});
 			this.CHOOSE_LEVERONEID(id1);
 			this.CHOOSE_LEVERTWOID(id2);
-			this.$router.push({path:'/proList', query: {levelOneCid: id1,levelTwoCid: id2}});
+			this.$router.push({path:'/proList', query: {levelOneCid: id1, levelTwoCid: id2}});
 		},
 		//获取分类列表数据
 		_getSortList() {

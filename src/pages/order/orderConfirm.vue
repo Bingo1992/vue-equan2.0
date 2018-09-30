@@ -28,8 +28,9 @@
                 <div class="list-info-v">
                     <div>
                         <div class="list-box">
-                            <div class="list-info-h">
-                                <h5 class="nowrap-2 top-text">{{item.productName}}</h5>
+                            <div class="list-info-v">
+                                <h5 class="nowrap-2">{{item.productName}}</h5>
+                                <p>已选：{{item.skuValue}}</p>
                             </div>
                             <h5 class="pdl">X{{item.total}}</h5>
                         </div>
@@ -273,7 +274,6 @@
                 this.alertText = '提交中，请稍候'; 
                 let str = "{" + this.paramsList.join(",") + "}";
             
-              
                 // gotoPay({
                 //     addressid: this.curAdsId, 
                 //     content:str, 

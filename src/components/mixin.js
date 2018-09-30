@@ -1,4 +1,4 @@
-import {imgBaseUrl, baseUrl, esmUrl} from '/utils/env'
+import {imgBaseUrl, baseUrl, esmUrl, rulesUrl} from '/utils/env'
 
 export const getImgPath = {
 	methods: {
@@ -27,6 +27,15 @@ export const getUrlPath = {
 		//旧方法使用的url
 		getUrlPath(url) {
 			return baseUrl + url
+		}
+	}		
+}
+
+export const getRulesPath = {
+	methods: {
+		//旧方法使用的url
+		getRulesPath(url) {
+			return rulesUrl + url
 		}
 	}		
 }

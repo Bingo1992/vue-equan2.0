@@ -5,7 +5,12 @@
         recalc = function() {
             var clientWidth = docEl.clientWidth;
             if (!clientWidth) return;
-            docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+            // if(clientWidth < 414) {
+                docEl.style.fontSize = 20 * (clientWidth / 375) + 'px';
+            // } else {
+            //     docEl.style.fontSize = 20 * (414 / 375) + 'px';
+            // }
+            
         };
 
     if (!doc.addEventListener) return;

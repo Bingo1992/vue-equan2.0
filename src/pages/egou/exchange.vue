@@ -38,6 +38,19 @@
                     </div>
                 </label> 
             </li> -->
+             <li v-if="(e.canotAccept && e.type === 'ebuy' && e.redPacket != 0) || e.type === 'ebuyOnly'" @click="chooseTypeBtn(11)">
+                <label class="list-box" for="ebuy2">
+                      <div class="list-info-v">
+                        <span class="bg-pink">{{e.redPacket}}元红包</span>
+                        <i class="icon-plus"></i>
+                        <span class="bg-orange">{{e.ebuy}}元e购账户</span>
+                    </div>
+                    <div class="checkbox checkbox-2">
+                        <input type="radio" id="ebuy2" name="type1" value="11" v-model="inputType">
+                        <i class="icon-hook"></i>
+                    </div>
+                </label> 
+            </li>
 
              <li v-if="e.type === 'ebuy_card'" @click="chooseTypeBtn(12)">
                 <label class="list-box" for="ebuy3">
@@ -100,16 +113,18 @@
         <div class="rich-box font-gray">
             <h4>温馨提示</h4>
             <p v-if="e.type==='ebuy' || e.type === 'ebuyOnly'">
-            1、由于微信红包端口受限，如需兑换红包，将延迟3-5个工作日到账；<br>   
-            2、每张卡券按一定的比例充入我的e购账户和兑换红包\充值e币账户。其中，我的e购账户内的金额只能购买支持e购账户的礼品，e币可在e券商城购买汽车用品、汽车服务、加油充值、手机充值等；<br>
-            3、e购账户和e币不可兑换红包；</p>
-            <p v-else>
-            1、由于微信红包端口受限，如需兑换红包，将延迟3-5个工作日到账；<br>
-            2、充值e券账户可获得“e币”，“e币”可在<router-link to="/home" style="color:#87CEEB;">e券商城</router-link>购买汽车用品、汽车服务,加油充值、手机充值等；<br>
-            3、e币不可兑换红包；</p>
+            <!-- 1、由于微信红包端口受限，如需兑换红包，将延迟3-5个工作日到账；<br>    -->
+            1、每张卡券按一定的比例充入我的e购账户和红包\e币账户。其中，我的e购账户内的金额只能购买支持e购账户的礼品，e币可在e券商城购买汽车用品、汽车服务、加油充值、手机充值等；<br>
+            2、点击<a style="color:#87CEEB;" href="http://mp.weixin.qq.com/s/d1P9LERBt6W9gGo54zs_7A"> 使用说明</a> 查看详情；<br>
+            3、兑换的e币将在次年的12月31日过期，请及时使用；<br>
+            4、e购账户不可兑换红包；<br>
+            </p>
 
-            <p>4、点击<a style="color:#87CEEB;" href="http://mp.weixin.qq.com/s/d1P9LERBt6W9gGo54zs_7A"> 使用说明</a> 查看详情；<br>
-            5、兑换微信红包需先实名认证,认证方式：【微信】-【我】-【钱包】-【…】-【支付管理】-【实名认证】。
+            <p v-else>
+            <!-- 1、由于微信红包端口受限，如需兑换红包，将延迟3-5个工作日到账；<br> -->
+            1、充值e券账户可获得“e币”，“e币”可在<router-link to="/home" style="color:#87CEEB;">e券商城</router-link>购买汽车用品、汽车服务,加油充值、手机充值等；<br>
+            2、点击<a style="color:#87CEEB;" href="http://mp.weixin.qq.com/s/d1P9LERBt6W9gGo54zs_7A"> 使用说明</a> 查看详情；<br>
+            3、兑换的e币将在次年的12月31日过期，请及时使用。
             </p>
         </div>
 
@@ -156,6 +171,7 @@ export default {
              ebi: 0,
              ebuy: 0,
              redPacket: 0,
+             canotAccept: false,
              type: ''
           }
 
@@ -180,7 +196,7 @@ export default {
                 this.e.ebuy = data.ebuy;
                 this.e.ebi = data.ecoin;
                 this.e.redPacket = data.redPacket;
-
+                this.e.canotAccept = data.canotAccept;
                 // if(this.e.type === "ebuy") {
                 //     this.inputType = 10;
                 // } else if(this.e.type === "ecoin") {
@@ -214,15 +230,12 @@ export default {
         },
         //兑换按钮
         exchange() {
-            if(this.inputType == 2 || this.inputType == 11) {
-                this.showAdsDialog('尊敬的客户，因微信端口额度受限，红包兑换将延迟3-5个工作日到账，给您带来的不便，敬请谅解!');//显示公告
-            } else {
-                // this.showAlertTip = true;//提交中提示
-                // this.formLoading = true;
-                // this.alertText = '提交中，请稍候';
-                this.closeAdsDialog();
-            }
-           
+            // if(this.inputType == 2 || this.inputType == 11) {
+            //     this.showAdsDialog('尊敬的客户，因微信端口额度受限，红包兑换将延迟3-5个工作日到账，给您带来的不便，敬请谅解!');//显示公告
+            // } else {
+            //     this.closeAdsDialog();
+            // }
+           this.closeAdsDialog();
            
         },
         //公告

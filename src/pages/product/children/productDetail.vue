@@ -23,7 +23,13 @@
                         </span>
                         <s class="right-text font-gray">市场价￥{{proDetail.price}}</s>
                     </div>
-                </div>   
+                </div>  
+
+                <div class="bg-mgShow list-box" @click="showAttrDialog = true">
+                    <p class="list-info-h">{{skuValue? '已选：'+skuValue : '选择属性'}}</p>
+                    <i class="icon-right"></i>
+                </div> 
+
                 <div class="bg-mgShow pro-detail">
                     <h4 class="center-text">商品详情</h4>
                     <img v-for="(item,i) in proDetail.detailImg" :src="getImgPath(item.showPic)" :key="i">
@@ -42,27 +48,18 @@
                     <!-- <span v-if="cartNum != 0" class="circlePoint">{{cartNum}}</span> -->
                     <cart-num></cart-num>
                 </router-link>
-                <a v-if="count != 0" class="btn-cart" @click="addToCart(
-                    proDetail.showPic, 
-                    proDetail.name, 
-                    proDetail.cost, 
-                    proDetail.price, 
-                    proDetail.ebuy,
-                    proDetail.type)">加入购物车</a>
-                <a v-if="count != 0" @click="goToBuy(
-                    proDetail.showPic, 
-                    proDetail.name, 
-                    proDetail.cost, 
-                    proDetail.price, 
-                    proDetail.ebuy,
-                    proDetail.type)" class="btn-theme">立即购买</a>
+                <a v-if="count != 0" class="btn-cart" @click="addToCart()">加入购物车</a>
+                <a v-if="count != 0" @click="goToBuy()" class="btn-theme">立即购买</a>
                 <a v-else class="btn-pure-theme disbtn">商品已售罄</a>
             </div>
         </div>
 
+        <attr-dialog v-show="showAttrDialog" :productId="this.$route.query.productid" 
+        @closeAttrDialog="closeAttrDialog" ></attr-dialog>
+
          <!-- 提示遮罩 -->
         <alert-tip v-if="showAlertTip" :alert-text="alertText"></alert-tip>
-          
+   
     </div>
     	 
 
@@ -70,28 +67,36 @@
 
 <script>
 import {mapMutations} from 'vuex'
-import {proDetail, addCart} from '/api/api'
-import { setStore } from '/utils/storage'
+import {proDetail, addCart, userInfo} from '/api/api'
+import { setStore, getStore } from '/utils/storage'
 import {getImgPath} from '/components/mixin'
 import alertTip from '/components/alertTip'
 import Banner from '/components/swiperDefault'
 import Loading from '/components/loading'
 import cartNum from '/components/cartNum'
+import attrDialog from '/components/attrDialog'
 
 export default {
 	data(){
 		return {
+            skuid: '',
+            quality: '',
 			proDetail: [],
 			imglistSrc:[],//轮播图
-            count: 0,//商品：1上架，0下架
-            showLoading: true,
+            count: 0,//商品：1未售罄，0已售罄
+            mobile: '',
+            skuValue: '',
             showAttrDialog: false,
+            showCartDialog: false,
+            showBuyDialog: false,
+            showLoading: true,
             showAlertTip: false,
-            alertText: ""
+            alertText: "",
+            attrInfo: {}//属性列表
 		}
 	},
     components: {
-        Banner, Loading, alertTip, cartNum
+        Banner, Loading, alertTip, cartNum, attrDialog
     },
 	mounted() {
         document.title = "商品详情";
@@ -140,6 +145,7 @@ export default {
                 })
                
             })
+           
 		},
         //显示弹窗
         showHideAlert(text) { 
@@ -150,40 +156,89 @@ export default {
             }, 1500);
         },
         //加入购物车
-        addToCart(img, title, price, marketPrice, ebuy, type) {
-            addCart({quality:1}, this.$route.query.productid).then(res => {
-                this.ADD_CART({
-                    productId: this.$route.query.productid,
-                    productImg: img,
-                    productName: title,
-                    currCost: price,
-                    currPrice: marketPrice,
-                    check: false,
-                    total: 1,
-                    ebuy: ebuy,
-                    type: type
-                });
-                this.showHideAlert('已成功加入购物车');
-            });
+        addToCart() {
+          
+                // if(getStore('state') ==  0) {//未关注
+                //     this.$router.push('/focus');
+                // } 
+                // else if(!getStore("mobile") || getStore("mobile") == "undefined" || getStore("mobile") == "") { //未注册
+                //      this.$router.push('/login');
+                // }
+                // else {
+                    this.showAttrDialog = true;
+                    this.showCartDialog = true;
+                    // addCart({quality:1}, this.$route.query.productid).then(res => {
+                    //     this.ADD_CART({
+                    //         productId: this.$route.query.productid,
+                    //         productImg: img,
+                    //         productName: title,
+                    //         currCost: price,
+                    //         currPrice: marketPrice,
+                    //         check: false,
+                    //         total: 1,
+                    //         ebuy: ebuy,
+                    //         type: type
+                    //     });
+                    //     this.showHideAlert('已成功加入购物车');
+                    // });
+                // }   
         },
         // 点击购买
-        goToBuy(img, title, price, marketPrice, ebuy, type) {
-            let goods = [];
-            goods.push({
-                productId: this.$route.query.productid,
-                currCost: price,
-                productName: title,
-                productImg: img,
-                currPrice: marketPrice,
-                total: 1,
-                check: true,
-                ebuy: ebuy,
-                type: type
-            });
-         
-            setStore('buyPro',goods);//将当前购买的商品信息存储到buyPro
-            this.$router.push({path:'/orderConfirm',query:{skuId: this.$route.query.productid}});
-        }
+        goToBuy() {
+            this.showAttrDialog = true;
+            this.showBuyDialog = true;
+
+            // let goods = [];
+            // goods.push({
+            //     productId: this.skuid,
+            //     currCost: price,
+            //     productName: title,
+            //     productImg: img,
+            //     currPrice: marketPrice,
+            //     total: this.quality,
+            //     check: true,
+            //     ebuy: ebuy,
+            //     type: type,
+            //     skuValue: this.skuValue
+            // });   
+            // setStore('buyPro',goods);//将当前购买的商品信息存储到buyPro
+            // this.$router.push({path:'/orderConfirm',query:{skuId: this.$route.query.productid}});
+        },
+        // 关闭属性遮罩
+        closeAttrDialog(flag, value, skuid, quality) {
+            this.showAttrDialog = false;
+            if(flag) {//有选择属性
+                 this.skuValue = value;
+                 this.skuid = skuid;
+                 this.quality = quality;
+            } 
+            // 商品信息
+            let proInfo = {
+                skuId: this.skuid,
+                productImg: this.proDetail.showPic,
+                productName: this.proDetail.name,
+                currCost: this.proDetail.cost,
+                currPrice: this.proDetail.price,
+                check: false,
+                total: this.quality,
+                ebuy: this.proDetail.ebuy,
+                type: this.proDetail.type,
+                skuValue: this.skuValue
+            };
+            if(this.showCartDialog) {//加入购物车
+                addCart({quality: this.quality}, this.skuid).then(res => {
+                    this.ADD_CART(proInfo);
+                    this.showHideAlert('已成功加入购物车');
+                });
+            } 
+            if(this.showBuyDialog) {//立即购买
+                let goods = [];
+                goods.push(proInfo);
+                setStore('buyPro',goods);//将当前购买的商品信息存储到buyPro
+                this.$router.push({path:'/orderConfirm',query:{skuId: this.skuid}});
+            }   
+        },
+        
        
 	},
     watch:{

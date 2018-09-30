@@ -5,10 +5,14 @@ const Home = resolve => require(['/pages/home/home'], resolve);
 const Ticket = resolve => require(['/pages/ticket/ticket'], resolve);
 const User = resolve => require(['/pages/user/user'], resolve);
 const Cart = resolve => require(['/pages/cart/cart'], resolve);
-// 登录
+// 登录，关注
 const Login = resolve => require(['/pages/login/login'], resolve);
+const Focus = resolve => require(['/pages/login/focus'], resolve);
+const Maintain = resolve => require(['/pages/login/maintain'], resolve);
+
 // 订单
 const OrderList = resolve => require(['/pages/order/orderList'], resolve);
+const OrderDetail = resolve => require(['/pages/order/children/orderDetail'], resolve);
 const OrderConfirm = resolve => require(['/pages/order/orderConfirm'], resolve);
 const OrderPay = resolve => require(['/pages/order/pay'], resolve);
 const Result = resolve => require(['/pages/order/result'], resolve);
@@ -24,8 +28,8 @@ const TicketCode = resolve => require(['/pages/ticket/ticketCode'], resolve);
 // 兑换页面
 const Exchange = resolve => require(['/pages/egou/exchange'], resolve);
 // 红包活动
-const RpLucky = resolve => require(['/pages/user/rpLucky'], resolve);
-
+const RpLucky = resolve => require(['/pages/redPacket/rpLucky'], resolve);
+const GetRedPacket = resolve => require(['/pages/redPacket/getRedPacket'], resolve);
 
 // 充值中心
 const RechargeCenter = resolve => require(['/pages/recharge/rechargeCenter'], resolve);
@@ -39,12 +43,15 @@ const RedPacketCharge = resolve => require(['/pages/recharge/redPacketCharge'], 
 
 // 我的账户
 const Account = resolve => require(['/pages/account/account'], resolve);
+// const AccountNew = resolve => require(['/pages/account/accountNew'], resolve);
+const AccountDetail = resolve => require(['/pages/account/children/accountDetail'], resolve);
 
 // 商品
 const ProList = resolve => require(['/pages/product/productList'], resolve);
 const sort = resolve => require(['/pages/sort/sort'], resolve);
 const ProDetail = resolve => require(['/pages/product/children/productDetail'], resolve);
 
+const Activity = resolve => require(['/pages/home/activity'], resolve);
 
 Vue.use(Router)
 
@@ -68,6 +75,12 @@ export default new Router({
           component: ProDetail, 
           meta: {title: '商品详情'}
       }]
+    },
+    {
+      path: '/activity',
+      component: Activity,
+      name: 'Activity',
+      meta: {title: '积分清零倒计时'}
     },
     {
       path: '/cart',
@@ -120,19 +133,19 @@ export default new Router({
       path: '/result',
       component: Result,
       name: 'Result',
-      meta: {title: '订单结果'},
-      children:[{
-          path: 'productDetail',
-          component: ProDetail,
-          name: 'ProDetail',
-          meta: {title: '商品详情'}
-      }]
+      meta: {title: '订单结果'}
     },
     {
       path: '/orderList',
       component: OrderList,
       name: 'OrderList',
-      meta: {title: '我的订单'}
+      meta: {title: '我的订单'},
+      children:[{
+          path: 'orderDetail',
+          component: OrderDetail,
+          name: 'OrderDetail',
+          meta: {title: '订单详情'}
+      }]
     },
     {
       path: '/chooseAddress',
@@ -156,8 +169,26 @@ export default new Router({
       path: '/account',
       component: Account,
       name: 'Account',
-      meta: {title:'我的账户'}
+      meta: {title:'我的账户'},
+      children: [{
+        path: 'accountDetail',
+        component: AccountDetail,
+        name: 'AccountDetail',
+        meta: {title: '交易详情'}
+      }]
     },
+    // {
+    //   path: '/accountNew',
+    //   component: AccountNew,
+    //   name: 'AccountNew',
+    //   meta: {title:'我的账户'},
+    //   children: [{
+    //     path: 'accountDetail',
+    //     component: AccountDetail,
+    //     name: 'AccountDetail',
+    //     meta: {title: '交易详情'}
+    //   }]
+    // },
     {
       path: '/exchange',
       component: Exchange,
@@ -169,6 +200,11 @@ export default new Router({
       component: RpLucky,
       name: 'RpLucky',
       meta: {title:'红包活动'}
+    },   
+     {
+      path: '/getRedPacket',
+      component: GetRedPacket,
+      meta: {title:'领取红包'}
     },
     {
       path: '/ticketCode',
@@ -180,7 +216,19 @@ export default new Router({
       path: '/login',
       component:Login,
       name: 'Login',
-      meta: {title:'登录中心'}
+      meta: {title:'用户注册'}
+    },
+    {
+      path: '/focus',
+      component:Focus,
+      name: 'Focus',
+      meta: {title:'关注公众号'}
+    },
+    {
+      path: '/maintain',
+      component:Maintain,
+      name: 'Maintain',
+      meta: {title:'系统升级中'}
     },
     {
       path: '/rechargeCenter',
@@ -209,7 +257,7 @@ export default new Router({
       component: OilCharge,
       meta: {title:'油卡充值'}
     },
-  
+
     {
       path: '/redPacketCharge',
       component: RedPacketCharge,

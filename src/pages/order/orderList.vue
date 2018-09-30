@@ -10,34 +10,7 @@
 	                <span class="font-orange">{{item.showState}}</span>
 	            </div> 
 
-	            <!-- 已支付订单 -->
-				<div class="list-box border-bottom" v-if="item.detail" v-for="pro in item.detail" :key="pro.id">
- 					<!-- "0":实物,"1":电子券兑换e币,"2":电子券兑换红包,"3":电子券充值油卡,"4":话费充值,"5":e币充值油卡,"6":流量充值,"7":电子券,"8":人保vip,"9":流媒体充值 -->
-	                <img v-if="item.orderType === 0" class="list-img" :src="getImgPath(pro.product.pic)"> 
-	                <img  v-if="item.orderType === 1" class="list-img" src="../../assets/images/picEb.png">
-	                <img  v-if="item.orderType === 2" class="list-img" src="../../assets/images/picRb.png">
-	                <img  v-if="item.orderType === 3 || item.orderType === 5" class="list-img" src="../../assets/images/picYk.png">
-	                <img  v-if="item.orderType === 4" class="list-img" src="../../assets/images/mobile.png">
-	                <img  v-if="item.orderType === 6" class="list-img" src="../../assets/images/flow.png">
-	                <img  v-if="item.orderType === 7" class="list-img" src="../../assets/images/ticket.png">
-	                <img  v-if="item.orderType === 8" class="list-img" src="../../assets/images/ticket.png">
-	                <img  v-if="item.orderType === 9" class="list-img" src="../../assets/images/media.png">
-
-
-	                <div class="list-info-v">
-	                    <h4 class="nowrap-2">{{pro.productName}}</h4>
-	                    <p>
-	                    	价格：<span class="font-red pdr">{{pro.price}}</span>
-							数量：<span class="font-red pdr">{{pro.amount}}</span>
-	                    </p>
-	                    <p>下单时间：<span>{{pro.createTime}}</span></p>
-	                </div>
-	            </div> 
-	           <!--  <div  v-if="item.detail" class="flex-right">
-	            	<router-link class="btn-border" to="/orderList/orderDetail">查看订单</router-link>
-	            </div>	 -->
-
-	            <!-- 未支付订单 -->
+				 <!-- 未支付订单 -->
 				<div v-if="item.unpaid" class="list-box border-bottom" v-for="pro in item.unpaid" :key="pro.id">
 	                <img  class="list-img" src="images/p1.jpg">
 	                <div class="list-info">
@@ -46,14 +19,74 @@
 	                    <p>下单时间：<span>{{pro.createTime}}</span></p>
 	                </div>
 	            </div> 	
-	            <div  v-if="item.unpaid" class="flex-right border-top">
-	            	<a class="btn-delete btn-border" @click="cancelOrder(item.id, i)">取消订单</a>
-	                <a class="btn-border btn-border-theme">立刻支付</a>
+	            <div v-if="item.unpaid" class="clearfix">
+	            	<a class="btn-delete btn-border fr" @click="cancelOrder(item.id, i)">取消订单</a>
+	                <a class="btn-border btn-border-theme fr">立刻支付</a>
 	            </div>
+
+	            <!-- 已支付订单 -->
+			 
+				<!-- "0":实物,"1":电子券兑换e币,"2":电子券兑换红包,"3":电子券充值油卡,"4":话费充值,"5":e币充值油卡,"6":流量充值,"7":电子券,"8":人保vip,"9":流媒体充值 "10"：电子券兑换e币+e购 "11": 电子券兑换红包+e购 "12": 电子券兑换e购 "13"：e币兑换红包 -->
+				<div v-else>
+					<div v-if="item.orderType === 0 || item.orderType === 7">
+						<div class="list-box border-bottom"  v-for="pro in item.detail" :key="pro.id">
+							<img class="list-img-small" :src="getImgPath(pro.product.showpic)">
+							<div class="list-info-v">
+								<h5 class="nowrap-2">{{pro.productName}}</h5>
+								<p>价格：{{pro.product.cost}} &nbsp;&nbsp; 数量：{{pro.amount}}</p>
+								<p>下单时间：{{item.otime}}</p>
+							</div>
+						</div>
+						<div class="clearfix pd">
+							<!-- <router-link style="margin-left: 10px" v-if="item.orderType === 0 && item.state === 2" class="btn-border fr" :to="{path: '/orderList/logistics', query: {id: item.id}}">查看物流</router-link> -->
+							<router-link style="margin-left: 10px" v-if="item.orderType === 0" class="btn-border fr" :to="{path: '/orderList/orderDetail', query: {id: item.id}}">查看订单</router-link>
+							<router-link style="margin-left: 10px"  v-if="item.orderType === 7" class="btn-border fr" :to="{path: '/orderList/ticketDetail', query: {id: item.id}}">查看电子券</router-link>
+						</div>	
+						 
+					</div>
+
+					<div v-else>
+						<div class="list-box border-bottom">
+							<img v-if="item.orderType === 1" class="list-img-small" src="../../assets/images/picEb.png">
+							<img  v-if="item.orderType === 2 || item.orderType === 13" class="list-img-small" src="../../assets/images/picRb.png">
+							<img  v-if="item.orderType === 3 || item.orderType === 5" class="list-img-small" src="../../assets/images/oil.png">
+							<img  v-if="item.orderType === 4" class="list-img-small" src="../../assets/images/mobile.png">
+							<img  v-if="item.orderType === 6" class="list-img-small" src="../../assets/images/flow.png">
+							<img  v-if="item.orderType === 8" class="list-img-small" src="../../assets/images/ticket.png">
+							<img  v-if="item.orderType === 9" class="list-img-small" src="../../assets/images/media.png">
+							<img  v-if="item.orderType === 10" class="list-img-small" src="../../assets/images/picEb.png">
+							<img  v-if="item.orderType === 11" class="list-img-small" src="../../assets/images/picRb.png">
+							<img  v-if="item.orderType === 12" class="list-img-small" src="../../assets/images/ebuy.png">
+							
+							<div class="list-info-v">
+								<h5 v-if="item.orderType === 1" class="nowrap-2">兑换e币</h5>
+								<h5 v-if="item.orderType === 2 || item.orderType === 13" class="nowrap-2">兑换红包</h5>
+								<h5 v-if="item.orderType === 3" class="nowrap-2">油卡充值</h5>
+								<h5 v-if="item.orderType === 4" class="nowrap-2">话费充值</h5>
+								<h5 v-if="item.orderType === 5" class="nowrap-2">油卡充值</h5>
+								<h5 v-if="item.orderType === 6" class="nowrap-2">流量充值</h5>
+								<h5 v-if="item.orderType === 8" class="nowrap-2">人保VIP</h5>
+								<h5 v-if="item.orderType === 9" class="nowrap-2">
+								流媒体充值</h5>
+								<h5 v-if="item.orderType === 10" class="nowrap-2">兑换e币+e购</h5>
+								<h5 v-if="item.orderType === 11" class="nowrap-2">兑换红包+e购</h5>
+								<h5 v-if="item.orderType === 12" class="nowrap-2">兑换e购</h5>
+								<p>面额：<span class="font-orange">{{item.amount}}</span></p>
+								<p>下单时间：{{item.otime}}</p>
+							</div>
+							<p class="font-green state" v-if="item.state == 0">未提交充值</p>
+							<p class="font-green state" v-if="item.state == 1">已提交充值</p>
+
+						</div>	
+						<div class="clearfix pd">
+							<router-link class="btn-border fr" :to="{path: '/orderList/orderDetail', query: {id: item.id}}">查看订单</router-link>
+						</div>
+					</div>	
+				</div>
 			</li>
 		</ul>
 		<!-- 加载更多 -->
-		<load-more class="bg-mgShow" v-if="loadmore" :isLoading="isLoading" :noData="noData" @loadMore="loadMore"></load-more>
+		<load-more class="bg-gray" v-if="loadmore" :isLoading="isLoading" :noData="noData" @loadMore="loadMore"></load-more>
 		
 		<div v-if="orderList.length==0 && !isLoading" class="nothing">
 	        <img src="../../assets/images/nothing.png" >
@@ -64,7 +97,6 @@
 		<!-- 遮罩 -->
         <alert-tip v-show="showAlertTip"  :alertText="alertText"></alert-tip>
 		
-
 		<!-- 进入详情页 -->
 		<transition name="router-slid" mode="out-in">
 	    	<router-view></router-view>
@@ -89,13 +121,8 @@ export default {
 			loadmore: true,//显示加载更多
 			isLoading: true,
 			noData: false,
-			// order: {
-			// 	state: 0,//充值状态
-			// 	orderType: 0,//充值类型
-			// 	imgType: '',//图片类型
-			// 	btnType: '',//按钮类型
-			// 	linkType:''//链接类型
-			// }
+			showAlertTip: false,
+			alertText: ''
 		}
 	},
 	components: {
@@ -106,8 +133,7 @@ export default {
 		document.title = "我的订单";
 		this._initData();
 	},
-	methods: {
-		
+	methods: {		
 		_initData() {
 			//获取商品列表
 			this._getOrderList();
@@ -120,39 +146,10 @@ export default {
 	          }
 	        }
 			orderList(params).then(res => {
+			 
 				let data = res.resultList;	
 				this.isLastPage = res.isLastPage; //最后一页	
-				// this.order.orderType = data.orderType;//充值类型
-				// this.order.state = data.state;//订单状态
-				// if(this.order.orderType === 0) {//实物
-				// 	this.order.btnType = "查看订单";
-				// } else if(this.order.orderType === 1) {//电子券兑换e币
-				// 	this.order.imgType = "../../assets/images/picEb.png";
-				// 	this.order.btnType = "查看E币";
-
-				// } else if(this.order.orderType === 2) {//电子券兑换红包
-				// 	this.order.imgType = "../../assets/images/picRb.png";
-
-				// }  else if(this.order.orderType === 3 || this.order.orderType === 5) {//电子券充值油卡，e币充值油卡
-				// 	this.order.imgType = "../../assets/images/picYk.png";
-
-
-				// }  else if(this.order.orderType === 4) {//话费充值
-				// 	this.order.imgType = "../../assets/images/mobile.png";
-
-				// }  else if(this.order.orderType === 6) {//流量充值
-				// 	this.order.imgType = "../../assets/images/flow.png";
-
-				// }  else if(this.order.orderType === 7) {//电子券
-				// 	this.order.imgType = "../../assets/images/equan.png";
-
-				// }  else if(this.order.orderType === 8) {//人保vip
-				// 	this.order.imgType = "../../assets/images/ticket.png";
-
-				// } else if(this.order.orderType === 9) {//流媒体充值
-				// 	this.order.imgType = "../../assets/images/media.png";
-				// } 
-
+			
 				if(flag) {
 					this.orderList = [...this.orderList, ...data];
 				} else {
@@ -206,58 +203,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '../../assets/scss/var.scss';
-.fixed-right {
-	position:fixed;
-    right: 12px;
-    bottom: 4rem;
-    width: 100%;
-    z-index: 2; 
-    width: 45px;
-    a {
-    	@include circle(45px);
-    	display: block;
-    	border: 1px solid #e2e2e2;
-    	background-color: rgba(246, 247, 249, .9);
-    	color: #999;
-    	margin-top: 6px;
-    	position: relative;
-    }
-    i {
-    	font-size: 24px;
-    }
-    .semiCirclePoint {
-    	@include semicircle(10px);
-    	background-color: $color-red;
-    	// position: absolute;
-    	color: #fff;
-    	padding: 0 4px;
-    	font-size: 8px;
-		right: 0;
-    	top: 8px;
-    }
+.list-img-small {
+	width: 50px;
+	height: 50px;
+	object-fit: contain;
+	margin-right: 10px;
 }
-.banner-t {
-	margin-top: 83px;
-}
-#proList {
-	margin-top: -83px;
-	padding-top: 83px;
-}
-.sort-tabs {
-	p {
-		width: 100%;
-	}
-	i {
-		font-size: $md-font;
-		color:  #e3e3e3;
-	}
-}
-.flex-right {
-	display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-    a {
-    	margin-left: 10px;
-    }
+.state {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	font-size: 12px;
 }
 </style>

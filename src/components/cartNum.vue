@@ -1,5 +1,5 @@
 <template>
-	 <span v-if="cartNum != 0" class="circlePoint">{{cartNum < 100 ? cartNum : '99+'}}</span>
+	 <span v-if="cartNum != 0" class="circlePoint">{{cartNum  < 100? cartNum : '99+'}}</span>
 </template>
 <script>
 import {mapState, mapMutations} from 'vuex'

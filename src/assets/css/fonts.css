@@ -24,8 +24,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-.icon-18:before {
+.icon-clock:before {
   content: "\e900";
+}
+.icon-date:before {
+  content: "\e901";
 }
 .icon-up:before {
   content: "\e601";
@@ -51,117 +54,120 @@
 .icon-gantan:before {
   content: "\e62d";
 }
-.icon-user:before {
-  content: "\e901";
-}
-.icon-user-2:before {
+.icon-18:before {
   content: "\e902";
 }
-.icon-ticket:before {
+.icon-user:before {
   content: "\e903";
 }
-.icon-ticket-2:before {
+.icon-user-2:before {
   content: "\e904";
 }
-.icon-cart:before {
+.icon-ticket:before {
   content: "\e905";
 }
-.icon-cart-2:before {
+.icon-ticket-2:before {
   content: "\e906";
 }
-.icon-sort:before {
+.icon-cart:before {
   content: "\e907";
 }
-.icon-sort-2:before {
+.icon-cart-2:before {
   content: "\e908";
 }
-.icon-home:before {
+.icon-sort:before {
   content: "\e909";
 }
-.icon-home-2:before {
+.icon-sort-2:before {
   content: "\e90a";
 }
-.icon-coin:before {
+.icon-home:before {
   content: "\e90b";
 }
-.icon-search:before {
+.icon-home-2:before {
   content: "\e90c";
 }
-.icon-circle:before {
+.icon-coin:before {
   content: "\e90d";
 }
-.icon-address:before {
+.icon-search:before {
   content: "\e90e";
 }
-.icon-notes:before {
+.icon-circle:before {
   content: "\e90f";
 }
-.icon-recharge:before {
+.icon-address:before {
   content: "\e910";
 }
-.icon-market:before {
+.icon-notes:before {
   content: "\e911";
 }
-.icon-service:before {
+.icon-recharge:before {
   content: "\e912";
 }
-.icon-papers:before {
+.icon-market:before {
   content: "\e913";
 }
-.icon-order:before {
+.icon-service:before {
   content: "\e914";
 }
-.icon-help:before {
+.icon-papers:before {
   content: "\e915";
 }
-.icon-tel:before {
+.icon-order:before {
   content: "\e916";
 }
-.icon-map:before {
+.icon-help:before {
   content: "\e917";
 }
-.icon-account:before {
+.icon-tel:before {
   content: "\e918";
 }
-.icon-code:before {
+.icon-map:before {
   content: "\e919";
 }
-.icon-mobile:before {
+.icon-account:before {
   content: "\e91a";
 }
-.icon-buy:before {
+.icon-code:before {
   content: "\e91b";
 }
-.icon-ticket-3:before {
+.icon-mobile:before {
   content: "\e91c";
 }
-.icon-change:before {
+.icon-buy:before {
   content: "\e91d";
 }
-.icon-top:before {
+.icon-ticket-3:before {
   content: "\e91e";
 }
-.icon-password:before {
+.icon-change:before {
   content: "\e91f";
 }
-.icon-arrow-down:before {
+.icon-top:before {
   content: "\e920";
 }
-.icon-minus:before {
+.icon-password:before {
   content: "\e921";
 }
-.icon-plus:before {
+.icon-arrow-down:before {
   content: "\e922";
 }
-.icon-arrow-up:before {
+.icon-minus:before {
   content: "\e923";
 }
-.icon-ebuy:before {
+.icon-plus:before {
   content: "\e924";
 }
-.icon-del:before {
+.icon-arrow-up:before {
   content: "\e925";
 }
-.icon-edit:before {
+.icon-ebuy:before {
   content: "\e926";
+}
+.icon-del:before {
+  content: "\e927";
+}
+.icon-edit:before {
+  content: "\e928";
 }

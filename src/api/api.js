@@ -39,12 +39,21 @@ export const areaTitle = (params) =>  http.fetchGet('/area/detail',params);
 // export const areaList = (params) =>  http.fetchGet('/area',params);
 //账户
 export const account = (params) =>  http.fetchGet('/user/integral_history',params);
+export const accountNew = (params) =>  http.fetchGet('/user/historyIntegral',params);
+// 统计积分
+export const statisticsIntegral = (params) =>  http.fetchGet('/user/statisticsUserIntegral',params);
+// 交易详情
+export const accountDetail = (params, id) =>  http.fetchGet('/user/userIntegralHistoryDetail/'+id, params);
+
 // 用户信息
 export const userInfo = (params) =>  http.fetchGet('/user/personnel',params);
+
 //商品列表
 export const proList = (params) =>  http.fetchGet('/goods/list',params);
 export const proDetail = (params) =>  http.fetchGet('/product/detail',params);
 export const sortList = (params) =>  http.fetchGet('/goods/getGoodsClassify',params);
+// 商品列表-sku
+export const choosesku = (params) =>  http.fetchGet('/goods/choosesku',params);
 
 // 购物车
 // export const delCart = (params) => http.fetchGet('/shopCart/removeOrder', params);
@@ -71,8 +80,9 @@ export const gotoPay = (params) => http.fetchGet('/shopCart/exchangeOrder', para
 // export const gotoPay = (params) => http.fetchPost('/shopcarts/submit', params);
 export const payment = (params) => http.fetchGet('/wxpay/jsCall', params);
 // 订单
-export const orderList = (params) => http.fetchGet('/product/placeorder', params);
-export const cancelOrder = (params, payOrderId) => http.fetchGet('/cancelOrder/'+payOrderId, params);
+export const orderList = (params) => http.fetchGet('/shopCart/orders', params);
+export const orderDetail = (params, orderNum) => http.fetchGet('/user/order/detail/'+ orderNum, params);
+export const cancelOrder = (params, payOrderId) => http.fetchGet('/cancelOrder/'+ payOrderId, params);
 
 //卡券
 export const ticketList = (params) =>  http.fetchGet('/user/eticket/list2', params);
@@ -85,22 +95,36 @@ export const exchangeService = (params) =>  http.fetchGet('/user/eticket/recharg
 
 // 解除绑定
 export const unbind = (params) =>  http.fetchGet('/user/unbindm', params);
-// 红包活动
-export const checkLucky = (params) =>  http.fetchGet('/user/eticket/checkLucky', params);
 //注册
 export const register = (params) =>  http.fetchGet('/user/register', params);
 export const sendCode = (params) =>  http.fetchGet('/user/register/send_code', params);
 export const sendRegister = (params) =>  http.fetchGet('/user/register/save', params);
+// 二维码
+export const code = (params) =>  http.fetchGet('/user/subscribeQRCode', params);
 
 //充值中心
 export const historyMobile = (params) =>  http.fetchGet('/mobile/recharge/record', params);
+export const mobileRechargeEbi = (params) =>  http.fetchPost('/mobile/recharge', params);
+export const mobileRechargeMix = (params) =>  http.fetchPost('/mobile/recharge/mix', params);
+
 export const reCharge = (params) =>  http.fetchGet('/product/exchange', params);
+export const mediaChargeEbi = (params) =>  http.fetchPost('/recharge/ofpay/mediaV2', params);
+export const mediaChargeMix = (params) =>  http.fetchPost('/recharge/ofpay/mediaV2/mix', params);
+
+// 油卡充值
+export const historyOil = (params) =>  http.fetchPost('/oil/recharge/record', params);
+export const realName = (params) =>  http.fetchPost('/product/checkOilcard', params);
+export const oilRecharge = (params) =>  http.fetchPost('/product/exchangeOil', params);
+
 
 // 红包充值
 export const checkIntegral = (params) =>  http.fetchGet('/user/fullintegral', params);
 export const redPacketRatio = (params) =>  http.fetchGet('/product/checkCanDealRepackRadio', params);
 export const exchangeRedpack = (params) =>  http.fetchPost('/product/exchangeRepack', params);
 
+// 红包活动
+export const rpLucky = (params) =>  http.fetchGet('/user/eticket/checkLucky', params);
+export const checkLucky = (params) =>  http.fetchGet('/user/eticket/lucky', params);
 
 // export const banner = (params) =>  fetch('get','/banner',params);
 // export const ads = (params) =>  fetch('get','/ads',params);

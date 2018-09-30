@@ -13,10 +13,12 @@ module.exports = {
     proxyTable: {
         '/api': {
            // target: 'http://localhost:9090',
+          // target: 'http://t1.yesm.cn/equan-wxweb',
           //  target: 'http://192.168.4.48:8080/equan-wxweb',
-           target:'http://192.168.8.200:8080/equan-wxweb',
-          //  target: 'http://192.168.7.102:8080/equan-wxweb',
-           changeOrigin: true,
+          //  target:'http://192.168.8.200:8033/equan-wxweb/',
+           target: 'http://192.168.7.102:8080/equan-wxweb',
+          //  target: 'http://192.168.8.60:8081/equan-wxweb',
+          //  changeOrigin: true,
            pathRewrite: {'^/api': ''}
          }
     },
@@ -54,13 +56,13 @@ module.exports = {
 
   build: {
     // // // Template for index.html
-    index: path.resolve(__dirname, '../equan-test/index.html'),
+    index: path.resolve(__dirname, '../equan-test2/index.html'),
     // Paths
-    assetsRoot: path.resolve(__dirname, '../equan-test'),
+    assetsRoot: path.resolve(__dirname, '../equan-test2'),
 
     // 正式
-    // index: path.resolve(__dirname, '../equan/index.html'),
-    // assetsRoot: path.resolve(__dirname, '../equan'),
+    // index: path.resolve(__dirname, '../equan2/index.html'),
+    // assetsRoot: path.resolve(__dirname, '../equan2'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
 

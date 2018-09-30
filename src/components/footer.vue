@@ -9,13 +9,13 @@
       </router-link>
     </li> -->
     <li>
-      <router-link to="/home">
+      <router-link :to="{path: '/home'}">
         <i :class="[$route.path.indexOf('home') !== -1? 'icon-home-2':'icon-home']"></i>
         <p>首页</p>
       </router-link>
     </li>
     <li>
-      <router-link to="/sort">
+      <router-link :to="{path: '/sort'}">
         <i :class="[$route.path.indexOf('sort') !== -1? 'icon-sort-2':'icon-sort']"></i>
         <p>全部分类</p>
         <!-- <span v-if="cartNum && cartNum!=0" class="circlePoint">{{cartNum}}</span> -->

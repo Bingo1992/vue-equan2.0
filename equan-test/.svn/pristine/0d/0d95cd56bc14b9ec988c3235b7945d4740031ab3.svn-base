@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta http-equiv=Content-Type content="text/html; charset=utf-8"><meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name=format-detection content="telephone=no"><meta content=yes name=apple-mobile-web-app-capable><meta content=black name=apple-mobile-web-app-status-bar-style><title></title><link href=./static/css/app.9a7c1e0cf6e646935506c9bfca66dbe6.css rel=stylesheet></head><body><div id=app></div><script>var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b8899414c78822ce623d3322fb3a704b";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+ 
+    var url = window.location.href;
+    var http = url.split('//')[0];
+    var domain = document.domain;//获取域名
+
+   
+    // if(!sessionStorage.getItem('ssid')) {
+    //   var url = window.location.href;
+
+    //   var module = url.split('\#/')[1];
+      
+    //   module = module.replace('?', ',');
+    //   module = module.replace(/\&/g, ',');
+    //   module = module.replace(/\=/g, ':');
+      
+    //   var state = '2mobule:' + module; 
+    //   var jumpUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd0cc97b55aebf775&redirect_uri=http://t1.yesm.cn/equan-wxweb/wx/page.html&response_type=code&scope=snsapi_base&state='+ state +'#wechat_redirect';
+    //   window.location.href = jumpUrl;
+
+    // }</script><script type=text/javascript src=./static/js/manifest.283dd8a682d8971507ba.js></script><script type=text/javascript src=./static/js/vendor.6a5666989616b219b987.js></script><script type=text/javascript src=./static/js/app.72f4d8f5577be00b9289.js></script></body></html>

@@ -38,7 +38,7 @@
 					<li>
 						<router-link :to="{path:'/proList', query:{searchVal: 'search'}}">
 							<i class="icon-search"></i>
-							 搜索
+							搜索
 						</router-link>
 					</li>
 				</ul>
@@ -71,12 +71,12 @@
 						<p>苏宁易购卡</p>
 					</router-link>
 				</li>
-				<li>
+				<!-- <li>
 					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8c6084ddf52977ec&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
 						<img src="../../../static/images/3.png">
 						<p>违章查办</p>
 					</a>
-				</li>
+				</li> -->
 				<!-- <li>
 					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd0cc97b55aebf775&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
 						<img src="../../../static/images/3.png">
@@ -89,6 +89,12 @@
 						<p>违章查办</p>
 					</a>
 				</li> -->
+				<li>
+					<a :href="getRulesPath('&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect')">
+						<img src="../../../static/images/3.png">
+						<p>违章查办</p>
+					</a>
+				</li>
 				<li>
 					<router-link to="/rechargeCenter">
 						<img src="../../../static/images/4.png">
@@ -109,9 +115,9 @@
 	                            <h4 class="font-red center-text">每周特价</h4>
 	                            <p class="font-gray center-text">优惠低至2.3折</p>
 	                            <img class="act-img-2" src="../../assets/images/5.jpg">
-								<!-- <p class="font-gray md-font center-text">裤子没了皮带 e券给您依赖</p> -->
 	                        </router-link> 
 	                    </li>
+					
 	                    <li>
 	                        <!-- <router-link class="list-box" :to="{path: '/proList', query: {
 	                        	areaId: 7}}">
@@ -134,18 +140,19 @@
 	                        </a> 
 	                    </li>
 	                    <li>
-	                       <router-link class="list-box" :to="{path: '/proList', query: {
-	                       	areaId: 8}}">
-	                       		<!-- <div class="discount"><span>精选</span></div> -->
+	                       <!-- <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 8}}"> -->
+	                       	<a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=11')">	 
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-purple">女神专区</h4>
-                                		<p class="font-gray" >你值得被呵护</p>
+	                            		<h4 class="font-purple">时尚精英</h4>
+                                		<p class="font-gray" >你的潮趣精品</p>
 	                            	</div>
 	                                
 	                            </div>
-	                            <img class="act-img" src="../../assets/images/2.jpg">    
-	                        </router-link> 
+	                            <img class="act-img" src="../../assets/images/2.jpg">  
+	                       	</a>  
+	                        <!-- </router-link>  -->
 	                    </li>
 	                    <li>
 	                       <router-link class="list-box" :to="{path: '/proList', query: {
@@ -164,8 +171,8 @@
 	                        <a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=9')">
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-red-2">家居精选</h4>
-	                                	<p class="font-gray">凉席特价中…</p>
+	                            		<h4 class="font-red-2">居家美物</h4>
+	                                	<p class="font-gray">高颜值靓生活</p>
 	                            	</div>
 		                                
 	                            </div>
@@ -186,17 +193,19 @@
 	                        </router-link> 
 	                    </li> -->
 						<li>
-	                       <router-link class="list-box" :to="{path: '/proList', query: {
-	                       	areaId: 30}}">
+	                       <!-- <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 30}}"> -->
+							<a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=10')">
 	                            <div class="list-info-v">
 	                            	<div>
-	                            		<h4 class="font-orange">精英型男</h4>
-	                                	<p class="font-gray">造型态度兼备</p>
+	                            		<h4 class="font-orange">吃货天堂</h4>
+	                                	<p class="font-gray">幸福感吃出来</p>
 	                            	</div>
 		                                
 	                            </div>
-	                            <img class="act-img" src="../../assets/images/6.jpg">    
-	                        </router-link> 
+	                            <img class="act-img" src="../../assets/images/6.jpg"> 
+							</a>   
+	                        <!-- </router-link>  -->
 	                    </li>
 	                    <li>
 	                        <router-link class="list-box" :to="{path: '/proList', query: {
@@ -205,8 +214,7 @@
 	                            	<div>
 	                            		<h4 class="font-yellow">厨具电器</h4>
 	                                	<p class="font-gray">让生活更方便</p>
-	                            	</div>
-		                                
+	                            	</div> 
 	                            </div>
 	                            <img class="act-img" src="../../assets/images/7.jpg">    
 	                        </router-link> 
@@ -223,61 +231,12 @@
 
 		    <banner :listImg="adsImg" myClass="-c1"></banner>
 
-			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 25}}">
-				<h4>夏日精选</h4>
+			<router-link class="title-list" :to="{path: '/proList', query: {areaId: 83}}">
+				<h4>金秋佳品</h4>
 				<i class="icon-circle"></i>
 			</router-link>
 		    <product :proList="proList3" proThree="true"></product>
-			<!-- <div class="outter-list">
-				<table class="inner-list">
-					<tr>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/1.jpg">
-								<h6 class="nowrap-2">造型态度</h6>
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/2.jpg">
-								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/3.jpg">
-								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/4.jpg">
-								<h6 class="nowrap-2">造型态度</h6>
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/5.jpg">
-								<h6 class="nowrap-2">造型态度兼备造型态度兼备造型态度兼备</h6>
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<img src="../../assets/images/4.jpg">
-								<h6 class="nowrap-2">造型态度兼备</h6>
-							</a>
-						</td>
-						<td class="getmore_pro">
-							<a href="#">
-								<p>查看更多 <i class="icon-down"></i></p>
-							</a>
-						</td>
-					</tr>
-					
-					
-				</table>
-			</div> -->
-
+			 
 		    <router-link class="title-list" :to="{path: '/proList', query: {areaId: 2}}">
 				<h4>人气推荐</h4>
 				<i class="icon-circle"></i>
@@ -304,7 +263,7 @@ import Banner from '/components/swiperDefault'
 import loading from '/components/loading'
 import FooterNav from '/components/footer'
 import product from '/components/product'
-import { getUrlPath } from '/components/mixin'
+import { getUrlPath, getRulesPath } from '/components/mixin'
 // import Swiper from 'swiper'
 // import '/utils/swiper-3.4.2.min.js'
 export default {
@@ -326,12 +285,12 @@ export default {
 	components: {
 	   Banner, product, FooterNav, loading
 	},
-	mixins: [getUrlPath],
+	mixins: [getUrlPath, getRulesPath],
 	mounted() {
 		if(!this.$route.query.productid) {
-			document.title = "e券商城";
+			// document.title = "e券商城";
 			// document.title = "易购积分汇";
-			// document.title = "商城首页";
+			document.title = "商城首页";
 		}	
 		this._initData();
 
@@ -348,7 +307,7 @@ export default {
 			// 轮播图1
 			banner({params:{location: "index_top"}}).then(res => {
 				this.listImg = res.obj;
-				// console.log(res)
+
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
                     window.scrollTo(0,0);
@@ -356,7 +315,7 @@ export default {
 			            pagination: '.swiper-pagination0',
 			            paginationClickable: true,
 			            loop: true,
-			            autoplay: 3000,
+			            autoplay: 4000,
 			            autoplayDisableOnInteraction: false
 			        });
 			        // 只有一张图时禁止轮播
@@ -398,8 +357,8 @@ export default {
 				}
 				
 			});
-			//商品列表(夏日精选)
-			proList({params:{areaId: 25,pageSize: 9}}).then(res => {
+			//商品列表(中秋佳品)
+			proList({params:{areaId: 83,pageSize: 9}}).then(res => {
 				this.proList3 = res.attributes.resultList;
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
@@ -424,8 +383,7 @@ export default {
 					this.proList2.splice(this.proList2.length-1, 1);
 				}
 			});
-			
-	
+
 		},
 		//搜索商品
 		searchTarget(searchVal) {
@@ -545,7 +503,7 @@ export default {
 	    float: left;
 	    padding: .1rem;
 	    &:first-child a {
-	    	height: 9.46rem;
+	    	height: 9.48rem;
 		    display: block;
 		    padding: 10px;
 	    }

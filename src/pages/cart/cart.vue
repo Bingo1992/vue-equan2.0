@@ -178,6 +178,7 @@ export default {
   },
   computed: {
     ...mapState(["cartList"]),
+ 
     // 是否全选
     checkAllFlag() {
       if (this.checkedCount === this.cartList.length) {
@@ -195,7 +196,7 @@ export default {
         this.cartList.forEach(item => {
           if (item.check) {
             i++;
-            this.checkID.push(item.skuId);
+            this.checkID.push(item.skuId);//将选中的id加入数组
           }
         });
       return Number(i);
@@ -203,7 +204,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["INIT_BUYCART", "EDIT_CART", "DELETE_CART"]),
+    ...mapMutations(["INIT_BUYCART", "EDIT_CART", "DELETE_CART", "ADD_CART"]),
     initData() {
       this._getUserTotal();
     },
@@ -227,7 +228,7 @@ export default {
         let proInfo = {
             skuId: this.pro.newSkuId,
             productImg: this.pro.newImg,
-            productName: this.pro.newImg,
+            productName: this.pro.newName,
             currCost: this.pro.newPrice,
             currPrice: this.pro.newMarketPrice,
             check: this.pro.newCheck,
@@ -236,33 +237,43 @@ export default {
             type: this.pro.NewType,
             skuValue: this.pro.newSkuValue
         };
+         addCart({quality: this.pro.newTotal}, this.pro.newSkuId).then(res => {
+            this.ADD_CART(proInfo);
+            this.calcuPay();
+        });
     },
     // 修改数量
     editNum(skuId, quality, check) {
        this._editCart(skuId, quality, check);
     },
-    // 修改属性
+    // 点击修改属性按钮
     changeAttr(oldSkuId, skuVal, name, total, check, ebuy, type) {
         this.showAttrDialog = true;
         this.oldSkuId = oldSkuId;
         this.skuCartValue = skuVal;
         this.pro.newName = name;
-        this.pro.newTotal = total;
         this.pro.newCheck = check;
         this.pro.newEbuy = ebuy;
         this.pro.NewType = type;
+        this.pro.newTotal = total; 
     },
     //关闭属性遮罩
-    closeAttrDialog(flag, skuValue, skuId, price, marketPrice, img) {
+    closeAttrDialog(flag, skuValue, skuId, quality, price, marketPrice, img) {
         this.showAttrDialog = false;
         if(flag) {//有选择属性
             this.pro.newSkuValue = skuValue;
             this.pro.newSkuId = skuId;
             this.pro.newPrice = price;
             this.pro.newMarketPrice = marketPrice;
-            this.pro.newImg = img;
+            this.pro.newImg = img; 
+            
+            let idArray = [];
+            idArray.push(this.oldSkuId);
+            this._delCart(idArray.join(','), idArray);
+            //删除旧数据（第一个参数是以，分隔的字符串，第二个参数是数组）
+            this._addCart();//添加新数据
         } 
-         
+        
 
     },
     //勾选产品

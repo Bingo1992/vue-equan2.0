@@ -44,7 +44,7 @@ export default {
     if (!cart.length || falg) {//添加新的购物车列表
       goods.total = total;
       goods.check = false;
-      cart.push(goods);
+      cart.unshift(goods);
       // console.log(goods)
     }
     state.cartList = cart;

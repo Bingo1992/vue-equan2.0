@@ -7,7 +7,8 @@
 				<div class="box-cnt">
 
 					<ul class="sortNav-fl">
-						<li :class="{'active': sortProIndex==i}" v-for="(item, i) in sortList" :key="i" @click="sortPro(item.classifyName, item.id, i)">
+						<li :class="{'active': sortProIndex==i}" v-for="(item, i) in sortList" :key="i" 
+						@click="sortPro(item.classifyName, item.id, i)">
 							<span>{{item.classifyName}}</span>
 						</li>
 					</ul>
@@ -16,7 +17,8 @@
 							<a :href="bannerUrl"><img :src="getImgPath(bannerImg)"></a>
 							<!-- <a :href="bannerUrl"><img src="../../assets/images/banner1.jpg"></a> -->
 							<ul class="second-sortNav">
-								<li v-for="(item, i) in sortList2" :key="i" @click="getProList(item.classifyName, item.parentId, item.id)">
+								<li v-for="(item, i) in sortList2" :key="i" 
+								@click="getProList(item.classifyName, item.parentId, item.id)">
 									<!-- <router-link :to="{path:'/proList', query: {levelOneCid: item.parentId,levelTwoCid: item.id}}"> -->
 										<img :src="getImgPath(item.classifyImgSrc)">
 										<p>{{item.classifyName}}</p>

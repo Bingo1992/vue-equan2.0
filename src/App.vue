@@ -98,7 +98,9 @@ html {
   /* background-color: #fafafa; */
 }
 body {
-  font: 14px/24px "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+  /* font: 14px/24px "Helvetica Neue", Helvetica, STHeiTi, sans-serif; */
+  font:  14px/24px -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+
   -webkit-user-select: none;
   color: #333;
   background-color: #fff;

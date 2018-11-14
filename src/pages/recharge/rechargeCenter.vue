@@ -16,11 +16,17 @@
 						<p>手机充值</p>
 					</router-link>
 				</li>
-				<li>
+				<!-- <li>
 					<a :href="getUrlPath('/oilCard_recharge.html')">
 						<img src="../../assets/images/oil.png">
 						<p>油卡充值</p>
 					</a>
+				</li> -->
+				<li>
+					<router-link to="/oilCharge">
+						<img src="../../assets/images/oil.png">
+						<p>油卡充值</p>
+					</router-link>
 				</li>
 				<!-- <li>
 					<a :href="getUrlPath('/media_recharge.html')">

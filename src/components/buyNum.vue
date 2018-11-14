@@ -1,17 +1,17 @@
 <template>
 	<div class="amount">
       <span :class="['minus', 'icon-minus', num <= 1? 'dis-btn':'']" @touchstart="down()"></span>
-      <span class="count" @click="showDialog()">{{num}}</span>
-      <span class="plus icon-plus" @touchstart="up()"></span>
+      <span :class="['count', stock == 0? 'dis-btn':'']" @click="showDialog()">{{num}}</span>
+      <span :class="['plus', 'icon-plus', (num >= stock || stock == 0)? 'dis-btn':'']" @touchstart="up()"></span>
 		
 		<div v-if="showNumDialog" class="ui-dialog">
-	        <div class="dialog-cnt">
+	        <div class="dialog-cnt" style="z-index:25">
 	  			<div class="center-text">
 	  				<h5 class="pdt">购买数量</h5>
 	  				<div class="amount">
-	  					 <span :class="['minus', 'icon-minus', num <= 1? 'dis-btn':'']" @touchstart="down()"></span>
+	  					 <span :class="['minus', 'icon-minus', num  <= 1? 'dis-btn':'']" @touchstart="down()"></span>
 					      <input type="number" class="count" maxlength="3" v-model.number="num">
-					      <span class="plus icon-plus" @touchstart="up()"></span>
+					      <span :class="['plus', 'icon-plus', num >= stock? 'dis-btn':'']" @touchstart="up()"></span>
 	  				</div>
 	  			</div>
 	            <div class="two-btn">
@@ -22,6 +22,7 @@
 	　 </div>
 
   </div>
+
 </template>
 <script>
 export default {
@@ -39,13 +40,25 @@ export default {
       },
       proID: {
         type: [Number, String]
+	  },
+	  skuID: {
+        type: [Number, String]
       },
       check: {
 		type: [String, Boolean],
 		default: false
-      },
+	  },
+	  stock: {
+		type: [Number] 
+	  }
+	},
+	mounted() {
+		this.initData();
 	},
 	methods: {
+		initData() {
+			this.num = this.proNum;
+		},
 		up() {
 			this.changeNum('up');
 		},
@@ -53,19 +66,28 @@ export default {
 			this.changeNum('down');
 		},
 		changeNum(type) {
+			
 			if(type === 'up') {//+
-				this.num++;
+			
+				if(this.num >= this.stock) {//数量大于库存
+					this.num = this.stock;
+				} else {
+					this.num++;
+				}
+				
 			} else {//-
 				this.num--;
 			}
-			this.$emit('editNum', this.proID, this.num, this.check);
+			this.$emit('editNum', this.proID, this.skuID, this.num, this.check);
 		},
 		confirmBtn() {
 			this.num = this.num > this.limit ? Number(this.limit) : Number(this.num);
- 			if(this.num < 1 || this.num == '') {
+ 			if(this.num < 1 || this.num == '' || !/^[0-9]*[1-9][0-9]*$/.test(this.num)) {
  				this.num = 1;
- 			}
-			this.$emit('editNum', this.proID, this.num, this.check);
+ 			} else if(this.num >= this.stock) {
+				 this.num = this.stock;
+			 }
+			this.$emit('editNum', this.proID, this.skuID, this.num, this.check);
 			this.showNumDialog = false;
 		},
 		showDialog() {
@@ -74,7 +96,10 @@ export default {
 		closeDialog() {
 			this.showNumDialog = false;
 		}
-	}
+	},
+	watch: {
+        'proNum': 'initData'
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -85,15 +110,15 @@ export default {
     padding: 0;
     display:inline-block;
     background-color: #f4f4f4;
-    width: 30px;
+	width: 30px;
+	&.dis-btn {
+        color: #ccc;
+        pointer-events: none;
+    }
 }
 .minus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    &.dis-btn {
-        color: #ccc;
-        pointer-events: none;
-    }
 }
 .plus {
     border-top-left-radius: 0;
@@ -106,7 +131,11 @@ export default {
     background-color: #f4f4f4;
     display: inline-block;
     vertical-align: middle;
-    text-align: center;
+	text-align: center;
+	&.dis-btn {
+        color: #ccc;
+        pointer-events: none;
+    }
 }
 .ui-dialog {
 	.minus, .plus, .count {

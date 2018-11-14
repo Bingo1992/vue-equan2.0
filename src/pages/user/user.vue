@@ -25,12 +25,13 @@
                 </router-link>
             </li>
             <li>
-            	<a class="list-box" :href="getUrlPath('/convert_data.html')">
+            	<!-- <a class="list-box" :href="getUrlPath('/convert_data.html')"> -->
+                 <router-link class="list-box" to="/orderList">   
                     <i class="icon-order font-green pdr"></i>
                     <span class="list-info-h">我的订单</span>
-<!--                     <span class="circlePoint">{{orderLen}}</span> -->
                     <i class="icon-right"></i>
-                </a>
+                </router-link>    
+                <!-- </a> -->
             </li>
             <li>
                 <router-link class="list-box" :to="{path:'/ticket', query:{tckType: 1}}">
@@ -47,11 +48,13 @@
                 </router-link>
             </li>
             <li>
-               <a class="list-box" :href="getUrlPath('/rpLucky_new1.html')">
+               <!-- <a class="list-box" :href="getUrlPath('/rpLucky_new1.html')"> -->
+                <router-link class="list-box" to="/rpLucky">
                     <i class="icon-ticket-3 font-red pdr"></i>
                     <span class="list-info-h">红包活动</span>
                     <i class="icon-right"></i>
-                </a>
+                </router-link>    
+                <!-- </a> -->
             </li>
         </ul>
 
@@ -64,11 +67,13 @@
                 </a>
             </li>
             <li>
-                <a class="list-box" href="tel:4000408000">
+                <!-- <a class="list-box" href="tel:4000408000"> -->
+                <router-link  class="list-box" to="/user/help" >
                     <i class="icon-help font-green pdr"></i>
                     <span class="list-info-h">咨询帮助</span>
                     <i class="icon-right"></i>
-                </a>
+                </router-link>
+                <!-- </a> -->
             </li>
 
         </ul>
@@ -76,6 +81,11 @@
 		<div class="fixed-bottom bg-show">
 			<footer-nav></footer-nav>	
 		</div>
+
+        <!-- 进入客服咨询 -->
+		<!-- <transition name="router-slid" mode="out-in"> -->
+	    	<router-view></router-view>
+	    <!-- </transition> -->
 
          <!-- 解绑手机号遮罩 -->
        <confirm-dialog v-if="showDialog" :confirm-text="confirmText" showBtn="true" @closeConfirmDialog="closeConfirmDialog" @confirmBtn="confirmBtn" centerText="true"></confirm-dialog>
@@ -140,9 +150,10 @@ export default {
             unbind().then(res => {
                 if(res.resultCode == 200) {
                     this.showHideAlert('已成功解绑手机号');
+                    // this.$router.push({path:'/login', query:{t: timestamp}});
                     setTimeout(() => {
                         this.$router.push('/login');
-                    },1600);
+                    },1000);
                 }
             })
         },
@@ -163,6 +174,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../assets/scss/var.scss";
 .per-img {
 	width: 3rem;
     height: 3rem;

@@ -13,6 +13,7 @@ const Maintain = resolve => require(['/pages/login/maintain'], resolve);
 // 订单
 const OrderList = resolve => require(['/pages/order/orderList'], resolve);
 const OrderDetail = resolve => require(['/pages/order/children/orderDetail'], resolve);
+const TicketDetail = resolve => require(['/pages/order/children/ticketDetail'], resolve);
 const OrderConfirm = resolve => require(['/pages/order/orderConfirm'], resolve);
 const OrderPay = resolve => require(['/pages/order/pay'], resolve);
 const Result = resolve => require(['/pages/order/result'], resolve);
@@ -50,8 +51,11 @@ const AccountDetail = resolve => require(['/pages/account/children/accountDetail
 const ProList = resolve => require(['/pages/product/productList'], resolve);
 const sort = resolve => require(['/pages/sort/sort'], resolve);
 const ProDetail = resolve => require(['/pages/product/children/productDetail'], resolve);
-
+// others
 const Activity = resolve => require(['/pages/home/activity'], resolve);
+const VipCenter = resolve => require(['/pages/home/vipCenter'], resolve);
+const Help = resolve => require(['/pages/user/children/help'], resolve);
+const Appeal = resolve => require(['/pages/user/children/children/appeal'], resolve);
 
 Vue.use(Router)
 
@@ -77,6 +81,12 @@ export default new Router({
       }]
     },
     {
+      path: '/vipCenter',
+      component: VipCenter,
+      name: 'VipCenter',
+      meta: {title: '会员特权'} 
+    },
+    {
       path: '/activity',
       component: Activity,
       name: 'Activity',
@@ -98,7 +108,19 @@ export default new Router({
       path: '/user',
       component: User,
       name: 'User',
-      meta: {title: '个人中心'}
+      meta: {title: '个人中心'},
+      children:[{
+        path: 'help',
+        component: Help,
+        name: 'Help',
+        meta: {title: '客服咨询'},
+        children: [{
+          path: 'appeal',
+          component: Appeal,
+          name: 'Appeal',
+          meta: {title: '卡券申诉'}
+        }]
+      }]
     },
     {
       path: '/proList',
@@ -145,7 +167,12 @@ export default new Router({
           component: OrderDetail,
           name: 'OrderDetail',
           meta: {title: '订单详情'}
-      }]
+      },{
+        path: 'ticketDetail',
+        component: TicketDetail,
+        name: 'TicketDetail',
+        meta: {title: '电子券详情'}
+    }]
     },
     {
       path: '/chooseAddress',

@@ -8,7 +8,8 @@ export default {
 		}
 	},
 	  // 加入购物车
-  	['ADD_CART'](state, { 
+  	['ADD_CART'](state1, { 
+      productId,
       skuId, 
       productImg, 
       productName, 
@@ -18,10 +19,13 @@ export default {
       total, 
       ebuy,
       type,
-      skuValue}) {
-    let cart = state.cartList; // 购物车
+      skuValue,
+      stock,
+      state}) {
+    let cart = state1.cartList; // 购物车
     let falg = true;
     let goods = {
+      productId,
       skuId,
       productImg,
       productName,
@@ -29,7 +33,9 @@ export default {
       currPrice,
       ebuy,
       type,
-      skuValue
+      skuValue,
+      stock,
+      state
     }
     if (cart.length) { // 有内容
       cart.forEach(item => {
@@ -47,7 +53,7 @@ export default {
       cart.unshift(goods);
       // console.log(goods)
     }
-    state.cartList = cart;
+    state1.cartList = cart;
     // 存入localStorage
     setStore('buyCart', cart);
   },

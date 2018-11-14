@@ -8,7 +8,7 @@
 	        </div>
 			<div class="two-btn">
 				<router-link class="btn-border btn-recharge" :to="{path:'/ticket',query:{tckType:1}}">e{{eIndex === 0? '币':'购'}}充值</router-link>
-				<router-link v-if="eIndex === 0" class="btn-border" to="/redpacketCharge">红包兑换</router-link>
+				<router-link v-if="eIndex === 0 && ebi != 0" class="btn-border" to="/redpacketCharge">红包兑换</router-link>
 			</div>
 	        
 	  </div>

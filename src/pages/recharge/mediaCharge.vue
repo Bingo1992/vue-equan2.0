@@ -79,7 +79,8 @@
     </div> 
     
     <div class="btn">
-        <p class="btn-pure-theme" @click="gotoPay()">立即支付</p>
+        <p :class="[cantClick? 'cantClick': '','btn-pure-theme']" 
+        @click="gotoPay()">立即支付</p>
     </div>
 
     <!-- 信息确认遮罩 -->
@@ -121,6 +122,7 @@ export default {
       showAlertTip: false,
       formLoading: false,
       alertText: "",
+      cantClick: false,//按钮是否可点击
       idx: 0,
       imgIdx: 0,
       typeIdx: 0,
@@ -460,6 +462,7 @@ export default {
     },
     // 确认充值
     _confirmCharge() {
+      this.cantClick = true;//按钮不可用
       this.showDialog = false;
       this.showAlertTip = true; //提交中提示
       this.formLoading = true;
@@ -472,6 +475,7 @@ export default {
           if (res.success) {
             this.$router.push("/result");
           } else {
+            this.cantClick = false;//按钮恢复点击
             this.showHideAlert(res.msg);
           }
         });
@@ -483,6 +487,7 @@ export default {
               if(res.success) {
                    window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.odNo);   
               } else {
+                  this.cantClick = false;//按钮恢复点击
                   this.showHideAlert(res.msg);
               }
           })

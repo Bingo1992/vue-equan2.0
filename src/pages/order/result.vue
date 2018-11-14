@@ -8,7 +8,7 @@
       </div>
       <div class="rich-box font-gray">
         <p class="center-text pdb" v-if="type == 1">本次共增加{{ebi}}e币</p>
-        <p v-if="type == 2">1.红包将在48小时内发送,如出现"待发送"状态请耐心等待;<br>2.由于微信系统限制，建议兑换操作不能过于频密。</p>
+        <p v-if="type == 2">1.红包将在<span class="font-orange">72小时</span>内发送,如出现"待发送"状态请耐心等待;<br>2.由于微信系统限制，建议兑换操作不能过于频密。</p>
         <p v-if="type == 8">尊敬的VIP客户：车主权益将在7天内发放至您的账户，请注意查收，谢谢！</p>
         <p class="center-text pdb" v-if="type == 10">本次共增加{{ebuy}}e购+{{ebi}}e币</p>
         <p class="center-text pdb" v-if="type == 12">本次共增加{{ebuy}}e购</p>
@@ -17,8 +17,9 @@
       
       </div>
       <div class="two-btn">
-          <router-link class="btn-pure-theme" to="/home">e币商城</router-link>   
-          <a class="btn-gray" :href="getUrlPath('/convert_data.html')">查看订单</a>
+          <router-link class="btn-pure-theme" to="/home">商城首页</router-link>   
+          <router-link class="btn-gray" to="/orderList">查看订单</router-link>   
+          <!-- <a class="btn-gray" :href="getUrlPath('/convert_data.html')">查看订单</a> -->
       </div>
 
        <router-link class="title-list" :to="{path: '/proList', query: {areaId: 13}}" style="margin-top:1.5rem;">
@@ -92,7 +93,7 @@
               document.title = "支付结果";
             }
             //商品列表(推荐)
-            proList({params:{areaId: 13}}).then(res => {
+            proList({params:{areaId: 13,pageSize: 40}}).then(res => {
               this.proList2 = res.attributes.resultList;
               if(this.proList2.length % 3 == 1){
                 this.proList2.splice(this.proList2.length-1, 1);

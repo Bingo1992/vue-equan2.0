@@ -6,7 +6,8 @@
         </div>
         <div class="bg-gray list-box">
             <span class="list-info-h">请选择兑换类型</span>
-            <span v-if="e.type === 'ebuy'" class="font-orange" @click="showConfirmDialog('e购说明',egouText)"><i class="btn-help-e">?</i>什么是e购</span>
+            <span v-if="e.type === 'ebuy'" class="font-orange" 
+            @click="showConfirmDialog('e购说明',egouText)"><i class="btn-help-e">?</i>什么是e购</span>
             <i v-if="e.type === 'ebuy'" class="icon-right"></i>
         </div>
 
@@ -106,7 +107,8 @@
         </ul>
 
         <div class="btn">
-            <p :class="['btn-pure-theme',inputType==0?'disbtn':'']" @click="exchange()">确定兑换</p>
+            <p :class="['btn-pure-theme',inputType==0?'disbtn':'', cantClick?'cantClick':'']"
+             @click="exchange()">确定兑换</p>
              <!-- <p class="btn-pure-theme" @click="exchange()">确定兑换</p> -->
         </div>
 
@@ -157,10 +159,11 @@ export default {
           showAds: false,//公告
           confirmTitle:'',
           confirmText:'',
-          alertText: "",//提交中提示
           egouText: '1. 我的e购账户是指用户在e券中的特殊账户，每张卡券会按特定比例将部分金额充入我的e购账户。比例由发券企业设置，不可更改;<br>2.我的e购账户中的金额，只能购买e券商城中的支持e购账户购买的礼品，不能购买其他服务;<br>3.兑换多张卡券时e购账户中的金额可累加，使用时可分多次使用。',
+          alertText: "",//提交中提示
           showAlertTip: false,
           formLoading: false,
+          cantClick: false,//按钮是否可点击
           adsImg: [],
           tkId: '',
           tkVal: '',
@@ -247,6 +250,7 @@ export default {
         },
       
         closeAdsDialog() {
+          this.cantClick = true;//按钮不可点击
           this.showAds = false;
           this.showAlertTip = true;//提交中提示
           this.formLoading = true;
@@ -258,9 +262,11 @@ export default {
                 redPacket: this.e.redPacket
             }}).then(res => {
                 if(res.resultCode == 200) {
-                     this.$router.push({path:'/result',query:{type: this.inputType, ebuy: this.e.ebuy,ecoin: this.e.ebi, redPacket: this.e.redPacket}});
+                     this.$router.push({path:'/result',query:{type: this.inputType, 
+                     ebuy: this.e.ebuy,ecoin: this.e.ebi, redPacket: this.e.redPacket}});
                  } else {
-                    this.showAlertTip = false;//提交中提示
+                    this.cantClick = false;//按钮恢复点击
+                    this.showAlertTip = false; 
                     this.formLoading = false;
                     this.showConfirmDialog('温馨提示', res.resultMsg);
                     // this.showHideAlert(res.resultMsg);
@@ -283,16 +289,16 @@ export default {
         //关闭遮罩
         closeConfirmDialog() {
           this.showDialog = false;
-        },
-        //显示隐藏提示框
-        showHideAlert(text) { 
-            this.showAlertTip = true;
-            this.formLoading = false;
-            this.alertText = text;
-            setTimeout(() => {
-                this.showAlertTip = false;
-            }, 1500);
         }
+        //显示隐藏提示框
+        // showHideAlert(text) { 
+        //     this.showAlertTip = true;
+        //     this.formLoading = false;
+        //     this.alertText = text;
+        //     setTimeout(() => {
+        //         this.showAlertTip = false;
+        //     }, 1500);
+        // }
       
     }
 

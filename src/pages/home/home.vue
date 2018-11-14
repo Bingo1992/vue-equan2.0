@@ -79,7 +79,7 @@
 				</li> -->
 				<!-- <li>
 					<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd0cc97b55aebf775&redirect_uri=http://wz.haicar.cn/joysim-car/openwx/index.html&response_type=code&scope=snsapi_base&state=STATE&component_appid=wxce521621dc4ddb26#wechat_redirect">
-						<img src="../../../static/images/3.png">
+						<img src="../../.. /static/images/3.png">
 						<p>违章查办</p>
 					</a>
 				</li> -->
@@ -95,7 +95,13 @@
 						<p>违章查办</p>
 					</a>
 				</li>
-				<li>
+				<li v-if="account == 0 && domain1 === 'https://equan2.yesm.cn'">
+					<router-link to="/vipCenter">
+						<img src="../../../static/images/5.png">
+						<p>特权中心</p>
+					</router-link>
+				</li>
+				<li v-else>
 					<router-link to="/rechargeCenter">
 						<img src="../../../static/images/4.png">
 						<p>充值中心</p>
@@ -113,7 +119,7 @@
 	                        	areaId: 5}}">
 	                            <div class="hot"><span>SALE</span></div>
 	                            <h4 class="font-red center-text">每周特价</h4>
-	                            <p class="font-gray center-text">优惠低至2.3折</p>
+	                            <p class="font-gray center-text">低至29元起</p>
 	                            <img class="act-img-2" src="../../assets/images/5.jpg">
 	                        </router-link> 
 	                    </li>
@@ -140,9 +146,9 @@
 	                        </a> 
 	                    </li>
 	                    <li>
-	                       <!-- <router-link class="list-box" :to="{path: '/proList', query: {
-	                       	areaId: 8}}"> -->
-	                       	<a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=11')">	 
+	                       <router-link class="list-box" :to="{path: '/proList', query: {
+	                       	areaId: 8}}">
+	                       	<!-- <a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=11')">	  -->
 	                            <div class="list-info-v">
 	                            	<div>
 	                            		<h4 class="font-purple">时尚精英</h4>
@@ -151,8 +157,8 @@
 	                                
 	                            </div>
 	                            <img class="act-img" src="../../assets/images/2.jpg">  
-	                       	</a>  
-	                        <!-- </router-link>  -->
+	                       	<!-- </a>   -->
+	                        </router-link> 
 	                    </li>
 	                    <li>
 	                       <router-link class="list-box" :to="{path: '/proList', query: {
@@ -208,8 +214,9 @@
 	                        <!-- </router-link>  -->
 	                    </li>
 	                    <li>
-	                        <router-link class="list-box" :to="{path: '/proList', query: {
-	                        	areaId: 31}}">
+	                       <!-- <router-link class="list-box" :to="{path: '/proList', query: {
+	                        	areaId: 31}}"> -->
+							<a class="list-box" :href="getUrlPath('/wechatArticle.html?wechatArticleId=12')">	
 	                            <div class="list-info-v">
 	                            	<div>
 	                            		<h4 class="font-yellow">厨具电器</h4>
@@ -217,7 +224,8 @@
 	                            	</div> 
 	                            </div>
 	                            <img class="act-img" src="../../assets/images/7.jpg">    
-	                        </router-link> 
+	                        <!-- </router-link>  -->
+							</a>
 	                    </li>
 	                </ul>
 	            </div>
@@ -251,19 +259,20 @@
 		    	<footer-nav></footer-nav>
 		    </div>
 
+			<!-- 维护提醒遮罩 -->
+			<!-- <confirm-dialog v-if="showDialog" confirmTitle="温馨提示" confirmText="由于中石化官方充值通道维护，目前暂停中石化油卡充值。" @closeConfirmDialog="closeConfirmDialog"></confirm-dialog> -->
 		<!-- </div> -->
-
-			
-	
 	</div>
 </template>
 <script>
 import {integral, banner, proList} from '/api/api'
 import Banner from '/components/swiperDefault'
 import loading from '/components/loading'
+// import confirmDialog from '/components/confirmDialog'
 import FooterNav from '/components/footer'
 import product from '/components/product'
 import { getUrlPath, getRulesPath } from '/components/mixin'
+import {domainUrl} from '/utils/env'
 // import Swiper from 'swiper'
 // import '/utils/swiper-3.4.2.min.js'
 export default {
@@ -272,8 +281,10 @@ export default {
 		return {
 			list: [],
 			showLoading: true,
+			showDialog: true,
 			account: 0, //e币
 			ebuy: 0,//e购
+			domain1: domainUrl,//当前域名
 			searchVal: '',//搜索内容
 			adsImg: [],
 			listImg: [],
@@ -348,16 +359,21 @@ export default {
 			//商品列表(首发)
 			proList({params:{areaId: 3,pageSize: 9}}).then(res => {
 				this.proList1 = res.attributes.resultList;
+			 
 				this.$nextTick(() => {
                     window.scrollTo(0,1);
                     window.scrollTo(0,0);
                 })
-				if(this.proList1.length % 3 != 0){
+				if(this.proList1.length % 3 == 1){
 					this.proList1.splice(this.proList1.length-1, 1);
 				}
+				if(this.proList1.length % 3 == 2){
+					this.proList1.splice(this.proList1.length-2, 2);
+				}
+
 				
 			});
-			//商品列表(中秋佳品)
+			//商品列表(金秋佳品)
 			proList({params:{areaId: 83,pageSize: 9}}).then(res => {
 				this.proList3 = res.attributes.resultList;
 				this.$nextTick(() => {
@@ -389,6 +405,9 @@ export default {
 		searchTarget(searchVal) {
 			this.$router.push({path:'/proList', query:{searchVal: searchVal}})
 		}
+		// closeConfirmDialog() {
+		// 	this.showDialog = false;
+		// }
 	}
 
 }

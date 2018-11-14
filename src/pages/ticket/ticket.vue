@@ -7,25 +7,26 @@
 			<router-link v-if="tckType==1" class="list-box bg-gray" to="/ticketCode">
 		    	<div class="list-info-h">
 		    		<span>使用e券积分卡充值</span>
-		    		<i class="icon-tip" @click.prevent="showConfirmDialog()">?</i>
+		    		<i class="icon-tip" @click.prevent="showConfirmDialog('帮助', '1、刮开e券积分卡背面的“密码”涂层；<br>2、将密码输入到“码券”，安全码输入到“安全码”；<br>3、拖动滑条获取图片验证码，按提示点击图片中的图案；<br>4、点击“充值”进入充值页面')">?</i>
 		    	</div>
 		    	<i class="icon-right"></i>
 		    </router-link>
 
 			<div v-if="tckList.length === 0" class="nothing">
-					<div class="center-text">
-						<i class="icon-ticket"></i>
-						<h4>您的账户暂无卡券</h4>
-						<router-link class="font-red" to="/home">进入e券商城逛逛</router-link>
-					</div>
-			        
+				<div class="center-text">
+					<i class="icon-ticket"></i>
+					<h4>您的账户暂无卡券</h4>
+					<router-link class="font-red" to="/home">进入商城逛逛</router-link>
+				</div>    
 		    </div>
 
 		    <ul v-else class="ticket-list border-list">
-				<li class="list-box" v-for="(item, i) in tckList" :key="i" @click="gotoDetail(item.eticketProductId, item.id, item.code)">
+				<li class="list-box" v-for="(item, i) in tckList" :key="i" 
+				@click="gotoDetail(item.eticketProductId, item.id, item.code, item.category)">
 	                <div class="ticket-img">
 	                     <img src="../../assets/images/ticket1.jpg">
-	                     <p>￥<span>{{item.price}}</span></p>
+						 <p v-if="item.category == '汽车服务'">1次</p>
+	                     <p v-else>￥<span>{{item.price}}</span></p>
 	                </div>
 	               
 	                <div class="list-info-v">
@@ -36,9 +37,10 @@
 						</div>
 							
 	                </div>
-	                
-	                <!-- <router-link v-if="tckType==1" class="btn-pure-theme btn-normal" :to="{path:'/exchange', query: {tkId: item.id,tkVal: item.code}}">点击充值</router-link> -->
-					<p v-if="tckType==1" class="btn-pure-theme btn-normal">点击充值</p>
+
+					<p v-if="tckType==1 && item.category == '汽车服务'" class="btn-pure-theme btn-normal">立即使用</p>
+					<p v-else-if="tckType==1 && item.category != '汽车服务'" class="btn-pure-theme btn-normal">点击充值</p>
+					
 	                <i v-else class="icon-right"></i>
 		        </li>
 			</ul>
@@ -97,20 +99,23 @@ export default {
 			})
 		},
 		//显示遮罩
-	    showConfirmDialog() {
+	    showConfirmDialog(title, text) {
 	      this.showDialog = true;
-	      this.confirmTitle = '帮助';
-	      this.confirmText = '1、刮开e券积分卡背面的“密码”涂层；<br>\
-	      2、将密码输入到“码券”，安全码输入到“安全码”；<br>\
-	      3、拖动滑条获取图片验证码，按提示点击图片中的图案；<br>\
-	      4、点击“充值”进入充值页面';
+	      this.confirmTitle = title;
+	      this.confirmText = text;
 	       // event.cancelBubble = true;
 	    },
-	    gotoDetail(ticketId, id, code) {
-	    	if(this.tckType == 2) {
+	    gotoDetail(ticketId, id, code, category) {
+		 
+	    	if(this.tckType == 2) {//企业赠券
 	    		window.location.href = this.getESMPath('/product?id=' + ticketId);
-	    	} else {
-				this.$router.push({path: '/exchange', query: {tkId: id,tkVal: code}});
+			} else {//我的卡券
+				if(category == '汽车服务') {
+					this.showConfirmDialog('温馨提示','服务通道正在维护，暂时无法使用，敬请谅解。');
+				} else {
+					this.$router.push({path: '/exchange', query: {tkId: id,tkVal: code}});
+				}
+				
 			}
 	    },
 		//关闭遮罩

@@ -19,13 +19,13 @@
 		                    <span>{{i == 0? sortPro: odByName}}</span>
 		                    <i :class="[sortIndex == i?'icon-arrow-up font-theme':'icon-arrow-down']"></i>
 		                </p>
-
 		            </li>
 		        </ul>
 			</div>
 
 			<!-- 筛选遮罩 -->
-			<sort-tabs v-show="sortIndex != null" :sortIndex="sortIndex" @closeDialog="closeDialog" @sortPrice="sortPrice" @sortType="sortType"></sort-tabs>
+			<sort-tabs v-show="sortIndex != null" :sortIndex="sortIndex" 
+			@closeDialog="closeDialog" @sortPrice="sortPrice" @sortType="sortType"></sort-tabs>
 
 			<!-- 商品列表 -->
 			<product v-if="proList.length" :proList="proList"></product>

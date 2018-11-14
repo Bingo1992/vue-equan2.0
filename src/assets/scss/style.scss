@@ -171,7 +171,8 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
   // height: 100%;
   z-index: 6;
   background-color: #fff;
-  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
       // padding-bottom: 84px;
   -webkit-overflow-scrolling: touch;
   padding-bottom: constant(safe-area-inset-bottom);
@@ -317,6 +318,7 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
     background: rgba(0,0,0,.4); 
     @extend %fixed-body;
     z-index: 20;
+    overflow: auto;
 }
 .dialog-cnt {
     position: relative;
@@ -495,7 +497,7 @@ i.icon-right,i.icon-up,i.icon-down,i.icon-left {
 .rich-box {
     padding: $gauge;
     box-sizing: border-box;
-    text-align: justify;
+    // text-align: justify;
     line-height: 22px;
     .list-box {padding: 0;}
     .text,img {
@@ -739,7 +741,7 @@ li.vcode-box{
 .label {
     overflow: hidden;
     [class^="label-"] {
-        margin-top: .4rem;
+        margin: .2rem 0;
         line-height: .8rem;
         margin-right: 6px;
         float: left;
@@ -856,3 +858,4 @@ li.vcode-box{
 .show {display: block !important;}
 .hide {display: none !important;}
 .disbtn {pointer-events:none;background: #ccc;}
+.cantClick{ pointer-events: none;}

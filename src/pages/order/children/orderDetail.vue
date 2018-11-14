@@ -25,15 +25,16 @@
 				<span class="pdr">卡号：</span>
 				<span>{{oil.oilCardNum}}</span>
 			</li>  
-			<li>
+			<li v-if="oil.type == '中石油油卡'">
 				<span class="pdr">姓名：</span>
 				<span>{{oil.name}}</span>
 			</li>  
-			<li>
+			<li v-if="oil.type == '中石油油卡'">
 				<span class="pdr">身份证号：</span>
 				<span>{{oil.IDcard}}</span>
 			</li>        
 		</ul>
+
 
 		<!-- 手机媒体充值 -->
 		<ul class="order-detail" v-if="recharge.flag">    
@@ -47,8 +48,16 @@
 			</li>      
 		</ul>
 
+		<!-- 人保VIP -->
+		<ul class="order-detail" v-if="picc.flag">     
+			<li>
+				<span class="pdr">手机号：</span>
+				<span>{{picc.mobileNum}}</span>
+			</li>      
+		</ul>
+
 		<!-- 商品 -->
-		<div v-if="pro.flag">
+		<div v-if="pro.flag && !pro.ticket">
 			<div class="list-box border-bottom">
 				<i class="icon-map pdr"></i>
 				<div class="list-info-v">
@@ -56,13 +65,22 @@
 					<p>{{pro.address}}</p>
 				</div>
 			</div>
-			<div v-if="logisticsInfo.length == 0" class="list-box"  >
+			<!-- <div v-if="logisticsInfo.length == 0" class="list-box"  >
 				<p class="list-info-h">暂无物流信息</p>
 			</div>
 			<div v-else class="list-box" @click="showLogistics = true">
-				<p class="list-info-h">{{logisticsInfo[0].AcceptStation}}</p>
-				<span class="pdl">点击查看<i class="icon-right"></i></span>
+				<p class="list-info-h md-font">{{logisticsInfo[0].AcceptStation}}</p>
+				<span class="pdl font-gray">点击查看<i class="icon-right"></i></span>
+			</div> -->
+			 
+			<div v-if="!hasDeliver" class="list-box">
+				<p class="list-info-h">暂无物流信息</p>
 			</div>
+			<div v-else class="list-box" @click="showLogistics = true">
+				<p class="list-info-h md-font">{{logisticsInfo.length != 0? logisticsInfo[0].AcceptStation : '包裹正在等待揽收'}}</p>
+				<span class="pdl font-gray md-font">查看物流<i class="icon-right"></i></span>
+			</div>
+		 
 		</div>
 
 		<!-- 电子券 -->
@@ -80,9 +98,19 @@
 				</div>
 			</div>
 
-			<div v-if="esm.flag || recharge.flag || oil.flag" class="list-box border-bottom">
-				<img class="list-img-small" :src="getUrlPath(typeList[type].src)">
-			 
+			<div v-if="esm.flag || recharge.flag || oil.flag || redpacket.flag || picc.flag" class="list-box border-bottom">
+				<!-- <img class="list-img-small" :src="getUrlPath(typeList[type].src)"> -->
+			 <img v-if="type === 1" class="list-img-small" src="../../../assets/images/picEb.png">
+			<img  v-if="type === 2 || type === 13" class="list-img-small" src="../../../assets/images/picRb.png">
+			<img  v-if="type === 3 || type === 5" class="list-img-small" src="../../../assets/images/oil.png">
+			<img  v-if="type === 4" class="list-img-small" src="../../../assets/images/mobile.png">
+			<img  v-if="type === 6" class="list-img-small" src="../../../assets/images/flow.png">
+			<img  v-if="type === 8" class="list-img-small" src="../../../assets/images/a8.png">
+			<img  v-if="type === 9" class="list-img-small" src="../../../assets/images/media.png">
+			<img  v-if="type === 10" class="list-img-small" src="../../../assets/images/picEb.png">
+			<img  v-if="type === 11" class="list-img-small" src="../../../assets/images/picRb.png">
+			<img  v-if="type === 12" class="list-img-small" src="../../../assets/images/ebuy.png">
+
 				<div class="list-info-v">
 					<h5  class="nowrap-2">{{typeList[type].name}}</h5>
 					<p v-if="type == 4 || type == 6 || type == 9">{{orderName}}</p>
@@ -98,7 +126,7 @@
 				</p>
 			</div>
 
-			<ul v-if="esm.flag" class="order-detail">
+			 <ul v-if="esm.flag || redpacket.flag" class="order-detail"> <!--esm或红包 -->
 				<li>
 					<span>商品总额：</span>
 					<span class="fr">￥{{amount}}</span>
@@ -180,9 +208,13 @@ export default {
 			exchangeECoin: 0,//发放的e币
 			orderName: '-',
 			showLogistics: false,
+			hasDeliver: false,//是否发货
 			company: '',
 			logisId: '',
 			logisticsInfo: [],
+			redpacket: {
+				flag: false
+			},
 			esm: {
                 flag: false,
 				esmNum: '',//卡券号码  
@@ -202,9 +234,14 @@ export default {
 				mediaFlag: false,
 				mobileNum: '',//手机号 
 				mediaNum: ''//充值账号
-            },
+			},
+			picc: {
+				flag: false,
+				mobileNum: ''//手机号
+			},
             pro: {
-                flag: false,
+				flag: false,
+				ticket: false,
 				name: '',
 				mobile: '',
 				address: '',
@@ -214,6 +251,7 @@ export default {
 			stateList: {
 				0: {
 					'-1': '已取消',
+					99: '异常',
 					0: '未支付',
 					1: '已支付，待发货',
 					2: '已发货',
@@ -221,61 +259,90 @@ export default {
 					4: '已退款'
 				},
 				1: {
+					'-1': '已取消',
+					99: '异常',
 					1: '兑换成功'
 				},
 				2: {
+					'-1': '已取消',
+					99: '异常',
 					0: '未发送',
 					1: '已发送'
 				},
 				3: {
+					'-1': '已取消',
+					99: '异常',
 					1: '排队中',
 					2: '充值成功',
 					3: '充值失败，已退款',
 					4: '部分成功，失败部分退款'
 				},
 				4: {
+					'-1': '已取消',
+					99: '异常',
+					0: '未支付',
 					1: '排队中',
 					2: '充值成功',
 					3: '充值失败',
 					4: '已退款'
 				},
 				5: {
+					'-1': '已取消',
+					99: '异常',
 					1: '排队中',
 					2: '充值成功',
 					3: '充值失败，已退款',
 					4: '部分成功，失败部分退款'
 				},
 				6: {
+					'-1': '已取消',
+					99: '异常',
+					0: '未支付',
 					1: '排队中',
 					2: '充值成功',
 					3: '充值失败',
 					4: '已退款'
 				},
 				7: {
+					'-1': '已取消',
+					99: '异常',
 					0: '未支付',
 					1: '已支付，待发券',
 					2: '已发券' 
 				},
 				8: {
+					'-1': '已取消',
+					99: '异常',
 					0: '兑换成功，待发卡' 
 				},
 				9: {
+					'-1': '已取消',
+					99: '异常',
+					0: '未支付',
 					1: '排队中',
 					2: '充值成功',
 					3: '充值失败',
 					4: '已退款'
 				},
 				10: {
+					'-1': '已取消',
+					99: '异常',
 					1: '兑换成功' 
 				},
 				11: {
+					'-1': '已取消',
+					99: '异常',
 					0: '未发送',
 					1: '已发送' 
 				},
 				12: {
+					'-1': '已取消',
+					99: '异常',
 					1: '兑换成功' 
 				},
 				13: {
+					'-1': '已取消',
+					99: '异常',
 					0: '未发送',
 					1: '已发送' 
 				}
@@ -352,9 +419,14 @@ export default {
 			  this.esm.esmNum = data.esmNum;
 			  this.esm.name = data.esmProductName;
 			  //   油卡
-			  if(data.cardholderIdCard) {
+			  if(data.oliCarNum) {
 				let len = data.cardholderIdCard.length;
 				this.oil.oilCardNum = data.oliCarNum;
+				if(data.oliCarNum.substring(0, 6) === "100011") {
+					this.oil.type = "中石化油卡";
+				} else {
+					this.oil.type = "中石油油卡";
+				}
 				this.oil.IDcard = data.cardholderIdCard.replace(/(\w)/g,function(a,b,c,d){return (c>3 && c < len-4)?'*':a});
 				this.oil.name = data.cardholderName;
 			  }
@@ -368,21 +440,31 @@ export default {
 			  this.recharge.mediaNum = data.mediaRechargeAccount;
 			  this.orderName = data.orderName;
 			  
-	 
+	 		 
 			//  "0":实物,"1":电子券兑换e币,"2":电子券兑换红包,"3":电子券充值油卡,"4":话费充值,"5":e币充值油卡,"6":流量充值,"7":电子券,"8":人保vip,"9":流媒体充值 "10"：电子券兑换e币+e购 "11": 电子券兑换红包+e购 "12": 电子券兑换e购 "13"：e币兑换红包 
 			  if(data.orderType == 0) {
 				  this.type = 0; 
 				  this.pro.flag = true;
 				  this.pro.list = data.detailVoList;
 	 
-				if(data.logisticsInfo) {
+				// if(data.logisticsInfo) {
+				// 	this.company = data.expressSupplier;
+				//   	this.logisId = data.expressNumber;
+				// 	for(let i = data.logisticsInfo.length-1; i >= 0; i--) {
+				// 		this.logisticsInfo.push(data.logisticsInfo[i]);
+				// 	}
+				// }
+				if(data.expressSupplier) {
+					this.hasDeliver = true;
 					this.company = data.expressSupplier;
-				  	this.logisId = data.expressNumber;
-					for(let i = data.logisticsInfo.length-1; i >= 0; i--) {
-						this.logisticsInfo.push(data.logisticsInfo[i]);
+					this.logisId = data.expressNumber;
+					if(data.logisticsInfo) {//倒序输出物流信息
+						for(let i = data.logisticsInfo.length-1; i >= 0; i--) {
+							this.logisticsInfo.push(data.logisticsInfo[i]);
+						}
 					}
-				}
-				  
+					
+				} 
 
 			  } else if(data.orderType == 1) {
 				  this.type = 1; 
@@ -406,9 +488,12 @@ export default {
 			  } else if(data.orderType == 7) {
 				  this.type = 7; 
 				  this.pro.flag = true;
-			  } else if(data.orderType == 8) {
+				  this.pro.ticket = true;
+				  this.pro.list = data.detailVoList;
+			  } else if(data.orderType == 8) {//人保VIP
 				  this.type = 8; 
-				  this.recharge = true;
+				  this.picc.flag = true;
+				  this.picc.mobileNum = data.mobile;
 			  } else if(data.orderType == 9) {
 				  this.type = 9; 
 				  this.recharge.flag = true;
@@ -424,8 +509,9 @@ export default {
 				  this.esm.flag = true;
 			  } else if(data.orderType == 13) {
 				  this.type = 13; 
-				  this.esm.flag = true;
+				  this.redpacket.flag = true;
 			  }
+	 		  
 			  if(data.exchangeEBuy) { this.exchangeEBuy = data.exchangeEBuy; }
 			  if(data.exchangeECoin) { this.exchangeECoin = data.exchangeECoin; }
 			  if(data.eBuy) { this.ebuy = data.eBuy; }

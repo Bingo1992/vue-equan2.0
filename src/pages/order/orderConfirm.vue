@@ -110,7 +110,7 @@
                 </p> 
               </div>
             
-              <button class="btn-theme" @click="gotoPay1"> 立即付款</button>
+              <button :class="[cantClick? 'cantClick': '','btn-theme']" @click="gotoPay1"> 立即付款</button>
           </div>
         </div>
     <!-- </section> -->
@@ -150,6 +150,7 @@
             showAlertTip: false,
             flag: false,//true则全部是虚拟物品
             formLoading: false,//提交中提示
+            cantClick: false,//按钮是否可点击
             pay: {
               egou: 0,
               ebi: 0,
@@ -195,7 +196,7 @@
                if(item.type == 2) {//虚拟商品
                    virtual++;
                }
-              let str = item.productId  +':' +item.total;
+              let str = '"'+item.skuId+'"' +':' +item.total;
               // if(item.check) {
               this.paramsList.push(str);
               // } else {
@@ -269,6 +270,7 @@
             if(!this.flag && this.chooseAddress.length === 0) {
                 this.showHideAlert("请添加地址");
             } else {
+                this.cantClick = true;//按钮不可用
                 this.showAlertTip = true;//提交中提示
                 this.formLoading = true;
                 this.alertText = '提交中，请稍候'; 
@@ -280,13 +282,14 @@
                 //     remark: this.remark
                 // })
 
-                gotoPay({params:{
+                gotoPay({
                     addressid: this.curAdsId, 
-                    params:str, 
+                    content: JSON.parse(str), 
                     remark: this.remark
-                }}).then(res => {
+                }).then(res => {
                     if(res.success == false) {
-                        this.showHideAlert(res.msg);
+                        this.cantClick = false;//按钮恢复使用
+                        this.showHideAlert(res.msg); 
                     } else if(Number(res.attributes.wxPayTotal) > 0) {
                         // console.log(res.attributes.payOrderId)
                         window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.payOrderId);

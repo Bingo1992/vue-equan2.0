@@ -1,10 +1,10 @@
 <template>
 	<ul :class="['pro-list', proThree? 'pro-list-1':'pro-list-2', activity?'pro-list-3':'']">
-		<li v-if="item.state == 1" v-for="(item, i) in proList" :key="i" @click="gotoDetail(item.id)">
+		<li  v-for="(item, i) in proList" :key="i" @click="gotoDetail(item.skuId, item.productId)">
 				<div :class="[proThree? 'pro-img-1':'pro-img-2']">
 					<!-- <div class="imgLoad" :style="{ backgroundImage: 'url(' + getImgPath(item.pic.split(';')[0]) + ')' }"></div> -->
-					<div v-if="item.areaId" class="imgLoad" :style="{ backgroundImage: 'url(' + getImgPath(item.showPic) + ')' }"></div>
-					<div v-else class="imgLoad" :style="{ backgroundImage: 'url(' + getImgPath(item.showpic) + ')' }"></div>
+			
+					<div  class="imgLoad" :style="{ backgroundImage: 'url(' + getImgPath(item.showPic) + ')' }"></div>
 					<!-- <img v-if="areaId ==  5" class="img-label" src="../assets/images/valentine.png"> -->
 					<!-- <img v-if="item.supplierId ==  20 || item.supplierId ==  39 || item.supplierId ==  40" class="img-label" src="../assets/images/straight_pin_img.png"> -->
 					
@@ -13,24 +13,24 @@
 						<span v-if="item.ebuy == 1" class="label-blue">e购</span>
 						<span  class="label-orange">e币</span>
 					</div> -->
-					<img class="soldOut" v-if="item.count === 0" src="../assets/images/soldOut.png">
+					<img class="soldOut" v-if="item.hasStock === 0" src="../assets/images/soldOut.png">
 				</div>
 				<h6 v-if="proThree" class="pro-title nowrap-2">
 					<!-- <span v-if="item.ebuy == 1" class="label-red">支持e购</span>&nbsp; -->
-					{{item.name}}
+					{{item.productName}}
 				</h6>
 				<h5 v-else class="pro-title nowrap-2">
 					<!-- <span v-if="item.ebuy == 1" class="label-red">支持e购</span>&nbsp; -->
-					{{item.name}}
+					{{item.productName}}
 				</h5>
 				<div class="price-small">
 					<span class="font-orange">
 						<i class="icon-coin"></i>
-						{{item.cost}}
+						{{item.salePrice}}
 					</span>
-					<s class="right-text font-gray">市场价￥{{item.price}}</s>
+					<s class="right-text font-gray">市场价￥{{item.marketPrice}}</s>
 				</div>
-				 <router-link v-if="activity" class="btn-pink" :to="{path:'/productDetail', query:{productid: item.id}}">立即购买</router-link>
+				 <router-link v-if="activity" class="btn-pink" :to="{path:'/productDetail', query:{skuid: item.skuId, productid: item.productId}}">立即购买</router-link>
 		</li>
 	</ul>
 	
@@ -57,17 +57,18 @@ export default {
 		}
 	},
 	methods: {
-		gotoDetail(id) {	
+		gotoDetail(skuid, productid) {	
 			if(this.$route.query.areaId) {//专区进入	
-				this.$router.push({path:'/proList/productDetail', query:{productid: id, areaId:this.$route.query.areaId}});
+				this.$router.push({path:'/proList/productDetail', query:{skuid: skuid, productid: productid, areaId: this.$route.query.areaId}});
+
 			} else if(this.$route.query.levelOneCid) {//分类进入
-				this.$router.push({path:'/proList/productDetail', query:{productid: id, levelOneCid: this.oneId, levelTwoCid: this.twoId}});
+				this.$router.push({path:'/proList/productDetail', query:{skuid: skuid, productid: productid, levelOneCid: this.oneId, levelTwoCid: this.twoId}});
 
 			} else if(this.$route.path === '/home') {
-				this.$router.push({path:'/home/productDetail', query:{productid: id}});
+				this.$router.push({path:'/home/productDetail', query:{skuid: skuid, productid: productid}});
 			} 
 			else {
-				this.$router.push({path:'/productDetail', query:{productid: id}});
+				this.$router.push({path:'/productDetail', query:{skuid: skuid, productid: productid}});
 			}
 		}
 	} 

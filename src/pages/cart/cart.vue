@@ -33,23 +33,34 @@
          </li>
       </ul>
       <ul v-if="cartList.length > 0" class="cart-list border-list">
-          <li class="list-box" v-for="(cart) in cartList" :key="cart.skuId">
+          <li class="list-box"  v-for="(cart) in cartList" :key="cart.skuId" 
+         >
+             <div class="noStock" v-if="cart.stock == 0">
+                 <img src="../../assets/images/soldOut.png" alt="">
+              </div>
+             <div class="noStock" v-else-if="cart.state == 0">
+                 <img src="../../assets/images/state.png" alt="">
+              </div>
+              
                 <label class="checkbox checkbox-2">
                     <input type="checkbox" name="checkbox" :value="cart.check" v-model="cart.check" 
-                     @change="selectPro(cart.skuId, cart.total,cart.check)">
+                     @change.stop.prevent="selectPro(cart.skuId, cart.total,cart.check)">
                     <i class="icon-hook"></i>
                 </label>
-                <img class="list-img" :src="getImgPath(cart.productImg)">
-                <div class="list-info-v">
-                    <div class="list-box">
-                        <div class="list-info-v">
-                          <div class="price-small">
+                <!-- <router-link :to="{path:'/productDetail', query: {skuid: cart.skuId,
+            productid: cart.productId}}" > --> 
+                <img class="list-img"   @click.stop.prevent="gotoDetail(cart.skuId, cart.productId)" :src="getImgPath(cart.productImg)">
+                <div class="list-info-v" >
+                    <!-- <div class="list-box"> -->
+                        <!-- <div class="list-info-v" > -->
+                          <div class="price-small" @click.stop.prevent="gotoDetail(cart.skuId, cart.productId)">
                               <h5 class="nowrap-2">
                                 <!-- <span v-if="cart.ebuy" class="label-red">支持e购</span>&nbsp; -->
                                 {{cart.productName}}
                               </h5>
                              
-                              <p class="attrSelect" @click="changeAttr(cart.skuId, cart.skuValue, cart.productName, cart.total, cart.check, cart.ebuy, cart.type)">
+                              <p class="attrSelect" @click.stop.prevent="changeAttr(cart.productId, cart.skuId, cart.skuValue, 
+                              cart.productName, cart.total, cart.check, cart.type)">
                                     已选：{{cart.skuValue}}
                                     <i class="icon-down"></i>  
                               </p>
@@ -59,13 +70,16 @@
                                 <!-- <s class="font-gray">市场价:￥{{cart.currPrice}}</s> -->
                               </p>
  
-                              <buy-num class="cartAmount" :proID="cart.skuId" :proNum="cart.total" :check="cart.check" 
-                              @editNum="editNum"></buy-num>
-                            </div>
-                                              
+                            
+                            <!-- </div> -->
+                                             
                         </div>
-                    </div>
+                        <buy-num class="cartAmount" :proID="cart.productId" 
+                              :skuID="cart.skuId" :proNum="cart.total" :check="cart.check" 
+                              @editNum="editNum" :stock="cart.stock"></buy-num> 
+                    <!-- </div> -->
                 </div>
+              <!-- </router-link>   -->
           </li>
       </ul>
 
@@ -95,7 +109,7 @@
       <!-- 属性遮罩 -->     
       <attr-dialog v-if="showAttrDialog" 
        @closeAttrDialog="closeAttrDialog" cartDialog="true"
-       :skuCartId="oldSkuId" :skuCartValue="skuCartValue"></attr-dialog>
+       :oldSkuId="oldSkuId" :productId="productId" :skuValueStr="skuValueStr"></attr-dialog>
       
    
       <!-- 删除遮罩 -->
@@ -130,7 +144,8 @@ export default {
       checkID: [], //被选中的商品ID
       isCheckAll: true, //全选
       oldSkuId: '', //已选属性的商品id
-      skuCartValue: '',//旧属性
+      productId: '',//商品productid
+      skuValueStr: '',//旧属性
       pro: {
         newSkuId: '',
         newImg: '',
@@ -141,6 +156,8 @@ export default {
         newTotal: 1,
         newEbuy: 0,
         NewType: 1,
+        newStock: 0,
+        newState: 1,
         newSkuValue: '' //修改属性 
       },  
       flag: true,
@@ -209,15 +226,26 @@ export default {
       this._getUserTotal();
     },
     // 修改购物车
-    _editCart(skuId, quality, check) {
-      addCart({quality:quality}, skuId).then(res => {
-        this.EDIT_CART({ skuId, quality, check });
-        this.calcuPay();
+    _editCart(productId, skuId, quality, check) {
+      addCart(productId, skuId, quality).then(res => {
+        if(res.success) {
+            this.EDIT_CART({ skuId, quality, check });
+            this.calcuPay();
+        } else {
+            alert(res.msg);
+        }
+        
       });
     },
     // 删除购物车
-    _delCart(productIds, checkID){
-      delCart({ productIds: productIds }).then(res => {
+    // _delCart(productIds, checkID){
+    //   delCart({ productIds: productIds }).then(res => {
+    //     this.DELETE_CART(checkID);
+    //     this.calcuPay();
+    //   });
+    // },
+    _delCart(checkID){
+      delCart(checkID).then(res => {
         this.DELETE_CART(checkID);
         this.calcuPay();
       });
@@ -226,6 +254,7 @@ export default {
     _addCart() {
        // 商品信息
         let proInfo = {
+            productId: this.productId,
             skuId: this.pro.newSkuId,
             productImg: this.pro.newImg,
             productName: this.pro.newName,
@@ -235,30 +264,39 @@ export default {
             total: this.pro.newTotal,
             ebuy: this.pro.newEbuy,
             type: this.pro.NewType,
-            skuValue: this.pro.newSkuValue
+            skuValue: this.pro.newSkuValue,
+            stock: this.pro.newStock,
+            state: this.pro.newState
         };
-         addCart({quality: this.pro.newTotal}, this.pro.newSkuId).then(res => {
-            this.ADD_CART(proInfo);
-            this.calcuPay();
+       
+         addCart(this.productId, this.pro.newSkuId, this.pro.newTotal).then(res => { 
+            // if(res.success) {
+               this.ADD_CART(proInfo);  
+               this.calcuPay();
+            // } else {
+              //  alert(res.msg);
+            // }
+            
         });
     },
     // 修改数量
-    editNum(skuId, quality, check) {
-       this._editCart(skuId, quality, check);
+    editNum(productId, skuId, quality, check) {
+       this._editCart(productId, skuId, quality, check);
     },
     // 点击修改属性按钮
-    changeAttr(oldSkuId, skuVal, name, total, check, ebuy, type) {
+    changeAttr(productId, oldSkuId, skuVal, name, total, check, type) {
         this.showAttrDialog = true;
+        this.productId = productId;
         this.oldSkuId = oldSkuId;
-        this.skuCartValue = skuVal;
+        this.skuValueStr = skuVal;
         this.pro.newName = name;
         this.pro.newCheck = check;
-        this.pro.newEbuy = ebuy;
         this.pro.NewType = type;
         this.pro.newTotal = total; 
+        // this.pro.newStock = stock;   
     },
     //关闭属性遮罩
-    closeAttrDialog(flag, skuValue, skuId, quality, price, marketPrice, img) {
+    closeAttrDialog(flag, type, skuValue, skuId, quality, price, marketPrice, img, stock, state, ebuy) {
         this.showAttrDialog = false;
         if(flag) {//有选择属性
             this.pro.newSkuValue = skuValue;
@@ -266,12 +304,15 @@ export default {
             this.pro.newPrice = price;
             this.pro.newMarketPrice = marketPrice;
             this.pro.newImg = img; 
-            
+            this.pro.newStock = stock; 
+            this.pro.newEbuy = ebuy;
+            this.pro.newState = state;
             let idArray = [];
             idArray.push(this.oldSkuId);
-            this._delCart(idArray.join(','), idArray);
+            this._delCart(idArray);
             //删除旧数据（第一个参数是以，分隔的字符串，第二个参数是数组）
             this._addCart();//添加新数据
+        
         } 
         
 
@@ -294,6 +335,10 @@ export default {
       } else {
         this.edit = false;
       }
+    },
+    // 进入详情
+    gotoDetail(skuid, productid) {
+      this.$router.push({path:'/productDetail', query:{skuid: skuid, productid: productid}});
     },
     //统计总额
     calcTotalMoney() {
@@ -381,8 +426,7 @@ export default {
     },
     //删除购物车
     confirmBtn() {
-      let productIds = this.checkID.join(","); //以逗号分隔
-      this._delCart(productIds, this.checkID);
+      this._delCart(this.checkID);
     },
     //显示遮罩
     showConfirmDialog() {
@@ -472,7 +516,22 @@ export default {
 }
 .cartAmount {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: .5rem;
+  bottom: .5rem;
+}
+.noStock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: rgba(255,255,255,.6);
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: 3rem;
+  }
 }
 </style>

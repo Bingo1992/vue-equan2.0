@@ -51,7 +51,7 @@
         </div>
         <div class="btn">
           <!-- <p :class="['btn-pure-theme', getRedPacket <= 0?'disbtn':'']" @click="gotoExchange()">确定支付</p> -->
-           <p class="btn-pure-theme" @click="gotoExchange()">确定支付</p>
+           <p :class="[cantClick? 'cantClick': '','btn-pure-theme']" @click="gotoExchange()">确定支付</p>
         </div>
    
         <div class="rich-box font-gray">
@@ -78,6 +78,7 @@ export default {
        showAlertTip: false,
        formLoading: false,
        alertText: "",//提交中提示
+       cantClick: false,//按钮是否可点击
        ebiTotal: 0,//ebi总额
        currentEbi: 0,//当前快过期e币
       //  currentEbuy: 0,//当前快过期e购
@@ -143,6 +144,7 @@ export default {
       } else if(this.isInteger(Number(this.ebiInput)) == false) {
         this.showHideAlert('e币数量必须是整数');
       } else {
+        this.cantClick = true;//按钮不可用
         this.showAlertTip = true;//提交中提示
         this.formLoading = true;
         this.alertText = '提交中，请稍候';
@@ -155,6 +157,7 @@ export default {
             if(res.resultCode == 200) {
               this.$router.push({path:'/result', query:{type: 2}});
             } else {
+              this.cantClick = false;//按钮恢复点击
               this.showHideAlert(res.resultMsg);
             }
         }) 

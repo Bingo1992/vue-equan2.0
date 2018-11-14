@@ -49,19 +49,22 @@ export const accountDetail = (params, id) =>  http.fetchGet('/user/userIntegralH
 export const userInfo = (params) =>  http.fetchGet('/user/personnel',params);
 
 //商品列表
-export const proList = (params) =>  http.fetchGet('/goods/list',params);
-export const proDetail = (params) =>  http.fetchGet('/product/detail',params);
+// export const proList = (params) =>  http.fetchGet('/goods/list',params);
+export const proList = (params) =>  http.fetchGet('/goods/listsku',params);
+// export const proDetail = (params) =>  http.fetchGet('/product/detail',params);
+export const proDetail = (params) =>  http.fetchGet('/product/detailsku',params);
 export const sortList = (params) =>  http.fetchGet('/goods/getGoodsClassify',params);
 // 商品列表-sku
 export const choosesku = (params) =>  http.fetchGet('/goods/choosesku',params);
 
 // 购物车
-// export const delCart = (params) => http.fetchGet('/shopCart/removeOrder', params);
-// export const addCart = (params,id,count) => http.fetchGet('/cart/'+id+'/'+count, params);
-export const getCartList = (params) =>  http.fetchGet('/shopCart/displayOrder', params);
-export const delCart = (params) => http.fetchPost('/shopcarts/product/del', params);
-export const addCart = (params,id) => http.fetchPost('/shopcarts/'+ id +'/product', params);
-
+// export const getCartList = (params) =>  http.fetchGet('/shopCart/displayOrder', params);
+// export const delCart = (params) => http.fetchPost('/shopcarts/product/del', params);
+// export const addCart = (params,id) => http.fetchPost('/shopcarts/'+ id +'/product', params);
+// ----购物车---有属性选择功能
+export const getCartList = (params) =>  http.fetchGet('/shopcarts/shoppingCartList', params);
+export const delCart = (params) => http.fetchPost('/shopcarts/removeProductFromShoppingCart', params);
+export const addCart = (productid, skuid, quality) => http.fetchGet('/shopcarts/addToShoppingCart/'+ productid +'/' + skuid + '/' + quality);
 
 // 地址
 export const addressList = (params) => http.fetchGet('/user/receipt/address/list', params);
@@ -76,13 +79,17 @@ export const defaultAddress = (params, id) => http.fetchPost('/user/receipt/addr
 //订单确认
 export const orderConfirm = (params) => http.fetchGet('/product/placeorder', params);
 //订单支付
-export const gotoPay = (params) => http.fetchGet('/shopCart/exchangeOrder', params);
+// export const gotoPay = (params) => http.fetchGet('/shopCart/exchangeOrder', params);
+export const gotoPay = (params) => http.fetchPost('/shopcarts/submitOrder', params);
 // export const gotoPay = (params) => http.fetchPost('/shopcarts/submit', params);
 export const payment = (params) => http.fetchGet('/wxpay/jsCall', params);
 // 订单
 export const orderList = (params) => http.fetchGet('/shopCart/orders', params);
 export const orderDetail = (params, orderNum) => http.fetchGet('/user/order/detail/'+ orderNum, params);
-export const cancelOrder = (params, payOrderId) => http.fetchGet('/cancelOrder/'+ payOrderId, params);
+export const cancelOrder = (params, payOrderId) => http.fetchGet('/shopCart/cancelOrder/'+ payOrderId, params);
+export const ticketDetail = (params) => http.fetchGet('/user/order/eticketDetail/', params);
+//确认收货
+export const receive = (params, orderId) => http.fetchGet('/user/order/confirmSign/'+ orderId, params);
 
 //卡券
 export const ticketList = (params) =>  http.fetchGet('/user/eticket/list2', params);

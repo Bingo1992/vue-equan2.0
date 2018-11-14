@@ -40,7 +40,7 @@
                 <span class="font-gray">油卡类别</span>
                 <span class="flex-end list-info-h">{{oil.type}}</span>
             </li> 
-            <li class="list-box">
+            <li v-if="oil.type == '中石油油卡'" class="list-box">
                 <span class="font-gray">持卡人姓名</span>
                 <span class="flex-end list-info-h">{{oil.name}}</span>
             </li>         
@@ -48,7 +48,7 @@
                 <span class="font-gray">油卡卡号</span>
                 <span class="flex-end list-info-h">{{oil.oilCardNum}}</span>
             </li>
-            <li class="list-box">
+            <li v-if="oil.type == '中石油油卡'" class="list-box">
                 <span class="font-gray">身份证号</span>
                 <span class="flex-end list-info-h">{{oil.IDcard}}</span>
             </li>

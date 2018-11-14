@@ -136,7 +136,8 @@
 		</div>
 	     
     <div class="btn">
-        <p class="btn-pure-theme" @click="gotoPay()">立即支付</p>
+        <p :class="[cantClick? 'cantClick': '','btn-pure-theme']"
+         @click="gotoPay()">立即支付</p>
     </div>
 
     <alert-tip v-show="showAlertTip" :formLoading="formLoading" :alertText="alertText"></alert-tip>
@@ -160,7 +161,7 @@ export default {
       formLoading: false,
       showAlertTip: false,
       alertText: "",
-
+      cantClick: false,//按钮是否可点击
       feeList: [
         { faceVal: 10 },
         { faceVal: 30 },
@@ -181,7 +182,7 @@ export default {
       ],
       feeList2: [
         //联通
-        { faceVal: 7, flow: "350M" },
+        { faceVal: 7, flow: "50M" },
         { faceVal: 11, flow: "100M" },
         { faceVal: 32, flow: "500M" }
       ],
@@ -358,6 +359,7 @@ export default {
       } else if (this.m2.idx == -1 && this.tabIdx == 1) {
         this.showHideAlert("请输入选择流量类型");
       } else {
+        this.cantClick = true;//按钮不可用
         this.showAlertTip = true; //提交中提示
         this.formLoading = true;
         this.alertText = "提交中，请稍候";
@@ -375,6 +377,7 @@ export default {
               if (res.success) {
                 this.$router.push({ path: "/result", query: { recharge: 1 } });
               } else {
+                this.cantClick = false;//按钮恢复使用
                 this.showHideAlert(res.msg);
               }
             });
@@ -391,6 +394,7 @@ export default {
               if (res.success) {
                    window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.odNo);   
               } else {
+                this.cantClick = false;//按钮恢复使用
                 this.showHideAlert(res.msg);
               }
             });
@@ -409,6 +413,7 @@ export default {
               if (res.success) {
                 this.$router.push({ path: "/result", query: { recharge: 1 } });
               } else {
+                this.cantClick = false;//按钮恢复使用
                 this.showHideAlert(res.msg);
               }
             });
@@ -424,6 +429,7 @@ export default {
               if (res.success) {
                   window.location.href = this.getUrlPath('/pay.html?orderNo='+res.attributes.odNo);   
               } else {
+                this.cantClick = false;//按钮恢复使用
                 this.showHideAlert(res.msg);
               }
             });

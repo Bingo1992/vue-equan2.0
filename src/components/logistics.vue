@@ -1,8 +1,8 @@
 <template>
     <div class="children-view">
-        <a class="return-back border-bottom" @click="closeDialog">
+        <a class="list-box border-bottom" @click="closeDialog">
             <i class="icon-left"></i>
-            <h4>返回</h4>
+            <h4 style="font-size: 13px">返回</h4>
         </a>
     　 <ul class="logistic-list">    
             <li class="list-box">
@@ -15,7 +15,8 @@
             </li>    
         </ul>
         <div class="pd">物流跟踪：</div>
-        <ul class="logis-list" v-for="(item, i) in logisticsInfo" :key="i">
+        <p v-if="logisticsInfo.length == 0" class="pdl font-gray">包裹正在等待揽收</p>
+        <ul v-else class="logis-list" v-for="(item, i) in logisticsInfo" :key="i">
             <li :class="[i == 0 ? 'active' : '']">
                 <div class="logis-detail">
                     <div class="logis-detail-content border-bottom">
@@ -50,6 +51,7 @@ export default {
     border-left: 1px solid #bfbfbf;
     position: relative;
     line-height: 1rem;
+    font-size: 12px;
     .active p:first-child {
         color: #333;
     }
@@ -57,7 +59,7 @@ export default {
         content: '';
         display: inline-block;
         position: absolute;
-        left: -.25rem;
+        left: -.3rem;
         top: .7rem;
         width: .3rem;
         height: .3rem;

@@ -1,7 +1,8 @@
 <template>
   <div :class="['swiper-container','swiper-container'+myClass]">
         <div class="swiper-wrapper">
-            <a :href="item.url" class="swiper-slide" v-for="(item,i) in listImg" :style="{ backgroundImage: 'url(' + getImgPath(item.pic) + ')' }" :key="i"></a>
+            <a :href="item.url" class="swiper-slide" v-for="(item,i) in listImg" 
+            :style="{ backgroundImage: 'url(' + getImgPath(item.pic) + ')' }" :key="i"></a>
         </div>
         <div v-if="hasPoint" :class="['swiper-pagination', 'swiper-pagination-white', 'swiper-pagination' + myClass]"></div>
     </div>

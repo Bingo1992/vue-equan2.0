@@ -45,6 +45,7 @@
                 this.alertText = "提交中，请稍候";
                 rpLucky({params: {ticketNumValue: this.ticketCode}}).then( res => {
                     if(res.resultCode === 200) {
+                        // alert(JSON.stringify(res))
                         this.$router.push({path:'/getRedPacket', 
                         query:{ticketCode: this.ticketCode, redPacket: res.eticket.redPacket}});
                     } else {

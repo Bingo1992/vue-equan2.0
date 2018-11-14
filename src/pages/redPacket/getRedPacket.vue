@@ -46,9 +46,10 @@
          alertTip, carNum
       },  
       methods: {
+
           //领取红包
          getRedPacket() {
-           if(this.carNumber == ''|| this.carNumber.length != 5) {
+           if(this.carNumber == '' || this.carNumber.length != 5) {
                this.showHideAlert('请输入正确的车牌号');
            } else {
                 this.showAlertTip = true; //提交中提示
